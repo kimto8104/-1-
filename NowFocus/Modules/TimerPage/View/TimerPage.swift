@@ -16,6 +16,7 @@ struct TimerPage<T: TimerPresenterProtocol>: View {
   @StateObject var presenter: T
   @State private var progress: CGFloat = 0
   @State private var showResultView: Bool = false
+  @Binding var isTimerPageActive: Bool // タブ表示制御用のバインディング
   var body: some View {
     GeometryReader { gp in
       let hm = gp.size.width / 375
@@ -26,7 +27,9 @@ struct TimerPage<T: TimerPresenterProtocol>: View {
         if !showResultView {
           timerView(gp: gp, multiplier: multiplier)
         } else if presenter.totalFocusTime?.isEmpty != nil {
-          resultCard(gp: gp, multiplier: multiplier)
+          // 結果画面を表示する
+          resultView(gp: gp, multiplier: multiplier)
+            .transition(.blurReplace)
         }
       }
     }
@@ -37,6 +40,7 @@ struct TimerPage<T: TimerPresenterProtocol>: View {
       }
     })
     .onChange(of: presenter.isFaceDown,{ _, newValue in
+      if presenter.timerState != .start { self.isTimerPageActive = true }
       if newValue == false && presenter.timerState == .completed {
         // SwiftData にFocusHistoryを保存
         if let startDate = presenter.startDate , let totalFocusTimeInTimeInterval = presenter.totalFocusTimeInTimeInterval {
@@ -118,7 +122,7 @@ extension TimerPage {
   }
 }
 
-// MARK: Private Result View
+// MARK: Private Result View①
 extension TimerPage {
   func resultCard(gp: GeometryProxy, multiplier: CGFloat) -> some View {
     VStack {
@@ -155,7 +159,7 @@ extension TimerPage {
       presenter.resetTimer()
       presenter.stopMonitoringDeviceMotion()
       presenter.updateTimerState(timerState: .start)
-//      dismiss()
+      //      dismiss()
     } label: {
       Text("完了")
         .foregroundStyle(.black)
@@ -171,8 +175,55 @@ extension TimerPage {
   }
 }
 
+// MARK: ResultView②
+extension TimerPage {
+  func resultView(gp: GeometryProxy, multiplier: CGFloat) -> some View {
+    Color.black.opacity(0.8) // 背景を黒にする
+      .ignoresSafeArea()
+      .overlay(
+        VStack(spacing: 20 * multiplier) {
+          Text("１分から")
+            .foregroundColor(.white)
+            .font(.custom("IBM Plex Mono", size: 24 * multiplier))
+          
+          Text("\(presenter.totalFocusTime ?? "20分14秒")")
+            .foregroundColor(.yellow)
+            .font(.custom("IBM Plex Mono", size: 40 * multiplier))
+            .bold()
+          Text("も集中できた！")
+            .foregroundColor(.white)
+            .font(.custom("IBM Plex Mono", size: 32 * multiplier))
+            .bold()
+          Text("1分からでも習慣化させよう")
+            .foregroundColor(.white)
+            .font(.custom("IBM Plex Mono", size: 24 * multiplier))
+            .bold()
+          
+          Button {
+            presenter.resetTimer()
+            presenter.stopMonitoringDeviceMotion()
+            presenter.updateTimerState(timerState: .start)
+            withAnimation(.easeInOut(duration: 1.0)) {
+              isTimerPageActive = false
+              showResultView = false // 結果画面を閉じる
+            }
+          } label: {
+            Text("👍完了")
+              .foregroundColor(.black)
+              .frame(width: 150 * multiplier, height: 50 * multiplier)
+              .background(Color.white)
+              .cornerRadius(10)
+              .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 4)
+          }
+        }
+          .padding()
+      )
+  }
+}
+
 struct TimerPage_Previews: PreviewProvider {
   static var previews: some View {
-    TimerRouter.initializeTimerModule(with: 1)
+    @Previewable @State var isTimerPageActive: Bool = true
+    TimerRouter.initializeTimerModule(with: 1, isTimerPageActive: $isTimerPageActive)
   }
 }

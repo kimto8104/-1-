@@ -59,7 +59,7 @@ struct TimeOptionCell: View {
   var body: some View {
     ZStack {
       // NavigationLinkのvalueにOptional Intを使用
-      NavigationLink(destination:  TimerRouter.initializeTimerModule(with: timeOption.time), isActive: $navigate, label: {
+      NavigationLink(destination:  TimerRouter.initializeTimerModule(with: timeOption.time, isTimerPageActive: $isTimerPageActive), isActive: $navigate, label: {
         EmptyView()
       })
       .opacity(0)
@@ -79,7 +79,6 @@ struct TimeOptionCell: View {
         .onTapGesture {
           if timeOption.isEnabled {
             isPressed = true
-            isTimerPageActive = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
               isPressed = false
               navigate = true // 遷移先の値を設定
