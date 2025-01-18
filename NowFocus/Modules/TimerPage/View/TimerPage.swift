@@ -25,6 +25,7 @@ struct TimerPage<T: TimerPresenterProtocol>: View {
       ZStack {
         GradientBackgroundUtil.gradientBackground(size: gp.size, multiplier: multiplier)
         if !showResultView {
+          let _ = print("TimerPage's: \(presenter.showAlertForPause) + \(presenter.isFaceDown)")
           timerView(gp: gp, multiplier: multiplier)
         } else if presenter.totalFocusTime?.isEmpty != nil {
           // 結果画面を表示する
@@ -122,59 +123,6 @@ extension TimerPage {
   }
 }
 
-// MARK: Private Result View①
-extension TimerPage {
-  func resultCard(gp: GeometryProxy, multiplier: CGFloat) -> some View {
-    VStack {
-      Spacer()
-        .frame(height: 200 * multiplier)
-      ZStack {
-        RoundedRectangle(cornerRadius: 20 * multiplier)
-          .fill(Color(hex: "#E8E4E4")!.opacity(1))
-          .shadow(color: .black.opacity(0.25), radius: 4, x: 0, y: 10)
-          .frame(width: 314 * multiplier, height: 407 * multiplier)
-        VStack(spacing: 60 * multiplier) {
-          Text("1分のつもりが")
-            .font(.custom("IBM Plex Mono", size: 24 * multiplier))
-            .minimumScaleFactor(0.5)
-          
-          Text("\(presenter.totalFocusTime ?? "20分14秒")も")
-            .font(.custom("IBM Plex Mono", size: 40 * multiplier))
-            .minimumScaleFactor(0.5)
-          
-          Text("集中できた！")
-            .font(.custom("IBM Plex Mono", size: 32 * multiplier))
-            .minimumScaleFactor(0.5)
-        }
-      }
-      
-      Spacer().frame(height: 60 * multiplier)
-      completeButton(gp: gp, multiplier: multiplier)
-      Spacer()
-    }
-  }
-  
-  func completeButton(gp: GeometryProxy, multiplier: CGFloat) -> some View {
-    Button {
-      presenter.resetTimer()
-      presenter.stopMonitoringDeviceMotion()
-      presenter.updateTimerState(timerState: .start)
-      //      dismiss()
-    } label: {
-      Text("完了")
-        .foregroundStyle(.black)
-        .font(.custom("IBM Plex Mono", size: 20 * multiplier))
-        .multilineTextAlignment(.center)
-        .frame(width: 176 * multiplier, height: 60 * multiplier)
-    }
-    
-    .frame(width: 176 * multiplier, height: 60 * multiplier)
-    .background(Color(hex: "E8E4E4")!.opacity(1))
-    .cornerRadius(10 * multiplier)
-    .shadow(color: .black.opacity(0.25), radius: 4, x: 0, y: 10)
-  }
-}
-
 // MARK: ResultView②
 extension TimerPage {
   func resultView(gp: GeometryProxy, multiplier: CGFloat) -> some View {
@@ -200,13 +148,15 @@ extension TimerPage {
             .bold()
           
           Button {
-            presenter.resetTimer()
-            presenter.stopMonitoringDeviceMotion()
-            presenter.updateTimerState(timerState: .start)
+            
             withAnimation(.easeInOut(duration: 1.0)) {
               isTimerPageActive = false
               showResultView = false // 結果画面を閉じる
             }
+            presenter.resetTimer()
+            presenter.updateTimerState(timerState: .start)
+            presenter.startMonitoringDeviceMotion()
+            
           } label: {
             Text("👍完了")
               .foregroundColor(.black)
@@ -224,6 +174,7 @@ extension TimerPage {
 struct TimerPage_Previews: PreviewProvider {
   static var previews: some View {
     @Previewable @State var isTimerPageActive: Bool = true
-    TimerRouter.initializeTimerModule(with: 1, isTimerPageActive: $isTimerPageActive)
+    
+    TimerRouter.initializeTimerModule(with: 1, isTimerPageActive: $isTimerPageActive, presenter: TimerPresenter(time: 1))
   }
 }
