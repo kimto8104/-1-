@@ -25,7 +25,7 @@ protocol TimerPresenterProtocol: ObservableObject {
   var showAlertForPause: Bool { get set }
   var startDate: Date? { get }
   var totalFocusTimeInTimeInterval: TimeInterval? { get }
-  
+  var id: UUID { get }
   func resetTimer()
   func updateTime(time: TimeInterval)
   func updateTimerState(timerState: TimerState)
@@ -54,9 +54,13 @@ class TimerPresenter: TimerPresenterProtocol {
   var interactor: TimerInteractorProtocol?
   var router: TimerRouterProtocol?
   
+  
+  var id: UUID = UUID()
   init(time: Int) {
     print("TimerPresenter initialized")
-    updateTime(time: TimeInterval(time * 60))
+    print("UUID: \(id)")
+//    updateTime(time: TimeInterval(time * 60))
+    updateTime(time: TimeInterval(time))
   }
   
   func resumeTimer() {

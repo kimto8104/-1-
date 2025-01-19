@@ -42,8 +42,10 @@ class TimerInteractor: TimerInteractorProtocol {
   
   
   private init(initialTime: Int, motionManagerService: MotionManagerService) {
-    self.remainingTime = TimeInterval(initialTime * 60)
-    self.initialTime = TimeInterval(initialTime * 60)
+//    self.remainingTime = TimeInterval(initialTime * 60)
+//    self.initialTime = TimeInterval(initialTime * 60)
+    self.remainingTime = TimeInterval(initialTime)
+    self.initialTime = TimeInterval(initialTime)
     self.motionManagerService = motionManagerService
     setupBindings()
   }
@@ -61,7 +63,7 @@ class TimerInteractor: TimerInteractorProtocol {
       
       if isFaceDown && presenter?.timerState != .completed {
         // 画面が下向きでタイマーが完了していない
-        print("\(self.remainingTime.description)のタイマーを開始します")
+        print("\(self.remainingTime.description)のタイマーを開始します, presenterのiDは\(presenter?.id)")
         self.startTimer()
       } else if !isFaceDown && presenter?.timerState != .completed {
         // 画面が上向きで、タイマーが完了していない

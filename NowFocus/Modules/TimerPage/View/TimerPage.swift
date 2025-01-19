@@ -16,6 +16,7 @@ struct TimerPage<T: TimerPresenterProtocol>: View {
   @StateObject var presenter: T
   @State private var progress: CGFloat = 0
   @State private var showResultView: Bool = false
+  var id: UUID = UUID()
   @Binding var isTimerPageActive: Bool // タブ表示制御用のバインディング
   var body: some View {
     GeometryReader { gp in
@@ -35,6 +36,7 @@ struct TimerPage<T: TimerPresenterProtocol>: View {
       }
     }
     .onAppear(perform: {
+      print("TImerPageViewが現れた：\(self.id)")
       presenter.startMonitoringDeviceMotion()
       withAnimation(.linear(duration: 6).repeatForever(autoreverses: false)) {
         progress = 1
@@ -148,10 +150,10 @@ extension TimerPage {
             .bold()
           
           Button {
-            
+            let _ = print("この結果画面を出す前のTimerPageViewのIDは: \(self.id)")
             withAnimation(.easeInOut(duration: 1.0)) {
-              isTimerPageActive = false
               showResultView = false // 結果画面を閉じる
+              isTimerPageActive = false
             }
             presenter.resetTimer()
             presenter.updateTimerState(timerState: .start)
@@ -175,6 +177,6 @@ struct TimerPage_Previews: PreviewProvider {
   static var previews: some View {
     @Previewable @State var isTimerPageActive: Bool = true
     
-    TimerRouter.initializeTimerModule(with: 1, isTimerPageActive: $isTimerPageActive, presenter: TimerPresenter(time: 1))
+    TimerRouter.initializeTimerModule(with: 1, isTimerPageActive: $isTimerPageActive)
   }
 }
