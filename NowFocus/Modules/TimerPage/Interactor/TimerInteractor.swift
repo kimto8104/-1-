@@ -72,7 +72,8 @@ class TimerInteractor: TimerInteractorProtocol {
         self.stopExtraFocusCalculation()
         self.presenter?.saveTotalFocusTimeInTimeInterval(extraFocusTime: self.extraFocusTime)
         self.stopMonitoringDeviceMotion()
-        self.presenter?.showTotalFocusTime(extraFocusTime: self.extraFocusTime)
+        // 合計集中時間をPresenterに渡す
+        self.presenter?.showTotalFocusTime(totalFocusTimeString: formatTotalFocusTimeForString())
         self.pauseTimer()
       }
     }
@@ -123,6 +124,31 @@ class TimerInteractor: TimerInteractorProtocol {
       // 50分
       UserDefaultManager.fiftyMinuteDoneToday = true
     }
+  }
+  
+  // 残り時間をStringにして返す
+  private func formatRemainingTimeForString(time: TimeInterval) -> String {
+    let minutes = Int(time) / 60
+    let seconds = Int(time) % 60
+    return String(format: "%02d:%02d", minutes, seconds)
+  }
+  
+  private func formatTotalFocusTimeForString() -> String {
+    var totalFocusTimeString: String = ""
+    var totalFocusTimeInSeconds = Int(initialTime) + Int(extraFocusTime)
+    let hours = totalFocusTimeInSeconds / 3600
+    let minutes = (totalFocusTimeInSeconds % 3600) / 60
+    let seconds = totalFocusTimeInSeconds % 60
+    
+    if hours > 0 {
+      totalFocusTimeString = "\(hours)時間\(minutes)分\(seconds)秒"
+    } else if minutes > 0 {
+      totalFocusTimeString = "\(minutes)分\(seconds)秒"
+    } else {
+      totalFocusTimeString = "\(seconds)秒"
+    }
+    
+    return totalFocusTimeString
   }
   
   /// タイマー途中で画面を上向きにした場合に続けるかどうか？のアラートを出す

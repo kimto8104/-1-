@@ -18,18 +18,13 @@ protocol TimerPresenterProtocol: ObservableObject {
   var interactor: TimerInteractorProtocol? { get set }
   var router: TimerRouterProtocol? { get set }
   
-  var time: String { get }
-  var totalFocusTime: String? { get }
-  var isFaceDown: Bool { get }
-  var timerState: TimerState { get }
-  var showAlertForPause: Bool { get set }
   var startDate: Date? { get }
   var totalFocusTimeInTimeInterval: TimeInterval? { get }
   
   func resetTimer()
-  func updateTime(time: TimeInterval)
+  func updateRemainingTime(remainingTime: String)
   func updateTimerState(timerState: TimerState)
-  func showTotalFocusTime(extraFocusTime: TimeInterval)
+  func showTotalFocusTime(totalFocusTimeString: String)
   // SwiftDataに保存するためのメソッド
   func saveTotalFocusTimeInTimeInterval(extraFocusTime: TimeInterval)
   func saveStartDate(_ date: Date)
@@ -40,23 +35,23 @@ protocol TimerPresenterProtocol: ObservableObject {
   
 }
 
-class TimerPresenter: TimerPresenterProtocol {
-  @Published var time: String = "01:00"
-  @Published var totalFocusTime: String?
-  @Published var isFaceDown = false
-  @Published var timerState: TimerState = .start
-  @Published var showAlertForPause = false
+class TimerPresenter: NSObject, TimerPresenterProtocol {
+//  @Published var time: String = "01:00"
+//  @Published var totalFocusTime: String?
+//  @Published var isFaceDown = false
+//  @Published var timerState: TimerState = .start
+//  @Published var showAlertForPause = false
   
   var originalTime: TimeInterval?
   var startDate: Date?
   var totalFocusTimeInTimeInterval: TimeInterval?
   
+  private(set) lazy var view = TimerPage().delegate(self)
   var interactor: TimerInteractorProtocol?
   var router: TimerRouterProtocol?
   
   init(time: Int) {
     print("TimerPresenter initialized")
-    updateTime(time: TimeInterval(time * 60))
   }
   
   func resumeTimer() {
@@ -68,44 +63,21 @@ class TimerPresenter: TimerPresenterProtocol {
   }
   
   // 00:50のフォーマットに変える
-  func updateTime(time: TimeInterval) {
-    self.originalTime = time
-    let minutes = Int(time) / 60
-    let seconds = Int(time) % 60
-    self.time =  String(format: "%02d:%02d", minutes, seconds)
-    print("updateTime: \(self.time)")
+  func updateRemainingTime(remainingTime: String) {
+    view.model.updateRemainingTime(remainingTime: remainingTime)
   }
   
   func updateTimerState(timerState: TimerState) {
-    self.timerState = timerState
+    view.model.updateTimerState(timerState: timerState)
   }
   
   func updateIsFaceDown(isFaceDown: Bool) {
-    self.isFaceDown = isFaceDown
+    view.model.updateIsFaceDown(isFaceDown: isFaceDown)
   }
   
-  func showTotalFocusTime(extraFocusTime: TimeInterval) {
-    // 現在の time を TimeInterval に変換
-    let timeComponents = self.time.split(separator: ":").map { Int($0) ?? 0 }
-    let currentTimeInSeconds = (timeComponents[0] * 60) + timeComponents[1]
-    
-    // 合計時間を計算
-    let totalTimeInSeconds = currentTimeInSeconds + Int(extraFocusTime)
-    
-    // 合計時間をフォーマット
-    let hours = totalTimeInSeconds / 3600
-    let minutes = (totalTimeInSeconds % 3600) / 60
-    let seconds = totalTimeInSeconds % 60
-    
-    if hours > 0 {
-      self.totalFocusTime = "\(hours)時間\(minutes)分\(seconds)秒"
-    } else if minutes > 0 {
-      self.totalFocusTime = "\(minutes)分\(seconds)秒"
-    } else {
-      self.totalFocusTime = "\(seconds)秒"
-    }
-    
-    print("合計集中時間: \(self.totalFocusTime!)")
+  func showTotalFocusTime(totalFocusTimeString: String) {
+    view.model.updateTotalFocusTime(totalFocusTimeString: totalFocusTimeString)
+    print("合計集中時間: \(totalFocusTimeString)")
   }
   
   func saveTotalFocusTimeInTimeInterval(extraFocusTime: TimeInterval) {
@@ -127,5 +99,11 @@ class TimerPresenter: TimerPresenterProtocol {
   
   func stopMonitoringDeviceMotion() {
     interactor?.stopMonitoringDeviceMotion()
+  }
+}
+
+extension TimerPresenter: TimerPageDelegate {
+  func test() {
+    print("test")
   }
 }

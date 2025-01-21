@@ -10,13 +10,20 @@ import AVFoundation
 import CoreMotion
 import SwiftData
 
+// Presenterへ通知するためのProtocol
+protocol TimerPageDelegate: AnyObject {
+  func test()
+}
+
 // MARK: - View
-struct TimerPage<T: TimerPresenterProtocol>: View {
+struct TimerPage: View {
   @Environment(\.modelContext) private var modelContext
-  @StateObject var presenter: T
+  
+  @StateObject var model = TimerPageViewModel()
+  
   @State private var progress: CGFloat = 0
   @State private var showResultView: Bool = false
-  @Binding var isTimerPageActive: Bool // タブ表示制御用のバインディング
+//  @Binding var isTimerPageActive: Bool // タブ表示制御用のバインディング
   var body: some View {
     GeometryReader { gp in
       let hm = gp.size.width / 375
@@ -25,9 +32,8 @@ struct TimerPage<T: TimerPresenterProtocol>: View {
       ZStack {
         GradientBackgroundUtil.gradientBackground(size: gp.size, multiplier: multiplier)
         if !showResultView {
-          let _ = print("TimerPage's: \(presenter.showAlertForPause) + \(presenter.isFaceDown)")
           timerView(gp: gp, multiplier: multiplier)
-        } else if presenter.totalFocusTime?.isEmpty != nil {
+        } else if model.totalFocusTime.isEmpty != nil {
           // 結果画面を表示する
           resultView(gp: gp, multiplier: multiplier)
             .transition(.blurReplace)
@@ -169,6 +175,49 @@ extension TimerPage {
           .padding()
       )
   }
+}
+
+// MARK: Modifier
+extension TimerPage {
+  func delegate(_ value: TimerPageDelegate) -> Self {
+    model.delegate = value
+    return self
+  }
+}
+
+// MARK: ViewModel
+class TimerPageViewModel: ObservableObject {
+  fileprivate var delegate: TimerPageDelegate?
+  // 合計集中時間文字列
+  @Published var totalFocusTime: String?
+  @Published var isFaceDown: Bool = false
+  @Published var timerState: TimerState = .start
+  @Published var showAlertForPause = false
+  @Published var remainingTime: String = "01:00"
+}
+
+// ViewModel Method
+extension TimerPageViewModel {
+  func updateTotalFocusTime(totalFocusTimeString: String) {
+    self.totalFocusTime = totalFocusTimeString
+  }
+  
+  func updateIsFaceDown(isFaceDown: Bool) {
+    self.isFaceDown = isFaceDown
+  }
+  
+  func updateTimerState(timerState: TimerState) {
+    self.timerState = timerState
+  }
+  
+  func updateShowAlertForPause(showAlert: Bool) {
+    self.showAlertForPause = showAlert
+  }
+  
+  func updateRemainingTime(remainingTime: String) {
+    self.remainingTime = remainingTime
+  }
+  
 }
 
 struct TimerPage_Previews: PreviewProvider {
