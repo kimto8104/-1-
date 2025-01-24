@@ -9,12 +9,13 @@ import Foundation
 import Combine
 import AudioToolbox
 
-protocol TimerInteractorProtocol {
+protocol TimerInteractorProtocol: AnyObject {
   var presenter: (any TimerPresenterProtocol)? { get set}
   func startTimer()
   func pauseTimer()
   func resetTimer()
   
+  func updateTimerState(timerState: TimerState)
   // MotionManager
   func startMonitoringDeviceMotion()
   func stopMonitoringDeviceMotion()
@@ -37,9 +38,11 @@ class TimerInteractor: TimerInteractorProtocol {
   private var remainingTime: TimeInterval
   private let initialTime: TimeInterval
   
+  private var timerState: TimerState = .start
+  
+  
   private var extraFocusStartTime: Date? // タイマー完了後の計測開始時刻
   private var extraFocusTime: TimeInterval = 0 // 追加集中時間
-  
   
   private init(initialTime: Int, motionManagerService: MotionManagerService) {
     self.remainingTime = TimeInterval(initialTime * 60)
@@ -59,11 +62,11 @@ class TimerInteractor: TimerInteractorProtocol {
         return
       }
       
-      if isFaceDown && presenter?.timerState != .completed {
+      if isFaceDown && self.timerState != .completed {
         // 画面が下向きでタイマーが完了していない
         print("\(self.remainingTime.description)のタイマーを開始します")
         self.startTimer()
-      } else if !isFaceDown && presenter?.timerState != .completed {
+      } else if !isFaceDown && self.timerState != .completed {
         // 画面が上向きで、タイマーが完了していない
         self.showResetAlertForPause()
         self.pauseTimer()
@@ -71,9 +74,11 @@ class TimerInteractor: TimerInteractorProtocol {
         // 画面が上向きでタイマーを完了した
         self.stopExtraFocusCalculation()
         self.presenter?.saveTotalFocusTimeInTimeInterval(extraFocusTime: self.extraFocusTime)
+        
         self.stopMonitoringDeviceMotion()
         // 合計集中時間をPresenterに渡す
         self.presenter?.showTotalFocusTime(totalFocusTimeString: formatTotalFocusTimeForString())
+        self.presenter?.updateShowResultView(show: true)
         self.pauseTimer()
       }
     }
@@ -91,10 +96,10 @@ class TimerInteractor: TimerInteractorProtocol {
         self.updateCompletedTimeStatus()
         self.startExtraFocusCalculation() // 追加集中時間計測を開始
         self.resetTimer()
-        self.presenter?.updateTimerState(timerState: .completed)
+        self.updateTimerState(timerState: .completed)
         return
       }
-      self.presenter?.updateTime(time: remainingTime)
+      self.updateFormattedRemainingTime()
     })
   }
   
@@ -126,11 +131,18 @@ class TimerInteractor: TimerInteractorProtocol {
     }
   }
   
-  // 残り時間をStringにして返す
-  private func formatRemainingTimeForString(time: TimeInterval) -> String {
-    let minutes = Int(time) / 60
-    let seconds = Int(time) % 60
-    return String(format: "%02d:%02d", minutes, seconds)
+  func updateTimerState(timerState: TimerState) {
+    self.timerState = timerState
+    self.presenter?.updateTimerState(timerState: timerState)
+  }
+  
+  // 残り時間をフォーマットしてPresenterに渡す
+  private func updateFormattedRemainingTime() {
+      let minutes = Int(remainingTime) / 60
+      let seconds = Int(remainingTime) % 60
+      let formattedTime = String(format: "%02d:%02d", minutes, seconds)
+    self.presenter?.updateRemainingTime(remainingTime: formattedTime)
+      print("updateTime: \(formattedTime)") // デバッグ用
   }
   
   private func formatTotalFocusTimeForString() -> String {
@@ -153,7 +165,7 @@ class TimerInteractor: TimerInteractorProtocol {
   
   /// タイマー途中で画面を上向きにした場合に続けるかどうか？のアラートを出す
   private func showResetAlertForPause() {
-    presenter?.showAlertForPause = true
+    presenter?.updateShowAlertForPause(showAlert: true)
   }
   
   func pauseTimer() {
@@ -164,7 +176,7 @@ class TimerInteractor: TimerInteractorProtocol {
     timer?.invalidate()
     timer = nil
     remainingTime = initialTime
-    presenter?.updateTime(time: remainingTime)
+    self.updateFormattedRemainingTime()
   }
   
   func startMonitoringDeviceMotion() {

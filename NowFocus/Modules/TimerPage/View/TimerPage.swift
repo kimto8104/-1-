@@ -13,16 +13,18 @@ import SwiftData
 // Presenterへ通知するためのProtocol
 protocol TimerPageDelegate: AnyObject {
   func test()
+  func startMonitoringDeviceMotion()
+  func tapResetAlertOKButton()
+  func tapCompletedButton()
 }
 
 // MARK: - View
 struct TimerPage: View {
   @Environment(\.modelContext) private var modelContext
   
-  @StateObject var model = TimerPageViewModel()
+  @ObservedObject var model = TimerPageViewModel()
   
   @State private var progress: CGFloat = 0
-  @State private var showResultView: Bool = false
 //  @Binding var isTimerPageActive: Bool // タブ表示制御用のバインディング
   var body: some View {
     GeometryReader { gp in
@@ -31,9 +33,9 @@ struct TimerPage: View {
       let multiplier = abs(hm - 1) < abs(vm - 1) ? hm : vm
       ZStack {
         GradientBackgroundUtil.gradientBackground(size: gp.size, multiplier: multiplier)
-        if !showResultView {
+        if !model.showResultView {
           timerView(gp: gp, multiplier: multiplier)
-        } else if model.totalFocusTime.isEmpty != nil {
+        } else if model.totalFocusTime?.isEmpty != nil {
           // 結果画面を表示する
           resultView(gp: gp, multiplier: multiplier)
             .transition(.blurReplace)
@@ -41,39 +43,17 @@ struct TimerPage: View {
       }
     }
     .onAppear(perform: {
-      presenter.startMonitoringDeviceMotion()
+      model.delegate?.tapCompletedButton()
+      model.delegate?.startMonitoringDeviceMotion()
       withAnimation(.linear(duration: 6).repeatForever(autoreverses: false)) {
         progress = 1
       }
     })
-    .onChange(of: presenter.isFaceDown,{ _, newValue in
-      if presenter.timerState != .start { self.isTimerPageActive = true }
-      if newValue == false && presenter.timerState == .completed {
-        // SwiftData にFocusHistoryを保存
-        if let startDate = presenter.startDate , let totalFocusTimeInTimeInterval = presenter.totalFocusTimeInTimeInterval {
-          let focusHistory = FocusHistory(startDate: startDate, duration: totalFocusTimeInTimeInterval)
-          modelContext.insert(focusHistory)
-          do {
-            // SwiftDataに変更があれば保存
-            if modelContext.hasChanges {
-              try modelContext.save()
-            }
-          } catch {
-            print("Failed to save SwiftData at \(#line) Fix It")
-          }
-        }
-        
-        //画面が上向きで集中が完了してるなら結果画面を表示する
-        withAnimation(.easeInOut(duration: 1.0)) {
-          showResultView = true
-        }
-      }
-    })
+    
     .ignoresSafeArea()
-    .alert("タイマーをリセットしました", isPresented: $presenter.showAlertForPause) {
+    .alert("タイマーをリセットしました", isPresented: $model.showAlertForPause) {
       Button("OK") {
-        presenter.resetTimer()
-        presenter.updateTimerState(timerState: .start)
+        model.delegate?.tapResetAlertOKButton()
       }
     } message: {
       Text("１分始めることが大事")
@@ -86,9 +66,9 @@ extension TimerPage {
   func timerView(gp: GeometryProxy, multiplier: CGFloat) -> some View {
     VStack(spacing: 20 * multiplier) {
       instructionText(gp: gp, multiplier: multiplier)
-        .opacity(showResultView ? 0 : 1)
-      circleTimer(multiplier: multiplier, time: presenter.time)
-        .opacity(showResultView ? 0 : 1)
+        .opacity(model.showResultView ? 0 : 1)
+      circleTimer(multiplier: multiplier, time: model.remainingTime)
+        .opacity(model.showResultView ? 0 : 1)
         .overlay(
           Circle()
             .stroke(.clear, lineWidth: 2)
@@ -140,7 +120,7 @@ extension TimerPage {
             .foregroundColor(.white)
             .font(.custom("IBM Plex Mono", size: 24 * multiplier))
           
-          Text("\(presenter.totalFocusTime ?? "20分14秒")")
+          Text("\(model.totalFocusTime ?? "20分14秒")")
             .foregroundColor(.yellow)
             .font(.custom("IBM Plex Mono", size: 40 * multiplier))
             .bold()
@@ -156,13 +136,10 @@ extension TimerPage {
           Button {
             
             withAnimation(.easeInOut(duration: 1.0)) {
-              isTimerPageActive = false
-              showResultView = false // 結果画面を閉じる
+//              isTimerPageActive = false
+              model.showResultView = false // 結果画面を閉じる
             }
-            presenter.resetTimer()
-            presenter.updateTimerState(timerState: .start)
-            presenter.startMonitoringDeviceMotion()
-            
+            model.delegate?.tapCompletedButton()
           } label: {
             Text("👍完了")
               .foregroundColor(.black)
@@ -194,6 +171,7 @@ class TimerPageViewModel: ObservableObject {
   @Published var timerState: TimerState = .start
   @Published var showAlertForPause = false
   @Published var remainingTime: String = "01:00"
+  @Published var showResultView: Bool = false
 }
 
 // ViewModel Method
@@ -218,12 +196,15 @@ extension TimerPageViewModel {
     self.remainingTime = remainingTime
   }
   
+  func updateShowResultView(show: Bool) {
+    self.showResultView = show
+  }
 }
 
 struct TimerPage_Previews: PreviewProvider {
   static var previews: some View {
     @Previewable @State var isTimerPageActive: Bool = true
     
-    TimerRouter.initializeTimerModule(with: 1, isTimerPageActive: $isTimerPageActive, presenter: TimerPresenter(time: 1))
+    TimerRouter.initializeTimerModule(with: 1)
   }
 }

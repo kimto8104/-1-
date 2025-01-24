@@ -22,15 +22,19 @@ protocol TimerPresenterProtocol: ObservableObject {
   var totalFocusTimeInTimeInterval: TimeInterval? { get }
   
   func resetTimer()
+  
   func updateRemainingTime(remainingTime: String)
   func updateTimerState(timerState: TimerState)
+  func updateShowAlertForPause(showAlert: Bool)
+  func updateShowResultView(show: Bool)
+  
   func showTotalFocusTime(totalFocusTimeString: String)
   // SwiftDataに保存するためのメソッド
   func saveTotalFocusTimeInTimeInterval(extraFocusTime: TimeInterval)
   func saveStartDate(_ date: Date)
   // MotionManager
   func updateIsFaceDown(isFaceDown: Bool)
-  func startMonitoringDeviceMotion()
+//  func startMonitoringDeviceMotion()
   func stopMonitoringDeviceMotion()
   
 }
@@ -50,19 +54,11 @@ class TimerPresenter: NSObject, TimerPresenterProtocol {
   var interactor: TimerInteractorProtocol?
   var router: TimerRouterProtocol?
   
-  init(time: Int) {
-    print("TimerPresenter initialized")
-  }
-  
   func resumeTimer() {
     interactor?.startTimer()
   }
   
-  func resetTimer() {
-    interactor?.resetTimer()
-  }
-  
-  // 00:50のフォーマットに変える
+  // 00:50のフォーマットに変えてViewに渡す
   func updateRemainingTime(remainingTime: String) {
     view.model.updateRemainingTime(remainingTime: remainingTime)
   }
@@ -73,6 +69,14 @@ class TimerPresenter: NSObject, TimerPresenterProtocol {
   
   func updateIsFaceDown(isFaceDown: Bool) {
     view.model.updateIsFaceDown(isFaceDown: isFaceDown)
+  }
+  
+  func updateShowAlertForPause(showAlert: Bool) {
+    view.model.updateShowAlertForPause(showAlert: showAlert)
+  }
+  
+  func updateShowResultView(show: Bool) {
+    view.model.updateShowResultView(show: show)
   }
   
   func showTotalFocusTime(totalFocusTimeString: String) {
@@ -92,13 +96,14 @@ class TimerPresenter: NSObject, TimerPresenterProtocol {
     self.startDate = date
   }
   
-  
-  func startMonitoringDeviceMotion() {
-    interactor?.startMonitoringDeviceMotion()
-  }
-  
   func stopMonitoringDeviceMotion() {
     interactor?.stopMonitoringDeviceMotion()
+  }
+  
+  func resetTimer() {
+    interactor?.resetTimer()
+    interactor?.updateTimerState(timerState: .start)
+    startMonitoringDeviceMotion()
   }
 }
 
@@ -106,4 +111,41 @@ extension TimerPresenter: TimerPageDelegate {
   func test() {
     print("test")
   }
+  
+  func tapResetAlertOKButton() {
+    self.resetTimer()
+  }
+  
+  func tapCompletedButton() {
+    self.resetTimer()
+  }
+  
+  func startMonitoringDeviceMotion() {
+    interactor?.startMonitoringDeviceMotion()
+  }
 }
+
+//  .onChange(of: model.isFaceDown,{ _, newValue in
+////      if presenter.timerState != .start { self.isTimerPageActive = true }
+//    if newValue == false && model.timerState == .completed {
+//      // タイマー完了していて、画面が上向きなら
+//      // SwiftData にFocusHistoryを保存
+//      if let startDate = presenter.startDate , let totalFocusTimeInTimeInterval = presenter.totalFocusTimeInTimeInterval {
+//        let focusHistory = FocusHistory(startDate: startDate, duration: totalFocusTimeInTimeInterval)
+//        modelContext.insert(focusHistory)
+//        do {
+//          // SwiftDataに変更があれば保存
+//          if modelContext.hasChanges {
+//            try modelContext.save()
+//          }
+//        } catch {
+//          print("Failed to save SwiftData at \(#line) Fix It")
+//        }
+//      }
+//      
+//      //画面が上向きで集中が完了してるなら結果画面を表示する
+//      withAnimation(.easeInOut(duration: 1.0)) {
+//        showResultView = true
+//      }
+//    }
+//  })
