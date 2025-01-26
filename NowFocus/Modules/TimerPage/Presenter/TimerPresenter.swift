@@ -124,28 +124,3 @@ extension TimerPresenter: TimerPageDelegate {
     interactor?.startMonitoringDeviceMotion()
   }
 }
-
-//  .onChange(of: model.isFaceDown,{ _, newValue in
-////      if presenter.timerState != .start { self.isTimerPageActive = true }
-//    if newValue == false && model.timerState == .completed {
-//      // タイマー完了していて、画面が上向きなら
-//      // SwiftData にFocusHistoryを保存
-//      if let startDate = presenter.startDate , let totalFocusTimeInTimeInterval = presenter.totalFocusTimeInTimeInterval {
-//        let focusHistory = FocusHistory(startDate: startDate, duration: totalFocusTimeInTimeInterval)
-//        modelContext.insert(focusHistory)
-//        do {
-//          // SwiftDataに変更があれば保存
-//          if modelContext.hasChanges {
-//            try modelContext.save()
-//          }
-//        } catch {
-//          print("Failed to save SwiftData at \(#line) Fix It")
-//        }
-//      }
-//      
-//      //画面が上向きで集中が完了してるなら結果画面を表示する
-//      withAnimation(.easeInOut(duration: 1.0)) {
-//        showResultView = true
-//      }
-//    }
-//  })

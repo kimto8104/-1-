@@ -20,8 +20,6 @@ protocol TimerPageDelegate: AnyObject {
 
 // MARK: - View
 struct TimerPage: View {
-  @Environment(\.modelContext) private var modelContext
-  
   @ObservedObject var model = TimerPageViewModel()
   
   @State private var progress: CGFloat = 0
@@ -197,7 +195,9 @@ extension TimerPageViewModel {
   }
   
   func updateShowResultView(show: Bool) {
-    self.showResultView = show
+    withAnimation(.easeInOut(duration: 1.0)) {
+      self.showResultView = show
+    }
   }
 }
 

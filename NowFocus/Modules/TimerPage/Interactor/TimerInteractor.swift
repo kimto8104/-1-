@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import AudioToolbox
+import SwiftData
 
 protocol TimerInteractorProtocol: AnyObject {
   var presenter: (any TimerPresenterProtocol)? { get set}
@@ -37,9 +38,10 @@ class TimerInteractor: TimerInteractorProtocol {
   private var timer: Timer?
   private var remainingTime: TimeInterval
   private let initialTime: TimeInterval
+  private var totalFocusTimeInterval: TimeInterval = 0
   
   private var timerState: TimerState = .start
-  
+  private var startDate: Date?
   
   private var extraFocusStartTime: Date? // タイマー完了後の計測開始時刻
   private var extraFocusTime: TimeInterval = 0 // 追加集中時間
@@ -73,8 +75,11 @@ class TimerInteractor: TimerInteractorProtocol {
       } else {
         // 画面が上向きでタイマーを完了した
         self.stopExtraFocusCalculation()
-        self.presenter?.saveTotalFocusTimeInTimeInterval(extraFocusTime: self.extraFocusTime)
-        
+        Task {
+          // 合計集中時間を保存
+          await self.saveFocusHistory()
+        }
+       
         self.stopMonitoringDeviceMotion()
         // 合計集中時間をPresenterに渡す
         self.presenter?.showTotalFocusTime(totalFocusTimeString: formatTotalFocusTimeForString())
@@ -88,7 +93,7 @@ class TimerInteractor: TimerInteractorProtocol {
   func startTimer() {
     timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { [weak self] _ in
       guard let self else { return }
-      self.presenter?.saveStartDate(Date())
+      self.saveStartDate()
       if self.remainingTime > 0 {
         self.remainingTime -= 1
       } else {
@@ -161,6 +166,20 @@ class TimerInteractor: TimerInteractorProtocol {
     }
     
     return totalFocusTimeString
+  }
+  
+  private func saveStartDate() {
+    self.startDate = Date()
+  }
+  
+  @MainActor private func saveFocusHistory() {
+    if let startDate = self.startDate {
+      let focusHistory = FocusHistory(startDate: startDate, duration: (initialTime + extraFocusTime))
+      ModelContainerManager.shared.saveFocusHistory(history: focusHistory)
+      print("SwiftDataへ保存を完了しました")
+    } else {
+      print("SwiftDataへ保存を失敗しました。：startDateが存在しませんでした")
+    }
   }
   
   /// タイマー途中で画面を上向きにした場合に続けるかどうか？のアラートを出す
