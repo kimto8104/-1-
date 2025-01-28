@@ -40,12 +40,6 @@ protocol TimerPresenterProtocol: ObservableObject {
 }
 
 class TimerPresenter: NSObject, TimerPresenterProtocol {
-//  @Published var time: String = "01:00"
-//  @Published var totalFocusTime: String?
-//  @Published var isFaceDown = false
-//  @Published var timerState: TimerState = .start
-//  @Published var showAlertForPause = false
-  
   var originalTime: TimeInterval?
   var startDate: Date?
   var totalFocusTimeInTimeInterval: TimeInterval?
@@ -104,14 +98,11 @@ class TimerPresenter: NSObject, TimerPresenterProtocol {
     interactor?.resetTimer()
     interactor?.updateTimerState(timerState: .start)
     startMonitoringDeviceMotion()
+    view.model.startProgressAnimation()
   }
 }
 
 extension TimerPresenter: TimerPageDelegate {
-  func test() {
-    print("test")
-  }
-  
   func tapResetAlertOKButton() {
     self.resetTimer()
   }

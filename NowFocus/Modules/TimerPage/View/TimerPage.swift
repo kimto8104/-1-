@@ -12,7 +12,6 @@ import SwiftData
 
 // Presenterへ通知するためのProtocol
 protocol TimerPageDelegate: AnyObject {
-  func test()
   func startMonitoringDeviceMotion()
   func tapResetAlertOKButton()
   func tapCompletedButton()
@@ -21,8 +20,6 @@ protocol TimerPageDelegate: AnyObject {
 // MARK: - View
 struct TimerPage: View {
   @ObservedObject var model = TimerPageViewModel()
-  
-  @State private var progress: CGFloat = 0
 //  @Binding var isTimerPageActive: Bool // タブ表示制御用のバインディング
   var body: some View {
     GeometryReader { gp in
@@ -41,11 +38,8 @@ struct TimerPage: View {
       }
     }
     .onAppear(perform: {
-      model.delegate?.tapCompletedButton()
       model.delegate?.startMonitoringDeviceMotion()
-      withAnimation(.linear(duration: 6).repeatForever(autoreverses: false)) {
-        progress = 1
-      }
+      model.startProgressAnimation()
     })
     
     .ignoresSafeArea()
@@ -71,7 +65,7 @@ extension TimerPage {
           Circle()
             .stroke(.clear, lineWidth: 2)
             .overlay(Circle()
-              .trim(from: max(0, progress - 0.1), to: progress)
+              .trim(from: max(0, model.progress - 0.1), to: model.progress)
               .stroke(
                 LinearGradient(colors: [.white, .black ], startPoint: .leading, endPoint: .trailing),
                 style: StrokeStyle(lineWidth: 4, lineCap: .round)
@@ -170,6 +164,14 @@ class TimerPageViewModel: ObservableObject {
   @Published var showAlertForPause = false
   @Published var remainingTime: String = "01:00"
   @Published var showResultView: Bool = false
+  @Published var progress: CGFloat = 0
+  
+  func startProgressAnimation() {
+    progress = 0
+    withAnimation(.linear(duration: 6).repeatForever(autoreverses: false)) {
+      progress = 1
+    }
+  }
 }
 
 // ViewModel Method
