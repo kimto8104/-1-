@@ -13,7 +13,6 @@
 		FE1101442CEAABF100C833C1 /* FloatingBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1101432CEAABF100C833C1 /* FloatingBottomSheet.swift */; };
 		FE1101462CEAB4D600C833C1 /* FloatingBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1101452CEAB4D600C833C1 /* FloatingBottomSheetView.swift */; };
 		FE4176C82C9DA72500D671ED /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4176C72C9DA72500D671ED /* Color+Extension.swift */; };
-		FE4BF32C29BF54D00069FDD3 /* MainContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4BF32B29BF54D00069FDD3 /* MainContentView.swift */; };
 		FE4D27AE2D16AFAB00962E92 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4D27AD2D16AFAB00962E92 /* TestView.swift */; };
 		FE4D27B12D1B832D00962E92 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4D27B02D1B832D00962E92 /* TabBar.swift */; };
 		FE4D27B42D1C3D6000962E92 /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4D27B32D1C3D6000962E92 /* HistoryPage.swift */; };
@@ -44,7 +43,6 @@
 		FE1101432CEAABF100C833C1 /* FloatingBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingBottomSheet.swift; sourceTree = "<group>"; };
 		FE1101452CEAB4D600C833C1 /* FloatingBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingBottomSheetView.swift; sourceTree = "<group>"; };
 		FE4176C72C9DA72500D671ED /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
-		FE4BF32B29BF54D00069FDD3 /* MainContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContentView.swift; sourceTree = "<group>"; };
 		FE4D27AD2D16AFAB00962E92 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		FE4D27B02D1B832D00962E92 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		FE4D27B32D1C3D6000962E92 /* HistoryPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPage.swift; sourceTree = "<group>"; };
@@ -282,7 +280,6 @@
 				FEB840552998B6F900B945BA /* NowFocusApp.swift */,
 				FEB840592998B6FA00B945BA /* Assets.xcassets */,
 				FEB8405B2998B6FA00B945BA /* Preview Content */,
-				FE4BF32B29BF54D00069FDD3 /* MainContentView.swift */,
 				FE8EAA342A00C9910040FB07 /* AppDelegate.swift */,
 				FE6362D82C5B01EC009AB470 /* MotionManagerService.swift */,
 				FEB14FFB2C6B9F020011F32A /* MotionServiceWithInitialAttitude.swift */,
@@ -421,7 +418,6 @@
 				FE1100412CDBAFA200C833C1 /* UserDefaultManager.swift in Sources */,
 				FE1101442CEAABF100C833C1 /* FloatingBottomSheet.swift in Sources */,
 				FE4D27B12D1B832D00962E92 /* TabBar.swift in Sources */,
-				FE4BF32C29BF54D00069FDD3 /* MainContentView.swift in Sources */,
 				FE8A06BD2D0FA10100F9F206 /* GradientBackgroundUtil.swift in Sources */,
 				FE9ADB672D2D4F930036EA85 /* FocusHistory.swift in Sources */,
 			);

@@ -5,7 +5,7 @@
 //  Created by Tomofumi Kimura on 2024/07/21.
 //
 
-import Foundation
+import SwiftUI
 enum TimerState: String {
   case start
   case paused
@@ -27,7 +27,7 @@ protocol TimerPresenterProtocol: ObservableObject {
   func updateTimerState(timerState: TimerState)
   func updateShowAlertForPause(showAlert: Bool)
   func updateShowResultView(show: Bool)
-  
+  func updateTabBarVisibility(isVisible: Bool)
   func showTotalFocusTime(totalFocusTimeString: String)
   // SwiftDataに保存するためのメソッド
   func saveTotalFocusTimeInTimeInterval(extraFocusTime: TimeInterval)
@@ -43,14 +43,12 @@ class TimerPresenter: NSObject, TimerPresenterProtocol {
   var originalTime: TimeInterval?
   var startDate: Date?
   var totalFocusTimeInTimeInterval: TimeInterval?
+  // タブバー表示状態を保持
+  var isTabBarVisible: Binding<Bool>?
   
   private(set) lazy var view = TimerPage().delegate(self)
   var interactor: TimerInteractorProtocol?
   var router: TimerRouterProtocol?
-  
-  func resumeTimer() {
-    interactor?.startTimer()
-  }
   
   // 00:50のフォーマットに変えてViewに渡す
   func updateRemainingTime(remainingTime: String) {
@@ -99,6 +97,13 @@ class TimerPresenter: NSObject, TimerPresenterProtocol {
     interactor?.updateTimerState(timerState: .start)
     startMonitoringDeviceMotion()
     view.model.startProgressAnimation()
+  }
+  
+  // タブバーの表示/非表示を制御
+  func updateTabBarVisibility(isVisible: Bool) {
+    withAnimation(.easeInOut(duration: 1.0)) {
+      self.isTabBarVisible?.wrappedValue = isVisible
+    }
   }
 }
 

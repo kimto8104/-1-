@@ -68,6 +68,8 @@ class TimerInteractor: TimerInteractorProtocol {
         // 画面が下向きでタイマーが完了していない
         print("\(self.remainingTime.description)のタイマーを開始します")
         self.startTimer()
+        // 下タブを非表示に
+        self.presenter?.updateTabBarVisibility(isVisible: false)
       } else if !isFaceDown && self.timerState != .completed {
         // 画面が上向きで、タイマーが完了していない
         self.showResetAlertForPause()
@@ -79,12 +81,13 @@ class TimerInteractor: TimerInteractorProtocol {
           // 合計集中時間を保存
           await self.saveFocusHistory()
         }
-       
+        self.presenter?.updateTabBarVisibility(isVisible: false)
         self.stopMonitoringDeviceMotion()
         // 合計集中時間をPresenterに渡す
         self.presenter?.showTotalFocusTime(totalFocusTimeString: formatTotalFocusTimeForString())
         self.presenter?.updateShowResultView(show: true)
         self.pauseTimer()
+        
       }
     }
     .store(in: &cancellables)
@@ -196,6 +199,7 @@ class TimerInteractor: TimerInteractorProtocol {
     timer = nil
     remainingTime = initialTime
     self.updateFormattedRemainingTime()
+    self.presenter?.updateTabBarVisibility(isVisible: true)
   }
   
   func startMonitoringDeviceMotion() {

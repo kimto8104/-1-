@@ -20,7 +20,6 @@ protocol TimerPageDelegate: AnyObject {
 // MARK: - View
 struct TimerPage: View {
   @ObservedObject var model = TimerPageViewModel()
-//  @Binding var isTimerPageActive: Bool // タブ表示制御用のバインディング
   var body: some View {
     GeometryReader { gp in
       let hm = gp.size.width / 375
@@ -28,12 +27,19 @@ struct TimerPage: View {
       let multiplier = abs(hm - 1) < abs(vm - 1) ? hm : vm
       ZStack {
         GradientBackgroundUtil.gradientBackground(size: gp.size, multiplier: multiplier)
-        if !model.showResultView {
+        
+        if !model.showResultView && model.selectedTab == .Home {
           timerView(gp: gp, multiplier: multiplier)
-        } else if model.totalFocusTime?.isEmpty != nil {
+        } else if model.totalFocusTime?.isEmpty != nil && model.selectedTab != .Clock {
           // 結果画面を表示する
           resultView(gp: gp, multiplier: multiplier)
             .transition(.blurReplace)
+        } else {
+          HistoryPage()
+        }
+        
+        if !model.showResultView {
+          tabBarView(multiplier: multiplier)
         }
       }
     }
@@ -99,6 +105,16 @@ extension TimerPage {
       .font(.custom("IBM Plex Mono", size: 20 * multiplier))
       .transition(.blurReplace())
   }
+  
+  func tabBarView(multiplier: CGFloat) -> some View {
+    VStack {
+      Spacer()
+      TabBarView(selectedTab: $model.selectedTab, multiplier: multiplier)
+        .transition(.opacity)
+      Spacer()
+        .frame(height: 40 * multiplier)
+    }
+  }
 }
 
 // MARK: ResultView②
@@ -128,8 +144,8 @@ extension TimerPage {
           Button {
             
             withAnimation(.easeInOut(duration: 1.0)) {
-//              isTimerPageActive = false
               model.showResultView = false // 結果画面を閉じる
+              
             }
             model.delegate?.tapCompletedButton()
           } label: {
@@ -157,6 +173,7 @@ extension TimerPage {
 // MARK: ViewModel
 class TimerPageViewModel: ObservableObject {
   fileprivate var delegate: TimerPageDelegate?
+  @Published fileprivate var selectedTab: TabIcon = .Home
   // 合計集中時間文字列
   @Published var totalFocusTime: String?
   @Published var isFaceDown: Bool = false
@@ -176,6 +193,7 @@ class TimerPageViewModel: ObservableObject {
 
 // ViewModel Method
 extension TimerPageViewModel {
+  
   func updateTotalFocusTime(totalFocusTimeString: String) {
     self.totalFocusTime = totalFocusTimeString
   }
@@ -205,8 +223,6 @@ extension TimerPageViewModel {
 
 struct TimerPage_Previews: PreviewProvider {
   static var previews: some View {
-    @Previewable @State var isTimerPageActive: Bool = true
-    
     TimerRouter.initializeTimerModule(with: 1)
   }
 }

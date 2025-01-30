@@ -14,7 +14,7 @@ struct NowFocusApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
   var body: some Scene {
     WindowGroup {
-      MainContentView()
+      TimerRouter.initializeTimerModule(with: 1)
         .modelContainer(for: [FocusHistory.self]) // SwiftDataのモデルコンテナをビュー階層に統合
         .onAppear {
           // アプリ起動時にリセットを確認
