@@ -15,6 +15,7 @@ protocol TimerPageDelegate: AnyObject {
   func startMonitoringDeviceMotion()
   func tapResetAlertOKButton()
   func tapCompletedButton()
+  func tapCategorySelectionButton()
 }
 
 // MARK: - View
@@ -28,24 +29,41 @@ struct TimerPage: View {
       ZStack {
         GradientBackgroundUtil.gradientBackground(size: gp.size, multiplier: multiplier)
         
-        if !model.showResultView && model.selectedTab == .Home {
-          timerView(gp: gp, multiplier: multiplier)
-        } else if model.totalFocusTime?.isEmpty != nil && model.selectedTab != .Clock {
-          // 結果画面を表示する
-          resultView(gp: gp, multiplier: multiplier)
-            .transition(.blurReplace)
-        } else {
-          HistoryPage()
+        VStack {
+          Spacer()
+            .frame(height: 120 * multiplier)
+          if !model.showResultView && model.selectedTab == .Home {
+            timerView(gp: gp, multiplier: multiplier)
+          } else if model.totalFocusTime?.isEmpty != nil && model.selectedTab != .Clock {
+            // 結果画面を表示する
+            resultView(gp: gp, multiplier: multiplier)
+              .transition(.blurReplace)
+          } else {
+            HistoryPage()
+          }
+          
+          Spacer()
+            .frame(height: 50 * multiplier)
+          if !model.showResultView {
+            tabBarView(multiplier: multiplier)
+          }
+          
+          Spacer()
+            .frame(width: 60 * multiplier, height: 60 * multiplier)
+            .background(.red)
         }
-        
-        if !model.showResultView {
-          tabBarView(multiplier: multiplier)
+        .frame(width: gp.size.width, height: gp.size.height)
+
+        if model.isCategoryPopupPresented {
+          Color.black.opacity(0.3)
+          model.categoryPopup
+          .transition(.move(edge: .bottom))
         }
       }
     }
     .onAppear(perform: {
       model.delegate?.startMonitoringDeviceMotion()
-      model.startProgressAnimation()
+//      model.startProgressAnimation()
     })
     
     .ignoresSafeArea()
@@ -76,8 +94,10 @@ extension TimerPage {
                 LinearGradient(colors: [.white, .black ], startPoint: .leading, endPoint: .trailing),
                 style: StrokeStyle(lineWidth: 4, lineCap: .round)
               ).blur(radius: 2)))
-      
-    }.position(x: gp.size.width / 2, y: gp.size.height / 2)
+      Spacer()
+        .frame(height: 10 * multiplier)
+      categorySelectionButton(multiplier: multiplier)
+    }
   }
   
   func circleTimer(multiplier: CGFloat, time: String) -> some View {
@@ -106,14 +126,36 @@ extension TimerPage {
       .transition(.blurReplace())
   }
   
-  func tabBarView(multiplier: CGFloat) -> some View {
-    VStack {
-      Spacer()
-      TabBarView(selectedTab: $model.selectedTab, multiplier: multiplier)
-        .transition(.opacity)
-      Spacer()
-        .frame(height: 40 * multiplier)
+  func categorySelectionButton(multiplier: CGFloat) -> some View {
+    Button {
+      model.delegate?.tapCategorySelectionButton()
+    } label: {
+      HStack(alignment: .center) {
+        Spacer()
+          .frame(width: 70 * multiplier)
+        Text("カテゴリー")
+          .font(.custom("IBM Plex Mono", size: 24 * multiplier))
+          .foregroundStyle(.black)
+          .minimumScaleFactor(0.5)
+          .lineLimit(1)
+        Spacer()
+          .frame(width: 30 * multiplier)
+        Text("▼")
+          .frame(width: 24 * multiplier, height: 24 * multiplier)
+          .foregroundStyle(.black)
+        Spacer()
+          .frame(width: 16 * multiplier)
+      }
+      .frame(width: 260 * multiplier, height: 54 * multiplier)
+      .background(Color(hex: "F6F0F0"))
+      .clipShape(RoundedRectangle(cornerRadius: 20 * multiplier))
     }
+    
+  }
+  
+  func tabBarView(multiplier: CGFloat) -> some View {
+    TabBarView(selectedTab: $model.selectedTab, multiplier: multiplier)
+      .transition(.opacity)
   }
 }
 
@@ -183,12 +225,29 @@ class TimerPageViewModel: ObservableObject {
   @Published var showResultView: Bool = false
   @Published var progress: CGFloat = 0
   
-  func startProgressAnimation() {
-    progress = 0
-    withAnimation(.linear(duration: 6).repeatForever(autoreverses: false)) {
-      progress = 1
+  
+  // Category
+  @Published var isCategoryPopupPresented = false
+  var categoryPopup: CategoryPopup?  // モジュールをここで保持
+  func showCategoryPopup() {
+    categoryPopup = CategoryPopupRouter.createModule()
+    withAnimation(.easeInOut(duration: 0.4)) {
+      self.isCategoryPopupPresented = true
     }
   }
+  
+  func hideCategoryPopup() {
+    withAnimation(.easeInOut(duration: 0.4)) {
+      self.isCategoryPopupPresented = false
+    }
+    categoryPopup = nil
+  }
+//  func startProgressAnimation() {
+//    progress = 0
+//    withAnimation(.linear(duration: 6).repeatForever(autoreverses: false)) {
+//      progress = 1
+//    }
+//  }
 }
 
 // ViewModel Method

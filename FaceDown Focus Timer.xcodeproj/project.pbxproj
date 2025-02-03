@@ -23,6 +23,10 @@
 		FE5825DC2C4D4EED007AB552 /* TimerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5825DB2C4D4EED007AB552 /* TimerRouter.swift */; };
 		FE6362D92C5B01EC009AB470 /* MotionManagerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6362D82C5B01EC009AB470 /* MotionManagerService.swift */; };
 		FE70E9EC2D4443CE002C0B7F /* ModelContainerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE70E9EB2D4443CE002C0B7F /* ModelContainerManager.swift */; };
+		FE70E9EF2D4D8384002C0B7F /* CategoryPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE70E9EE2D4D8384002C0B7F /* CategoryPopup.swift */; };
+		FE70E9F12D4F98F4002C0B7F /* CategoryPopupPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE70E9F02D4F98F4002C0B7F /* CategoryPopupPresenter.swift */; };
+		FE70E9F32D4F9902002C0B7F /* CategoryPopupInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE70E9F22D4F9902002C0B7F /* CategoryPopupInteractor.swift */; };
+		FE70E9F52D4F990E002C0B7F /* CategoryPopupRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE70E9F42D4F990E002C0B7F /* CategoryPopupRouter.swift */; };
 		FE8A06BD2D0FA10100F9F206 /* GradientBackgroundUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8A06BC2D0FA10100F9F206 /* GradientBackgroundUtil.swift */; };
 		FE8EAA322A0000BC0040FB07 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8EAA312A0000BC0040FB07 /* Int+Extension.swift */; };
 		FE8EAA352A00C9910040FB07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8EAA342A00C9910040FB07 /* AppDelegate.swift */; };
@@ -53,6 +57,10 @@
 		FE5825DB2C4D4EED007AB552 /* TimerRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerRouter.swift; sourceTree = "<group>"; };
 		FE6362D82C5B01EC009AB470 /* MotionManagerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionManagerService.swift; sourceTree = "<group>"; };
 		FE70E9EB2D4443CE002C0B7F /* ModelContainerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelContainerManager.swift; sourceTree = "<group>"; };
+		FE70E9EE2D4D8384002C0B7F /* CategoryPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPopup.swift; sourceTree = "<group>"; };
+		FE70E9F02D4F98F4002C0B7F /* CategoryPopupPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPopupPresenter.swift; sourceTree = "<group>"; };
+		FE70E9F22D4F9902002C0B7F /* CategoryPopupInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPopupInteractor.swift; sourceTree = "<group>"; };
+		FE70E9F42D4F990E002C0B7F /* CategoryPopupRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPopupRouter.swift; sourceTree = "<group>"; };
 		FE8A06BC2D0FA10100F9F206 /* GradientBackgroundUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackgroundUtil.swift; sourceTree = "<group>"; };
 		FE8EAA312A0000BC0040FB07 /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		FE8EAA332A00C2DC0040FB07 /* NowFocus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NowFocus.entitlements; sourceTree = "<group>"; };
@@ -163,6 +171,7 @@
 		FE5825D02C4D4843007AB552 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				FE70E9ED2D4D8342002C0B7F /* Category */,
 				FE4D27B22D1C3D4C00962E92 /* History */,
 				FE4D27AF2D1B832100962E92 /* TabBar */,
 				FE1101422CEAABE000C833C1 /* FloatingBottomSheet */,
@@ -223,6 +232,17 @@
 			children = (
 			);
 			path = Entity;
+			sourceTree = "<group>";
+		};
+		FE70E9ED2D4D8342002C0B7F /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				FE70E9EE2D4D8384002C0B7F /* CategoryPopup.swift */,
+				FE70E9F02D4F98F4002C0B7F /* CategoryPopupPresenter.swift */,
+				FE70E9F22D4F9902002C0B7F /* CategoryPopupInteractor.swift */,
+				FE70E9F42D4F990E002C0B7F /* CategoryPopupRouter.swift */,
+			);
+			path = Category;
 			sourceTree = "<group>";
 		};
 		FE8EAA302A0000AD0040FB07 /* Extension */ = {
@@ -399,8 +419,10 @@
 				FE4D27AE2D16AFAB00962E92 /* TestView.swift in Sources */,
 				FEB14FFC2C6B9F020011F32A /* MotionServiceWithInitialAttitude.swift in Sources */,
 				FE4176C82C9DA72500D671ED /* Color+Extension.swift in Sources */,
+				FE70E9F52D4F990E002C0B7F /* CategoryPopupRouter.swift in Sources */,
 				FE8EAA352A00C9910040FB07 /* AppDelegate.swift in Sources */,
 				FE11013F2CE9729600C833C1 /* CustomAlert.swift in Sources */,
+				FE70E9EF2D4D8384002C0B7F /* CategoryPopup.swift in Sources */,
 				FE54F1AE2C32EBCA0029DCDD /* TimerManager.swift in Sources */,
 				FE11003E2CCE764800C833C1 /* TimeSelectionPresenter.swift in Sources */,
 				FEFB29D329B7691E007D8FDA /* TimerPage.swift in Sources */,
@@ -410,11 +432,13 @@
 				FE5825DA2C4D4AFC007AB552 /* TimerInteractor.swift in Sources */,
 				FE6362D92C5B01EC009AB470 /* MotionManagerService.swift in Sources */,
 				FE4D27B42D1C3D6000962E92 /* HistoryPage.swift in Sources */,
+				FE70E9F12D4F98F4002C0B7F /* CategoryPopupPresenter.swift in Sources */,
 				FEB840562998B6F900B945BA /* NowFocusApp.swift in Sources */,
 				FE5825DC2C4D4EED007AB552 /* TimerRouter.swift in Sources */,
 				FE8EAA322A0000BC0040FB07 /* Int+Extension.swift in Sources */,
 				FE70E9EC2D4443CE002C0B7F /* ModelContainerManager.swift in Sources */,
 				FEF885322C74BE63005A9198 /* TimerProgressRing.swift in Sources */,
+				FE70E9F32D4F9902002C0B7F /* CategoryPopupInteractor.swift in Sources */,
 				FE1100412CDBAFA200C833C1 /* UserDefaultManager.swift in Sources */,
 				FE1101442CEAABF100C833C1 /* FloatingBottomSheet.swift in Sources */,
 				FE4D27B12D1B832D00962E92 /* TabBar.swift in Sources */,

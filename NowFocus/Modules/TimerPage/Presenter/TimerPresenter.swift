@@ -96,7 +96,7 @@ class TimerPresenter: NSObject, TimerPresenterProtocol {
     interactor?.resetTimer()
     interactor?.updateTimerState(timerState: .start)
     startMonitoringDeviceMotion()
-    view.model.startProgressAnimation()
+//    view.model.startProgressAnimation()
   }
   
   // タブバーの表示/非表示を制御
@@ -108,6 +108,10 @@ class TimerPresenter: NSObject, TimerPresenterProtocol {
 }
 
 extension TimerPresenter: TimerPageDelegate {
+  func tapCategorySelectionButton() {
+    view.model.showCategoryPopup()
+  }
+  
   func tapResetAlertOKButton() {
     self.resetTimer()
   }
