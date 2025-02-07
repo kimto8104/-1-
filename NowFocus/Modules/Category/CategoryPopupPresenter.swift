@@ -5,30 +5,45 @@
 //  Created by Tomofumi Kimura on 2025/02/02.
 //
 
-protocol CategoryPopupPresenterProtocol {
+protocol CategoryPopupPresenterDelegate {
   func viewDidLoad()
   func didTapAddCategory(name: String)
+  func showAddCategoryPopup()
+//  func didSelectCategory(_ category: String)
 }
 
-class CategoryPopupPresenter: CategoryPopupPresenterProtocol {
+class CategoryPopupPresenter: CategoryPopupPresenterDelegate {
+  
   private(set) lazy var view = CategoryPopup().delegate(self)
   var interactor: CategoryPopupInteractorProtocol?
   var router: CategoryPopupRouterProtocol?
-  
+  var timerPresenter: (any TimerPresenterProtocol)?
   func viewDidLoad() {
 //    let categories = interactor.fetchCategories()
 //    view.updateCategoryList(categories: categories)
   }
   
   func didTapAddCategory(name: String) {
-//    interactor.addCategory(name: name)
-//    let updatedCategories = interactor.fetchCategories()
-//    view.updateCategoryList(categories: updatedCategories)
+    view.model.addCategory(newCategory: name)
+    view.model.showingAddCategoryPopup = false
+    timerPresenter?.updateSelectedCategory(name)
   }
 }
 
 extension CategoryPopupPresenter: CategoryPopupDelegate {
+  func addCategory(name: String) {
+    didTapAddCategory(name: name)
+  }
+  
+  func closePopup() {
+    router?.dismissCategoryPopup()
+  }
+  
   func updateCategoryList(categories: [String]) {
     
+  }
+  
+  func showAddCategoryPopup() {
+    view.model.showingAddCategoryPopup = true
   }
 }

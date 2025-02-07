@@ -14,10 +14,14 @@ class FocusHistory {
   @Attribute(.unique) var id: UUID = UUID()
   // 開始日付
   var startDate: Date
+  // 集中時間
   var duration: TimeInterval
+  // カテゴリー
+  var category: String?
   
-  init(startDate: Date, duration: TimeInterval) {
+  init(startDate: Date, duration: TimeInterval, category: String? = nil) {
     self.startDate = startDate
     self.duration = duration
+    self.category = category
   }
 }

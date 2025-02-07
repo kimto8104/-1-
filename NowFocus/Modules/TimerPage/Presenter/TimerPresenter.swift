@@ -36,7 +36,7 @@ protocol TimerPresenterProtocol: ObservableObject {
   func updateIsFaceDown(isFaceDown: Bool)
 //  func startMonitoringDeviceMotion()
   func stopMonitoringDeviceMotion()
-  
+  func updateSelectedCategory(_ category: String)
 }
 
 class TimerPresenter: NSObject, TimerPresenterProtocol {
@@ -105,11 +105,26 @@ class TimerPresenter: NSObject, TimerPresenterProtocol {
       self.isTabBarVisible?.wrappedValue = isVisible
     }
   }
+  
+  func updateSelectedCategory(_ category: String) {
+    view.model.updateSelectedCategory(category)
+    interactor?.updateSelectedCategory(category)
+  }
 }
 
 extension TimerPresenter: TimerPageDelegate {
+  
   func tapCategorySelectionButton() {
-    view.model.showCategoryPopup()
+    let presenter = CategoryPopupPresenter()
+    let view = presenter.view
+    let router = CategoryPopupRouter(view: view, parentView: self.view)
+    let interactor = CategoryPopupInteractor()
+    interactor.presenter = presenter
+    presenter.interactor = interactor
+    presenter.router = router
+    presenter.timerPresenter = self
+    self.view.model.categoryPopup = presenter.view
+    self.view.model.showCategoryPopup()
   }
   
   func tapResetAlertOKButton() {

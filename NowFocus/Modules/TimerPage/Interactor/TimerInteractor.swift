@@ -21,6 +21,8 @@ protocol TimerInteractorProtocol: AnyObject {
   func startMonitoringDeviceMotion()
   func stopMonitoringDeviceMotion()
   func resetMotionManager()
+  
+  func updateSelectedCategory(_ category: String)
 }
 
 class TimerInteractor: TimerInteractorProtocol {
@@ -45,6 +47,8 @@ class TimerInteractor: TimerInteractorProtocol {
   
   private var extraFocusStartTime: Date? // タイマー完了後の計測開始時刻
   private var extraFocusTime: TimeInterval = 0 // 追加集中時間
+  
+  private var selectedCategory: String?
   
   private init(initialTime: Int, motionManagerService: MotionManagerService) {
     self.remainingTime = TimeInterval(initialTime * 60)
@@ -176,10 +180,15 @@ class TimerInteractor: TimerInteractorProtocol {
   }
   
   @MainActor private func saveFocusHistory() {
+    print("selectedCategory: \(self.selectedCategory)")
     if let startDate = self.startDate {
-      let focusHistory = FocusHistory(startDate: startDate, duration: (initialTime + extraFocusTime))
+      let focusHistory = FocusHistory(
+        startDate: startDate,
+        duration: (initialTime + extraFocusTime),
+        category: selectedCategory // 選択されたカテゴリーを保存
+      )
       ModelContainerManager.shared.saveFocusHistory(history: focusHistory)
-      print("SwiftDataへ保存を完了しました")
+      print("カテゴリー：\(focusHistory.category)、時間:\(focusHistory.duration.description)、開始時期：\(focusHistory.startDate.description)保存を完了しました")
     } else {
       print("SwiftDataへ保存を失敗しました。：startDateが存在しませんでした")
     }
@@ -212,5 +221,9 @@ class TimerInteractor: TimerInteractorProtocol {
   
   func resetMotionManager() {
     motionManagerService.reset()
+  }
+  
+  func updateSelectedCategory(_ category: String) {
+    self.selectedCategory = category
   }
 }

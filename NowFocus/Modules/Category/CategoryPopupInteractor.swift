@@ -11,8 +11,8 @@ protocol CategoryPopupInteractorProtocol {
 }
 
 class CategoryPopupInteractor: CategoryPopupInteractorProtocol {
-  private var categories: [String] = ["仕事", "勉強", "運動", "読書"]
-  var presenter: CategoryPopupPresenterProtocol?
+  private var categories: [String] = ["仕事", "勉強", "読書"]
+  var presenter: CategoryPopupPresenterDelegate?
   func fetchCategories() -> [String] {
     return categories
   }

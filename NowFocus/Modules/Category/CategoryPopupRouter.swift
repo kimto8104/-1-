@@ -8,18 +8,20 @@
 import SwiftUI
 
 protocol CategoryPopupRouterProtocol {
-  static func createModule() -> CategoryPopup
+  func dismissCategoryPopup()
 }
 
 class CategoryPopupRouter: CategoryPopupRouterProtocol {
-  static func createModule() -> CategoryPopup {
-    let router = CategoryPopupRouter()
-    let interactor = CategoryPopupInteractor()
-    let presenter = CategoryPopupPresenter()
-    interactor.presenter = presenter
-    presenter.interactor = interactor
-    
-    return presenter.view
+  var view: CategoryPopup?
+  var parentView: TimerPage? // TimerPageへの参照を保持
+  
+  init(view: CategoryPopup, parentView: TimerPage) {
+    self.view = view
+    self.parentView = parentView
+  }
+  
+  func dismissCategoryPopup() {
+    parentView?.model.hideCategoryPopup()
   }
 }
 

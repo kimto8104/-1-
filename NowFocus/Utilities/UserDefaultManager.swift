@@ -93,4 +93,28 @@ extension UserDefaultManager {
 //  }
 }
 
+// MARK: Category
+extension UserDefaultManager {
+  // カテゴリーリストの取得・保存
+  static var savedCategories: [String] {
+    get {
+      // 既存のデータあるならそれを返す
+      if let data = UserDefaults.standard.array(forKey: #function) as? [String] {
+        return data
+      }
+      
+      // 既存のデータがない場合
+      // デフォルトカテゴリーを保存し、返す
+      let defaultCategories = ["仕事", "勉強", "読書"]
+      self.savedCategories = defaultCategories
+      return self.savedCategories
+    }
+    
+    set {
+      // 新しい値をセットする
+      UserDefaults.standard.set(newValue, forKey: #function)
+    }
+  }
+}
+
 

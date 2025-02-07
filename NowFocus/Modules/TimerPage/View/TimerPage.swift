@@ -54,11 +54,12 @@ struct TimerPage: View {
         }
         .frame(width: gp.size.width, height: gp.size.height)
 
-        if model.isCategoryPopupPresented {
-          Color.black.opacity(0.3)
+//        if model.isCategoryPopupPresented {
+          Color.black.opacity(model.isCategoryPopupPresented ? 0.3 : 0)
           model.categoryPopup
-          .transition(.move(edge: .bottom))
-        }
+//          .transition(.move(edge: .bottom))
+            .opacity(model.isCategoryPopupPresented ? 1 : 0 )
+//        }
       }
     }
     .onAppear(perform: {
@@ -133,7 +134,7 @@ extension TimerPage {
       HStack(alignment: .center) {
         Spacer()
           .frame(width: 70 * multiplier)
-        Text("カテゴリー")
+        Text(model.selectedCategory ?? "カテゴリー")
           .font(.custom("IBM Plex Mono", size: 24 * multiplier))
           .foregroundStyle(.black)
           .minimumScaleFactor(0.5)
@@ -150,7 +151,6 @@ extension TimerPage {
       .background(Color(hex: "F6F0F0"))
       .clipShape(RoundedRectangle(cornerRadius: 20 * multiplier))
     }
-    
   }
   
   func tabBarView(multiplier: CGFloat) -> some View {
@@ -229,18 +229,19 @@ class TimerPageViewModel: ObservableObject {
   // Category
   @Published var isCategoryPopupPresented = false
   var categoryPopup: CategoryPopup?  // モジュールをここで保持
+  @Published var selectedCategory: String?
+  
   func showCategoryPopup() {
-    categoryPopup = CategoryPopupRouter.createModule()
-    withAnimation(.easeInOut(duration: 0.4)) {
+    withAnimation(.easeInOut(duration: 0.2)) {
       self.isCategoryPopupPresented = true
     }
   }
   
   func hideCategoryPopup() {
-    withAnimation(.easeInOut(duration: 0.4)) {
+    withAnimation(.easeInOut(duration: 0.2)) {
       self.isCategoryPopupPresented = false
+//      categoryPopup = nil
     }
-    categoryPopup = nil
   }
 //  func startProgressAnimation() {
 //    progress = 0
@@ -248,6 +249,11 @@ class TimerPageViewModel: ObservableObject {
 //      progress = 1
 //    }
 //  }
+  
+  func updateSelectedCategory(_ category: String) {
+    self.selectedCategory = category
+    hideCategoryPopup()
+  }
 }
 
 // ViewModel Method
