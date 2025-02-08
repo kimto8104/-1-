@@ -60,6 +60,9 @@ struct HistoryPage: View {
       }
     }
     .onAppear {
+      print("HistoryPage: onAppear - 履歴数: \(allHistory.count)")
+      print("HistoryPage: カテゴリー一覧: \(allHistory.compactMap { $0.category })")
+      viewModel.updateHistory(with: allHistory)
       viewModel.updateCategoryDurations()
     }
     .ignoresSafeArea()
@@ -121,6 +124,10 @@ class HistoryViewModel: ObservableObject {
   
   var totalDuration: TimeInterval {
     allHistory.reduce(0) { $0 + $1.duration }
+  }
+  
+  func updateHistory(with history: [FocusHistory]) {
+    self.allHistory = history
   }
   
   func updateCategoryDurations() {
