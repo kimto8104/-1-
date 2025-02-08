@@ -9,7 +9,7 @@ protocol CategoryPopupPresenterDelegate {
   func viewDidLoad()
   func didTapAddCategory(name: String)
   func showAddCategoryPopup()
-//  func didSelectCategory(_ category: String)
+  func didSelectCategory(_ category: String)
 }
 
 class CategoryPopupPresenter: CategoryPopupPresenterDelegate {
@@ -28,9 +28,17 @@ class CategoryPopupPresenter: CategoryPopupPresenterDelegate {
     view.model.showingAddCategoryPopup = false
     timerPresenter?.updateSelectedCategory(name)
   }
+  
+  func didSelectCategory(_ category: String) {
+    timerPresenter?.updateSelectedCategory(category)
+  }
 }
 
 extension CategoryPopupPresenter: CategoryPopupDelegate {
+  func didSelectCategory(name: String) {
+    didSelectCategory(name)
+  }
+  
   func addCategory(name: String) {
     didTapAddCategory(name: name)
   }

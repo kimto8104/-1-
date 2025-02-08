@@ -12,6 +12,7 @@ protocol CategoryPopupDelegate: AnyObject {
   func closePopup()
   func showAddCategoryPopup()
   func addCategory(name: String)
+  func didSelectCategory(name: String)
 }
 
 struct CategoryPopup: View {
@@ -103,7 +104,7 @@ extension CategoryPopup {
       Spacer()
       
       Button(action: {
-        print("\(category) を編集") // 編集処理をここに記述
+        model.delegate?.didSelectCategory(name: category)
       }) {
         Text("編集")
           .frame(width: 68 * multiplier, height: 28 * multiplier)

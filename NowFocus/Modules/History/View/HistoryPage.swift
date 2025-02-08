@@ -12,7 +12,6 @@ struct HistoryPage: View {
   @Query(animation: .bouncy) private var allHistory: [FocusHistory]
   @StateObject private var viewModel = HistoryViewModel()
   @State private var showingCategoryList = false
-  
   var body: some View {
     GeometryReader { gp in
       let hm = gp.size.width / 375
@@ -61,7 +60,7 @@ struct HistoryPage: View {
       }
     }
     .onAppear {
-      viewModel.updateHistory(with: allHistory)
+      viewModel.updateCategoryDurations()
     }
     .ignoresSafeArea()
   }
@@ -124,12 +123,7 @@ class HistoryViewModel: ObservableObject {
     allHistory.reduce(0) { $0 + $1.duration }
   }
   
-  func updateHistory(with history: [FocusHistory]) {
-    allHistory = history
-    updateCategoryDurations()
-  }
-  
-  private func updateCategoryDurations() {
+  func updateCategoryDurations() {
     var durations: [String: TimeInterval] = [:]
     
     for history in allHistory {
@@ -137,6 +131,7 @@ class HistoryViewModel: ObservableObject {
       durations[category, default: 0] += history.duration
     }
     
+    print("HistoryViewModel: カテゴリー集計結果: \(durations)")
     categoryDurations = durations
   }
   
