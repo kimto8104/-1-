@@ -35,6 +35,11 @@ class CategoryPopupPresenter: CategoryPopupPresenterDelegate {
 }
 
 extension CategoryPopupPresenter: CategoryPopupDelegate {
+  
+  @MainActor func removeCategoryFromHistory(category: String) {
+    interactor?.removeCategoryFromHistory(category: category)
+  }
+  
   func didSelectCategory(name: String) {
     didSelectCategory(name)
   }

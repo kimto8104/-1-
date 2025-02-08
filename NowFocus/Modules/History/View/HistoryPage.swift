@@ -63,7 +63,7 @@ struct HistoryPage: View {
       print("HistoryPage: onAppear - 履歴数: \(allHistory.count)")
       print("HistoryPage: カテゴリー一覧: \(allHistory.compactMap { $0.category })")
       viewModel.updateHistory(with: allHistory)
-      viewModel.updateCategoryDurations()
+//      viewModel.updateCategoryDurations()
     }
     .ignoresSafeArea()
   }
@@ -127,15 +127,24 @@ class HistoryViewModel: ObservableObject {
   }
   
   func updateHistory(with history: [FocusHistory]) {
+    print("HistoryViewModel: 更新開始 - 履歴数: \(history.count)")
     self.allHistory = history
+    updateCategoryDurations()
+    
+    // 選択中のカテゴリーが削除されていた場合、選択を解除
+    if let selectedCategory = selectedCategory,
+       !categoryDurations.keys.contains(selectedCategory) {
+      self.selectedCategory = nil
+    }
   }
   
-  func updateCategoryDurations() {
+  private func updateCategoryDurations() {
     var durations: [String: TimeInterval] = [:]
     
     for history in allHistory {
-      let category = history.category ?? "未分類"
-      durations[category, default: 0] += history.duration
+      if let category = history.category {  // nilの場合は集計しない
+        durations[category, default: 0] += history.duration
+      }
     }
     
     print("HistoryViewModel: カテゴリー集計結果: \(durations)")

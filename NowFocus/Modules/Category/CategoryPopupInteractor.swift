@@ -8,9 +8,15 @@
 protocol CategoryPopupInteractorProtocol {
   func fetchCategories() -> [String]
   func addCategory(name: String)
+  @MainActor func removeCategoryFromHistory(category: String)
 }
 
 class CategoryPopupInteractor: CategoryPopupInteractorProtocol {
+  
+  @MainActor func removeCategoryFromHistory(category: String) {
+    ModelContainerManager.shared.removeCategoryFromHistory(category: category)
+  }
+  
   private var categories: [String] = ["仕事", "勉強", "読書"]
   var presenter: CategoryPopupPresenterDelegate?
   func fetchCategories() -> [String] {

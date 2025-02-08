@@ -157,10 +157,13 @@ class CategoryPopupViewModel: ObservableObject {
     self.loadCategories()
   }
   
-  func removeCategory(_ category: String) {
+  @MainActor func removeCategory(_ category: String) {
     if let index = categories.firstIndex(of: category) {
       categories.remove(at: index)
       saveCategories()
+
+      // SwiftDataの更新
+      ModelContainerManager.shared.removeCategoryFromHistory(category: category)
     }
   }
   

@@ -6,7 +6,8 @@
 //
 
 import SwiftData
-
+import Foundation
+@MainActor
 class ModelContainerManager {
   static let shared = ModelContainerManager()
   let container: ModelContainer?
@@ -27,6 +28,38 @@ class ModelContainerManager {
         print("ModelContainerManager: 保存成功 - カテゴリー: \(history.category ?? "nil"), 時間: \(history.duration)")
     } catch {
         print("ModelContainerManager: 保存失敗 - \(error)")
+    }
+  }
+  
+  @MainActor func removeCategoryFromHistory(category: String) {
+    print("ModelContainerManager: カテゴリー削除開始 - \(category)")
+    
+    // UserDefaultsからカテゴリーを削除
+    var savedCategories = UserDefaultManager.savedCategories
+    savedCategories.removeAll { $0 == category }
+    // UserDefaultのカテゴリーを更新
+    UserDefaultManager.savedCategories = savedCategories
+    
+    // SwiftDataの該当カテゴリーの履歴を検索
+    let descriptor = FetchDescriptor<FocusHistory>(
+      predicate: #Predicate<FocusHistory> { history in
+        history.category == category
+      }
+    )
+    
+    do {
+      let histories = try container?.mainContext.fetch(descriptor) ?? []
+      print("ModelContainerManager: 対象履歴数 - \(histories.count)")
+      
+      // 該当する履歴のカテゴリーをnilに更新
+      for history in histories {
+        history.category = nil
+      }
+      // SwiftData保存
+      try container?.mainContext.save()
+      print("ModelContainerManager: カテゴリー削除完了")
+    } catch {
+      print("ModelContainerManager: カテゴリー削除失敗 - \(error)")
     }
   }
 }
