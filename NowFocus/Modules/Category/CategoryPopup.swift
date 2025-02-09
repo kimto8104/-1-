@@ -13,6 +13,7 @@ protocol CategoryPopupDelegate: AnyObject {
   func showAddCategoryPopup()
   func addCategory(name: String)
   func didSelectCategory(name: String)
+  @MainActor func removeCategoryFromHistory(category: String)
 }
 
 struct CategoryPopup: View {
@@ -158,12 +159,11 @@ class CategoryPopupViewModel: ObservableObject {
   }
   
   @MainActor func removeCategory(_ category: String) {
+    // SwiftDataの更新
+    delegate?.removeCategoryFromHistory(category: category)
     if let index = categories.firstIndex(of: category) {
       categories.remove(at: index)
       saveCategories()
-
-      // SwiftDataの更新
-      ModelContainerManager.shared.removeCategoryFromHistory(category: category)
     }
   }
   
