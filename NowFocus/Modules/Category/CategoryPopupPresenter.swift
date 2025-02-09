@@ -59,4 +59,8 @@ extension CategoryPopupPresenter: CategoryPopupDelegate {
   func showAddCategoryPopup() {
     view.model.showingAddCategoryPopup = true
   }
+  
+  func hideAddCategoryPopup() {
+    view.model.showingAddCategoryPopup = false
+  }
 }

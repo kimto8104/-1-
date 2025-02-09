@@ -11,6 +11,7 @@ protocol CategoryPopupDelegate: AnyObject {
   func updateCategoryList(categories: [String])
   func closePopup()
   func showAddCategoryPopup()
+  func hideAddCategoryPopup()
   func addCategory(name: String)
   func didSelectCategory(name: String)
   @MainActor func removeCategoryFromHistory(category: String)
@@ -90,7 +91,6 @@ extension CategoryPopup {
         .frame(width: 15 * multiplier)
     }
     .frame(height: 30 * multiplier)
-//    .background(Color(hex: "FFFAFA"))
     .background(Color.clear)
   }
   
@@ -171,6 +171,10 @@ class CategoryPopupViewModel: ObservableObject {
     delegate?.showAddCategoryPopup()
   }
   
+  func hideAddCategoryPopup() {
+    delegate?.hideAddCategoryPopup()
+  }
+  
   // Add new category
   func addCategory(newCategory: String = "新しいカテゴリー") {
     categories.append(newCategory)
@@ -199,18 +203,18 @@ struct CategoryPopup_Previews: PreviewProvider {
 // AddCategoryPopupViewModel
 class AddCategoryPopupViewModel: ObservableObject {
   @Published var categoryName = ""
-  @Published var isPresented: Bool
+  var isPresented: Binding<Bool>
   let multiplier: CGFloat
   let onAdd: (String) -> Void
   
   init(isPresented: Binding<Bool>, multiplier: CGFloat, onAdd: @escaping (String) -> Void) {
-    self._isPresented = Published(wrappedValue: isPresented.wrappedValue)
+    self.isPresented = isPresented
     self.multiplier = multiplier
     self.onAdd = onAdd
   }
   
   func dismiss() {
-    isPresented = false
+    isPresented.wrappedValue = false
   }
   
   func addCategory() {
@@ -221,77 +225,4 @@ class AddCategoryPopupViewModel: ObservableObject {
   }
 }
 
-// AddCategoryPopupの修正
-struct AddCategoryPopup: View {
-  @StateObject private var model: AddCategoryPopupViewModel
-  
-  init(isPresented: Binding<Bool>, multiplier: CGFloat, onAdd: @escaping (String) -> Void) {
-    _model = StateObject(wrappedValue: AddCategoryPopupViewModel(isPresented: isPresented, multiplier: multiplier, onAdd: onAdd))
-  }
-  
-  var body: some View {
-    ZStack {
-      Color.black.opacity(0.3)
-        .ignoresSafeArea()
-        .onTapGesture {
-          model.dismiss()
-        }
-      
-      VStack(spacing: 20 * model.multiplier) {
-        // ヘッダー
-        HStack {
-          Spacer()
-            .frame(width: 90 * model.multiplier)
-          
-          Text("カテゴリーを追加")
-            .font(.custom("IBM Plex Mono", size: 20 * model.multiplier))
-            .lineLimit(1)
-            .minimumScaleFactor(0.5)
-          
-          Spacer()
-          
-          Button(action: {
-            model.dismiss()
-          }) {
-            Image("Category_CloseButton")
-              .resizable()
-              .foregroundStyle(Color(hex: "D9D9D9")!)
-              .frame(width: 35 * model.multiplier, height: 31 * model.multiplier)
-          }
-          
-          Spacer()
-            .frame(width: 15 * model.multiplier)
-        }
-        .padding(.horizontal, 15 * model.multiplier)
-        
-        // テキストフィールド
-        TextField("カテゴリー名", text: $model.categoryName)
-          .font(.custom("IBM Plex Mono", size: 16 * model.multiplier))
-          .textFieldStyle(RoundedBorderTextFieldStyle())
-          .padding(.horizontal, 20 * model.multiplier)
-          .submitLabel(.done)
-          .onSubmit {
-            model.addCategory()
-          }
-        
-        // 追加ボタン
-        Button(action: {
-          model.addCategory()
-        }) {
-          Text("追加")
-            .font(.custom("IBM Plex Mono", size: 16 * model.multiplier))
-            .frame(width: 200 * model.multiplier, height: 46 * model.multiplier)
-            .background(model.categoryName.isEmpty ? Color(hex: "D9D9D9") : Color(hex: "4C4545"))
-            .foregroundColor(.white)
-            .cornerRadius(20 * model.multiplier)
-        }
-        .disabled(model.categoryName.isEmpty)
-        .padding(.top, 20 * model.multiplier)
-      }
-      .frame(width: 280 * model.multiplier, height: 200 * model.multiplier)
-      .background(Color(hex: "FFFAFA"))
-      .cornerRadius(20 * model.multiplier)
-    }
-  }
-}
 
