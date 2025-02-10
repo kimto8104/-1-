@@ -96,7 +96,7 @@ struct HistoryPage: View {
           } label: {
             HStack {
               Text(category)
-                .foregroundColor(.black)
+                .font(.custom("IBM Plex Mono", size: 16 * multiplier))
               Spacer()
               if viewModel.selectedCategory == category {
                 Image(systemName: "checkmark")
@@ -108,6 +108,18 @@ struct HistoryPage: View {
       }
       .navigationTitle("カテゴリー選択")
       .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        ToolbarItem(placement: .navigationBarTrailing) {
+          Button(action: {
+            showingCategoryList = false
+          }) {
+            Image("Category_CloseButton")
+              .resizable()
+              .foregroundStyle(Color(hex: "D9D9D9")!)
+              .frame(width: 35 * multiplier, height: 31 * multiplier)
+          }
+        }
+      }
     }
   }
 }
