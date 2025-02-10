@@ -29,37 +29,34 @@ struct TimerPage: View {
       ZStack {
         GradientBackgroundUtil.gradientBackground(size: gp.size, multiplier: multiplier)
         
+        // メインコンテンツ
         VStack {
-          Spacer()
-            .frame(height: 120 * multiplier)
           if !model.showResultView && model.selectedTab == .Home {
             timerView(gp: gp, multiplier: multiplier)
           } else if model.totalFocusTime?.isEmpty != nil && model.selectedTab != .Clock {
-            // 結果画面を表示する
             resultView(gp: gp, multiplier: multiplier)
               .transition(.blurReplace)
           } else {
             HistoryPage()
           }
-          
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        
+        // タブバーを下部に固定
+        VStack {
           Spacer()
-            .frame(height: 50 * multiplier)
           if !model.showResultView {
             tabBarView(multiplier: multiplier)
+              .padding(.bottom, 40 * multiplier)
           }
-          
-          Spacer()
-            .frame(width: 60 * multiplier, height: 60 * multiplier)
-            .background(.red)
         }
-        .frame(width: gp.size.width, height: gp.size.height)
-
-//        if model.isCategoryPopupPresented {
-          Color.black.opacity(model.isCategoryPopupPresented ? 0.3 : 0)
+        
+        // カテゴリーポップアップ
+        if model.isCategoryPopupPresented {
+          Color.black.opacity(0.3)
           model.categoryPopup
-//          .transition(.move(edge: .bottom))
-            .opacity(model.isCategoryPopupPresented ? 1 : 0 )
-//        }
+            .opacity(model.isCategoryPopupPresented ? 1 : 0)
+        }
       }
     }
     .onAppear(perform: {

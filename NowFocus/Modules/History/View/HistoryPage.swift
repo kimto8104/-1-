@@ -20,6 +20,7 @@ struct HistoryPage: View {
       
       ZStack {
         GradientBackgroundUtil.gradientBackground(size: gp.size, multiplier: multiplier)
+        
         VStack(spacing: 20 * multiplier) {
           // カテゴリー選択ボタン
           Button {
@@ -35,7 +36,7 @@ struct HistoryPage: View {
             }
             .padding(.horizontal, 20 * multiplier)
             .padding(.vertical, 10 * multiplier)
-            .frame(width: 320 * multiplier)
+            .frame(width: 320 * multiplier, height: 54 * multiplier)
             .background(Color(hex: "FFFAFA")!.opacity(0.8))
             .cornerRadius(20 * multiplier)
           }
@@ -53,6 +54,9 @@ struct HistoryPage: View {
               .shadow(color: .black.opacity(0.2), radius: 2 * multiplier, x: 0, y: 4 * multiplier)
               .font(.custom("IBM Plex Mono", size: 44 * multiplier))
           }
+          
+          Spacer()
+            .frame(width: 60 * multiplier, height: 60 * multiplier)
         }
       }
       .sheet(isPresented: $showingCategoryList) {
@@ -63,9 +67,8 @@ struct HistoryPage: View {
       print("HistoryPage: onAppear - 履歴数: \(allHistory.count)")
       print("HistoryPage: カテゴリー一覧: \(allHistory.compactMap { $0.category })")
       viewModel.updateHistory(with: allHistory)
-//      viewModel.updateCategoryDurations()
     }
-    .ignoresSafeArea()
+//    .ignoresSafeArea()
   }
   
   private func categoryListView(multiplier: CGFloat) -> some View {
