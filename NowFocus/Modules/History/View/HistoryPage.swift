@@ -27,6 +27,7 @@ struct HistoryPage: View {
             showingCategoryList = true
           } label: {
             HStack {
+              Spacer()
               Text(viewModel.selectedCategory ?? "全て")
                 .font(.custom("IBM Plex Mono", size: 16 * multiplier))
                 .foregroundColor(.black)
@@ -36,10 +37,13 @@ struct HistoryPage: View {
             }
             .padding(.horizontal, 20 * multiplier)
             .padding(.vertical, 10 * multiplier)
-            .frame(width: 320 * multiplier, height: 54 * multiplier)
+            .frame(width: 160 * multiplier, height: 54 * multiplier)
             .background(Color(hex: "FFFAFA")!.opacity(0.8))
             .cornerRadius(20 * multiplier)
           }
+          
+          Spacer()
+            .frame(height: 40 * multiplier)
           
           // 合計集中時間
           VStack {
