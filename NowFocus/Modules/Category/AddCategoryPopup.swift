@@ -10,6 +10,7 @@ import SwiftUI
 // AddCategoryPopupの修正
 struct AddCategoryPopup: View {
   @StateObject private var model: AddCategoryPopupViewModel
+  @FocusState private var isFocused: Bool
   
   init(isPresented: Binding<Bool>, multiplier: CGFloat, onAdd: @escaping (String) -> Void) {
     _model = StateObject(wrappedValue: AddCategoryPopupViewModel(isPresented: isPresented, multiplier: multiplier, onAdd: onAdd))
@@ -20,6 +21,7 @@ struct AddCategoryPopup: View {
       Color.black.opacity(0.3)
         .ignoresSafeArea()
         .onTapGesture {
+          isFocused = false
           model.dismiss()
         }
       
@@ -36,6 +38,7 @@ struct AddCategoryPopup: View {
           Spacer()
           
           Button(action: {
+            isFocused = false
             model.dismiss()
           }) {
             Image("Category_CloseButton")
@@ -55,12 +58,15 @@ struct AddCategoryPopup: View {
           .textFieldStyle(RoundedBorderTextFieldStyle())
           .padding(.horizontal, 20 * model.multiplier)
           .submitLabel(.done)
+          .focused($isFocused)
           .onSubmit {
+            isFocused = false
             model.addCategory()
           }
         
         // 追加ボタン
         Button(action: {
+          isFocused = false
           model.addCategory()
         }) {
           Text("追加")
@@ -76,6 +82,11 @@ struct AddCategoryPopup: View {
       .frame(width: 280 * model.multiplier, height: 200 * model.multiplier)
       .background(Color(hex: "FFFAFA"))
       .cornerRadius(20 * model.multiplier)
+      .offset(y: isFocused ? -60 * model.multiplier : 0)  // キーボードが表示されたときに上にずらす
+      .animation(.easeInOut(duration: 0.3), value: isFocused)  // アニメーションを追加
+    }
+    .onAppear {
+      isFocused = true  // 表示時に自動的にフォーカス
     }
   }
 }
