@@ -38,6 +38,8 @@ extension CategoryPopupPresenter: CategoryPopupDelegate {
   
   @MainActor func removeCategoryFromHistory(category: String) {
     interactor?.removeCategoryFromHistory(category: category)
+    timerPresenter?.removeSelectedCategoryByCategoryPopup(category)
+    
   }
   
   func didSelectCategory(name: String) {

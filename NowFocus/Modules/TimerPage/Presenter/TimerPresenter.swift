@@ -37,6 +37,7 @@ protocol TimerPresenterProtocol: ObservableObject {
 //  func startMonitoringDeviceMotion()
   func stopMonitoringDeviceMotion()
   func updateSelectedCategory(_ category: String)
+  func removeSelectedCategoryByCategoryPopup(_ category: String?)
 }
 
 class TimerPresenter: NSObject, TimerPresenterProtocol {
@@ -107,8 +108,15 @@ class TimerPresenter: NSObject, TimerPresenterProtocol {
   }
   
   func updateSelectedCategory(_ category: String) {
-    view.model.updateSelectedCategory(category)
-    interactor?.updateSelectedCategory(category)
+      view.model.updateSelectedCategory(category)
+      interactor?.updateSelectedCategory(category)
+  }
+  
+  func removeSelectedCategoryByCategoryPopup(_ category: String?) {
+    
+    if view.model.selectedCategory == category {
+      view.model.updateSelectedCategory(nil)
+    }
   }
 }
 

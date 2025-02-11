@@ -247,10 +247,11 @@ class TimerPageViewModel: ObservableObject {
 //    }
 //  }
   
-  func updateSelectedCategory(_ category: String) {
+  func updateSelectedCategory(_ category: String?) {
     self.selectedCategory = category
     hideCategoryPopup()
   }
+  
 }
 
 // ViewModel Method
