@@ -47,7 +47,7 @@ struct TimerPage: View {
           Spacer()
           if !model.showResultView {
             tabBarView(multiplier: multiplier)
-              .padding(.bottom, 40 * multiplier)
+              .padding(.bottom, 30 * multiplier)
           }
         }
         
