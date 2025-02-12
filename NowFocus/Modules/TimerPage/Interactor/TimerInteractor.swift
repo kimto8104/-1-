@@ -89,6 +89,7 @@ class TimerInteractor: TimerInteractorProtocol {
         self.stopMonitoringDeviceMotion()
         // 合計集中時間をPresenterに渡す
         self.presenter?.showTotalFocusTime(totalFocusTimeString: formatTotalFocusTimeForString())
+        self.extraFocusTime = 0
         self.presenter?.updateShowResultView(show: true)
         self.pauseTimer()
         
@@ -98,15 +99,16 @@ class TimerInteractor: TimerInteractorProtocol {
   }
   
   func startTimer() {
+    self.saveStartDate()
     timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { [weak self] _ in
       guard let self else { return }
-      self.saveStartDate()
+      
       if self.remainingTime > 0 {
         self.remainingTime -= 1
       } else {
         // タイマー完了
         self.updateCompletedTimeStatus()
-        self.startExtraFocusCalculation() // 追加集中時間計測を開始
+        self.saveStartDateOfExtraFocus() // 追加集中時間計測を開始
         self.resetTimer()
         self.updateTimerState(timerState: .completed)
         return
@@ -115,14 +117,18 @@ class TimerInteractor: TimerInteractorProtocol {
     })
   }
   
-  private func startExtraFocusCalculation() {
+  // 追加集中を始めた日時を保存
+  private func saveStartDateOfExtraFocus() {
     extraFocusStartTime = Date()
   }
   
   private func stopExtraFocusCalculation() {
-    guard let startTime = extraFocusStartTime else { return }
-    extraFocusTime += Date().timeIntervalSince(startTime)
-    extraFocusStartTime = nil
+    guard let extraFocusStartTime = self.extraFocusStartTime else { return }
+    // 追加の集中時間を計算
+    let additionalTime = Date().timeIntervalSince(extraFocusStartTime)
+    extraFocusTime += additionalTime
+    
+    self.extraFocusStartTime = nil
   }
   
   private func updateCompletedTimeStatus() {
