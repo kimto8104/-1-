@@ -35,6 +35,9 @@ struct CategoryPopup: View {
           List {
             ForEach(model.categories, id: \.self) { category in
               cell(multiplier: multiplier, category: category)
+                .onTapGesture {
+                  model.delegate?.didSelectCategory(name: category)
+                }
             }
             .onDelete { indexSet in
               indexSet.forEach { index in
@@ -107,13 +110,13 @@ extension CategoryPopup {
       Button(action: {
         model.delegate?.didSelectCategory(name: category)
       }) {
-        Text("編集")
+        Text("")
           .frame(width: 68 * multiplier, height: 28 * multiplier)
-          .foregroundColor(.black)
-          .padding(.horizontal, 2 * multiplier)
-          .padding(.vertical, 2 * multiplier)
-          .background(Color.gray.opacity(0.2))
-          .cornerRadius(20 * multiplier)
+//          .foregroundColor(.black)
+//          .padding(.horizontal, 2 * multiplier)
+//          .padding(.vertical, 2 * multiplier)
+//          .background(Color.gray.opacity(0.2))
+//          .cornerRadius(20 * multiplier)
       }
       
       Spacer()
