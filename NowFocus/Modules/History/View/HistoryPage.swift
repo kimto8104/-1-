@@ -72,7 +72,6 @@ struct HistoryPage: View {
       print("HistoryPage: カテゴリー一覧: \(allHistory.compactMap { $0.category })")
       viewModel.updateHistory(with: allHistory)
     }
-//    .ignoresSafeArea()
   }
   
   private func categoryListView(multiplier: CGFloat) -> some View {

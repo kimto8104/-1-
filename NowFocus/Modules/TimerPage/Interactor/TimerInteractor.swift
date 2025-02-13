@@ -61,41 +61,49 @@ class TimerInteractor: TimerInteractorProtocol {
     // isFaceDownの監視、trueになるとタイマーを停止、falseになるとタイマーをスタートさせる
     motionManagerService.$isFaceDown.sink { [weak self] isFaceDown in
       guard let self else { return }
-      self.presenter?.updateIsFaceDown(isFaceDown: isFaceDown)
-      
-      if self.isFirstTimeActive {
-        self.isFirstTimeActive = false
-        return
-      }
-      
-      if isFaceDown && self.timerState != .completed {
-        // 画面が下向きでタイマーが完了していない
-        print("\(self.remainingTime.description)のタイマーを開始します")
-        self.startTimer()
-        // 下タブを非表示に
-        self.presenter?.updateTabBarVisibility(isVisible: false)
-      } else if !isFaceDown && self.timerState != .completed {
-        // 画面が上向きで、タイマーが完了していない
-        self.showResetAlertForPause()
-        self.pauseTimer()
-      } else {
-        // 画面が上向きでタイマーを完了した
-        self.stopExtraFocusCalculation()
-        Task {
-          // 合計集中時間を保存
-          await self.saveFocusHistory()
+      Task {
+        self.presenter?.updateIsFaceDown(isFaceDown: isFaceDown)
+        if self.isFirstTimeActive {
+          self.isFirstTimeActive = false
+          return
         }
-        self.presenter?.updateTabBarVisibility(isVisible: false)
-        self.stopMonitoringDeviceMotion()
-        // 合計集中時間をPresenterに渡す
-        self.presenter?.showTotalFocusTime(totalFocusTimeString: formatTotalFocusTimeForString())
-        self.extraFocusTime = 0
-        self.presenter?.updateShowResultView(show: true)
-        self.pauseTimer()
         
+        if isFaceDown && self.timerState != .completed {
+          await self.handleFaceDown()
+        } else if !isFaceDown && self.timerState != .completed {
+          await self.handleFaceUpWithTimerNotCompleted()
+        } else {
+          await self.handleTimerCompletion()
+        }
       }
     }
     .store(in: &cancellables)
+  }
+  
+  // 画面が下向きでタイマーが完了していない
+  @MainActor private func handleFaceDown() {
+    print("\(self.remainingTime.description)のタイマーを開始します")
+    self.startTimer()
+    // 下タブを非表示に
+    self.presenter?.updateTabBarVisibility(isVisible: false)
+  }
+  
+  @MainActor private func handleFaceUpWithTimerNotCompleted() {
+    // 画面が上向きで、タイマーが完了していない
+    self.showResetAlertForPause()
+    self.pauseTimer()
+  }
+  // 画面が上向きでタイマーを完了した時の処理
+  @MainActor private func handleTimerCompletion() {
+    self.stopExtraFocusCalculation()
+    self.saveFocusHistory()
+    self.presenter?.updateTabBarVisibility(isVisible: false)
+    self.stopMonitoringDeviceMotion()
+    // 合計集中時間をPresenterに渡す
+    self.presenter?.showTotalFocusTime(totalFocusTimeString: formatTotalFocusTimeForString())
+    self.extraFocusTime = 0
+    self.presenter?.updateShowResultView(show: true)
+    self.pauseTimer()
   }
   
   func startTimer() {
@@ -187,6 +195,7 @@ class TimerInteractor: TimerInteractorProtocol {
   
   @MainActor private func saveFocusHistory() {
     print("selectedCategory: \(self.selectedCategory)")
+    print("\(#function) ExtraFocusTime: \(extraFocusTime)")
     if let startDate = self.startDate {
       let focusHistory = FocusHistory(
         startDate: startDate,
