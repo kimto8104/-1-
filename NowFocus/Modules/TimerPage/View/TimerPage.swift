@@ -36,7 +36,7 @@ struct TimerPage: View {
           } else if model.totalFocusTime?.isEmpty != nil && model.selectedTab != .Clock {
             let _ = print("totalFocusTime: \(model.totalFocusTime)")
             resultView(gp: gp, multiplier: multiplier)
-              .transition(.blurReplace)
+              .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))
           } else {
             HistoryPage()
           }
@@ -62,7 +62,7 @@ struct TimerPage: View {
     }
     .onAppear(perform: {
       model.delegate?.startMonitoringDeviceMotion()
-//      model.startProgressAnimation()
+      model.startProgressAnimation()
     })
     
     .ignoresSafeArea()
@@ -103,18 +103,20 @@ extension TimerPage {
     ZStack {
       // 背景用のCircleに影をつける
       Circle()
-        .fill(Color(hex: "#D1CDCD")!).opacity(0.42)
+        .fill(Color(hex: "#E8E4E4")!).opacity(0.65)
         .shadow(color: .black.opacity(0.4), radius: 4 * multiplier, x: 10 * multiplier, y: 10 * multiplier)
-        .shadow(color: Color(hex: "#FFFCFC")!.opacity(0.3), radius: 10, x: -10, y: -5)
+        .shadow(color: Color(hex: "#FFFCFC")!.opacity(0.4), radius: 10, x: -10, y: -5)
         .frame(width: 240 * multiplier, height: 240 * multiplier)
-        .transition(.blurReplace())
+        .transition(.scale.combined(with: .opacity))
       Text(time)
         .foregroundColor(.black)
         .shadow(color: .black.opacity(0.5), radius: 2 * multiplier, x: 0, y: 4 * multiplier)
         .font(.custom("IBM Plex Mono", size: 44 * multiplier))
         .shadow(color: Color(hex: "#FDF3F3")?.opacity(0.25) ?? .clear, radius: 4 * multiplier, x: -4 * multiplier, y: -4 * multiplier)
-        .transition(.blurReplace())
+        .transition(.scale)
     }
+    .scaleEffect(model.isPulsating ? 1.03 : 1.0)
+    .animation(Animation.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: model.isPulsating)
   }
   
   func instructionText(gp: GeometryProxy, multiplier: CGFloat) -> some View {
@@ -160,7 +162,7 @@ extension TimerPage {
 // MARK: ResultView②
 extension TimerPage {
   func resultView(gp: GeometryProxy, multiplier: CGFloat) -> some View {
-    Color.black.opacity(0.8) // 背景を黒にする
+    Color.black.opacity(0.85) // 少し透明度を上げる
       .ignoresSafeArea()
       .overlay(
         VStack(spacing: 20 * multiplier) {
@@ -169,7 +171,7 @@ extension TimerPage {
             .font(.custom("IBM Plex Mono", size: 24 * multiplier))
           
           Text("\(model.totalFocusTime ?? "20分14秒")")
-            .foregroundColor(.yellow)
+            .foregroundColor(Color(hex: "#FFDD00")!) // より鮮やかな黄色
             .font(.custom("IBM Plex Mono", size: 40 * multiplier))
             .bold()
           Text("も集中できた！")
@@ -192,7 +194,11 @@ extension TimerPage {
             Text("👍完了")
               .foregroundColor(.black)
               .frame(width: 150 * multiplier, height: 50 * multiplier)
-              .background(Color.white)
+              .background(
+                LinearGradient(gradient: Gradient(colors: [Color(hex: "#FFFFFF")!, Color(hex: "#F0F0F0")!]), 
+                              startPoint: .top, 
+                              endPoint: .bottom)
+              )
               .cornerRadius(10)
               .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 4)
           }
@@ -222,6 +228,7 @@ class TimerPageViewModel: ObservableObject {
   @Published var remainingTime: String = "01:00"
   @Published var showResultView: Bool = false
   @Published var progress: CGFloat = 0
+  @Published var isPulsating: Bool = true
   
   
   // Category
@@ -241,12 +248,15 @@ class TimerPageViewModel: ObservableObject {
 //      categoryPopup = nil
     }
   }
-//  func startProgressAnimation() {
-//    progress = 0
-//    withAnimation(.linear(duration: 6).repeatForever(autoreverses: false)) {
-//      progress = 1
-//    }
-//  }
+  func startProgressAnimation() {
+    progress = 0
+    withAnimation(.linear(duration: 6).repeatForever(autoreverses: false)) {
+      progress = 1
+    }
+    
+    // パルスアニメーションを開始
+    self.isPulsating = true
+  }
   
   func updateSelectedCategory(_ category: String?) {
     self.selectedCategory = category
