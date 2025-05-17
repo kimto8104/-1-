@@ -27,7 +27,16 @@ struct TimerPage: View {
       let vm = gp.size.height / 667
       let multiplier = abs(hm - 1) < abs(vm - 1) ? hm : vm
       ZStack {
-        GradientBackgroundUtil.gradientBackground(size: gp.size, multiplier: multiplier)
+        // 新しい背景グラデーション
+        LinearGradient(
+          gradient: Gradient(colors: [
+            Color(hex: "#F8F9FA")!,
+            Color(hex: "#E9ECEF")!
+          ]),
+          startPoint: .top,
+          endPoint: .bottom
+        )
+        .ignoresSafeArea()
         
         // メインコンテンツ
         VStack {
@@ -79,77 +88,107 @@ struct TimerPage: View {
 // MARK: Private TimerPage
 extension TimerPage {
   func timerView(gp: GeometryProxy, multiplier: CGFloat) -> some View {
-    VStack(spacing: 20 * multiplier) {
-      instructionText(gp: gp, multiplier: multiplier)
-        .opacity(model.showResultView ? 0 : 1)
-      circleTimer(multiplier: multiplier, time: model.remainingTime)
-        .opacity(model.showResultView ? 0 : 1)
-        .overlay(
-          Circle()
-            .stroke(.clear, lineWidth: 2)
-            .overlay(Circle()
-              .trim(from: max(0, model.progress - 0.1), to: model.progress)
-              .stroke(
-                LinearGradient(colors: [.white, .black ], startPoint: .leading, endPoint: .trailing),
-                style: StrokeStyle(lineWidth: 4, lineCap: .round)
-              ).blur(radius: 2)))
+    VStack {
+      Spacer() // 上部スペース
+      
+      VStack(spacing: 40 * multiplier) {
+        instructionText(gp: gp, multiplier: multiplier)
+          .opacity(model.showResultView ? 0 : 1)
+        
+        circleTimer(multiplier: multiplier, time: model.remainingTime)
+          .opacity(model.showResultView ? 0 : 1)
+          
+        categorySelectionButton(multiplier: multiplier)
+      }
+      
       Spacer()
-        .frame(height: 10 * multiplier)
-      categorySelectionButton(multiplier: multiplier)
     }
+    .padding(.horizontal, 20 * multiplier)
   }
   
   func circleTimer(multiplier: CGFloat, time: String) -> some View {
     ZStack {
-      // 背景用のCircleに影をつける
       Circle()
-        .fill(Color(hex: "#E8E4E4")!).opacity(0.65)
-        .shadow(color: .black.opacity(0.4), radius: 4 * multiplier, x: 10 * multiplier, y: 10 * multiplier)
-        .shadow(color: Color(hex: "#FFFCFC")!.opacity(0.4), radius: 10, x: -10, y: -5)
-        .frame(width: 240 * multiplier, height: 240 * multiplier)
-        .transition(.scale.combined(with: .opacity))
+        .trim(from: 0, to: model.progress)
+        .stroke(
+          LinearGradient(
+            colors: [Color(hex: "#339AF0")!, Color(hex: "#228BE6")!],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+          ),
+          style: StrokeStyle(lineWidth: 10 * multiplier, lineCap: .round)
+        )
+        .frame(width: 260 * multiplier, height: 260 * multiplier)
+        .rotationEffect(.degrees(-90))
+      
+      // タイマー背景円
+      Circle()
+        .fill(Color.white)
+        .frame(width: 220 * multiplier, height: 220 * multiplier)
+        .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.2), radius: 10, x: 0, y: 5)
+      
+      // タイマーテキスト
       Text(time)
-        .foregroundColor(.black)
-        .shadow(color: .black.opacity(0.5), radius: 2 * multiplier, x: 0, y: 4 * multiplier)
-        .font(.custom("IBM Plex Mono", size: 44 * multiplier))
-        .shadow(color: Color(hex: "#FDF3F3")?.opacity(0.25) ?? .clear, radius: 4 * multiplier, x: -4 * multiplier, y: -4 * multiplier)
-        .transition(.scale)
+        .foregroundColor(Color(hex: "#212529")!)
+        .font(.system(size: 40 * multiplier, weight: .medium, design: .monospaced))
+        .monospacedDigit() // 数字が等幅になるように
     }
-    .scaleEffect(model.isPulsating ? 1.03 : 1.0)
-    .animation(Animation.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: model.isPulsating)
+    .scaleEffect(model.isPulsating ? 1.05 : 0.95)
+    .animation(
+      Animation.easeInOut(duration: 1.8)
+        .repeatForever(autoreverses: true),
+      value: model.isPulsating
+    )
+    .onAppear {
+      model.isPulsating = true
+    }
   }
   
   func instructionText(gp: GeometryProxy, multiplier: CGFloat) -> some View {
-    Text("画面を下向きにしてタイマーを開始")
-      .frame(width: gp.size.width * 0.9, height: 60 * multiplier)
-      .padding(.horizontal, 10)
-      .font(.custom("IBM Plex Mono", size: 20 * multiplier))
-      .transition(.blurReplace())
+    HStack {
+      Image(systemName: "arrow.turn.down.right")
+        .font(.system(size: 16 * multiplier))
+        .foregroundColor(Color(hex: "#228BE6")!)
+      
+      Text("画面を下向きにしてタイマーを開始")
+        .font(.custom("IBM Plex Mono", size: 16 * multiplier))
+        .foregroundColor(Color(hex: "#495057")!)
+    }
+    .padding(.horizontal, 20 * multiplier)
+    .padding(.vertical, 12 * multiplier)
+    .background(
+      RoundedRectangle(cornerRadius: 12 * multiplier)
+        .fill(Color(hex: "#F1F3F5")!)
+    )
   }
   
   func categorySelectionButton(multiplier: CGFloat) -> some View {
     Button {
       model.delegate?.tapCategorySelectionButton()
     } label: {
-      HStack(alignment: .center) {
+      HStack(spacing: 10 * multiplier) {
+        Image(systemName: "tag.fill")
+          .font(.system(size: 16 * multiplier))
+          .foregroundColor(Color(hex: "#339AF0")!)
+        
+        Text(model.selectedCategory ?? "カテゴリーを選択")
+          .font(.custom("IBM Plex Mono", size: 18 * multiplier))
+          .fontWeight(.medium)
+          .foregroundColor(Color(hex: "#495057")!)
+        
         Spacer()
-          .frame(width: 70 * multiplier)
-        Text(model.selectedCategory ?? "カテゴリー")
-          .font(.custom("IBM Plex Mono", size: 24 * multiplier))
-          .foregroundStyle(.black)
-          .minimumScaleFactor(0.5)
-          .lineLimit(1)
-        Spacer()
-          .frame(width: 30 * multiplier)
-        Text("▼")
-          .frame(width: 24 * multiplier, height: 24 * multiplier)
-          .foregroundStyle(.black)
-        Spacer()
-          .frame(width: 16 * multiplier)
+        
+        Image(systemName: "chevron.down")
+          .font(.system(size: 14 * multiplier))
+          .foregroundColor(Color(hex: "#868E96")!)
       }
-      .frame(width: 260 * multiplier, height: 54 * multiplier)
-      .background(Color(hex: "F6F0F0"))
-      .clipShape(RoundedRectangle(cornerRadius: 20 * multiplier))
+      .padding(.horizontal, 20 * multiplier)
+      .padding(.vertical, 16 * multiplier)
+      .background(
+        RoundedRectangle(cornerRadius: 12 * multiplier)
+          .fill(Color.white)
+          .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.1), radius: 4, x: 0, y: 2)
+      )
     }
   }
   
@@ -162,49 +201,77 @@ extension TimerPage {
 // MARK: ResultView②
 extension TimerPage {
   func resultView(gp: GeometryProxy, multiplier: CGFloat) -> some View {
-    Color.black.opacity(0.85) // 少し透明度を上げる
-      .ignoresSafeArea()
-      .overlay(
-        VStack(spacing: 20 * multiplier) {
+    ZStack {
+      // 背景をブラー効果付きの半透明に
+      Color(hex: "#212529")!.opacity(0.9)
+        .ignoresSafeArea()
+        .blur(radius: 0.5)
+      
+      // コンテンツカード
+      VStack(spacing: 24 * multiplier) {
+        // 成功アイコン
+        Image(systemName: "checkmark.circle.fill")
+          .font(.system(size: 60 * multiplier))
+          .foregroundColor(Color(hex: "#51CF66")!)
+          .padding(.bottom, 10 * multiplier)
+        
+        Text("集中完了！")
+          .font(.custom("IBM Plex Mono", size: 28 * multiplier))
+          .fontWeight(.bold)
+          .foregroundColor(.white)
+        
+        VStack(spacing: 10 * multiplier) {
           Text("１分から")
-            .foregroundColor(.white)
-            .font(.custom("IBM Plex Mono", size: 24 * multiplier))
+            .foregroundColor(Color(hex: "#DEE2E6")!)
+            .font(.custom("IBM Plex Mono", size: 20 * multiplier))
           
           Text("\(model.totalFocusTime ?? "20分14秒")")
-            .foregroundColor(Color(hex: "#FFDD00")!) // より鮮やかな黄色
-            .font(.custom("IBM Plex Mono", size: 40 * multiplier))
-            .bold()
-          Text("も集中できた！")
-            .foregroundColor(.white)
-            .font(.custom("IBM Plex Mono", size: 32 * multiplier))
-            .bold()
-          Text("1分からでも習慣化させよう")
-            .foregroundColor(.white)
-            .font(.custom("IBM Plex Mono", size: 24 * multiplier))
-            .bold()
+            .foregroundColor(Color(hex: "#74C0FC")!)
+            .font(.custom("IBM Plex Mono", size: 42 * multiplier))
+            .fontWeight(.bold)
           
-          Button {
-            
-            withAnimation(.easeInOut(duration: 1.0)) {
-              model.showResultView = false // 結果画面を閉じる
-              
-            }
-            model.delegate?.tapCompletedButton()
-          } label: {
-            Text("👍完了")
-              .foregroundColor(.black)
-              .frame(width: 150 * multiplier, height: 50 * multiplier)
-              .background(
-                LinearGradient(gradient: Gradient(colors: [Color(hex: "#FFFFFF")!, Color(hex: "#F0F0F0")!]), 
-                              startPoint: .top, 
-                              endPoint: .bottom)
-              )
-              .cornerRadius(10)
-              .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 4)
-          }
+          Text("も集中できた！")
+            .foregroundColor(Color(hex: "#DEE2E6")!)
+            .font(.custom("IBM Plex Mono", size: 20 * multiplier))
         }
-          .padding()
+        .padding(.vertical, 20 * multiplier)
+        
+        Text("1分からでも習慣化させよう")
+          .foregroundColor(Color(hex: "#ADB5BD")!)
+          .font(.custom("IBM Plex Mono", size: 16 * multiplier))
+          .padding(.bottom, 10 * multiplier)
+        
+        Button {
+          withAnimation(.easeInOut(duration: 1.0)) {
+            model.showResultView = false
+          }
+          model.delegate?.tapCompletedButton()
+        } label: {
+          Text("完了")
+            .font(.custom("IBM Plex Mono", size: 18 * multiplier))
+            .fontWeight(.medium)
+            .foregroundColor(.white)
+            .frame(width: 180 * multiplier, height: 54 * multiplier)
+            .background(
+              LinearGradient(
+                gradient: Gradient(colors: [Color(hex: "#339AF0")!, Color(hex: "#228BE6")!]),
+                startPoint: .leading,
+                endPoint: .trailing
+              )
+            )
+            .cornerRadius(27 * multiplier)
+            .shadow(color: Color(hex: "#1971C2")!.opacity(0.3), radius: 8, x: 0, y: 4)
+        }
+      }
+      .padding(.horizontal, 30 * multiplier)
+      .padding(.vertical, 40 * multiplier)
+      .background(
+        RoundedRectangle(cornerRadius: 24 * multiplier)
+          .fill(Color(hex: "#343A40")!)
+          .shadow(color: .black.opacity(0.2), radius: 20, x: 0, y: 10)
       )
+      .padding(.horizontal, 20 * multiplier)
+    }
   }
 }
 
@@ -228,8 +295,7 @@ class TimerPageViewModel: ObservableObject {
   @Published var remainingTime: String = "01:00"
   @Published var showResultView: Bool = false
   @Published var progress: CGFloat = 0
-  @Published var isPulsating: Bool = true
-  
+  @Published var isPulsating: Bool = false // パルスアニメーション用
   
   // Category
   @Published var isCategoryPopupPresented = false
@@ -250,9 +316,6 @@ class TimerPageViewModel: ObservableObject {
   }
   func startProgressAnimation() {
     progress = 0
-    withAnimation(.linear(duration: 6).repeatForever(autoreverses: false)) {
-      progress = 1
-    }
     
     // パルスアニメーションを開始
     self.isPulsating = true
@@ -262,7 +325,6 @@ class TimerPageViewModel: ObservableObject {
     self.selectedCategory = category
     hideCategoryPopup()
   }
-  
 }
 
 // ViewModel Method

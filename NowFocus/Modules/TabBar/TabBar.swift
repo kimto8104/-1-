@@ -6,35 +6,72 @@
 //
 
 import SwiftUI
+import CoreHaptics // 触覚フィードバック用
 
 struct TabBarView: View {
   @Binding var selectedTab: TabIcon
   @State var Xoffset = 0.0
   var multiplier: CGFloat
+  @State private var hapticEngine: CHHapticEngine? // 触覚エンジン
+  
   var body: some View {
-    HStack {
+    HStack(spacing: 0) {
       ForEach(Array(tabItems.enumerated()), id: \.element.id) { index, item in
-        Spacer()
-        Image(systemName: item.iconname)
-          .resizable()
-          .bold()
-          .frame(width: 24 * multiplier, height: 24 * multiplier)
-          .symbolVariant(selectedTab == item.tab ? .fill : .none)
-          .contentTransition(.symbolEffect)
-          .onTapGesture {
+        Button {
+          if selectedTab != item.tab {
+            // 振動フィードバック
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            
             withAnimation(.spring()) {
               selectedTab = item.tab
               Xoffset = (CGFloat(index) * 70) * multiplier
             }
           }
-        Spacer()
-      }.frame(width: 23.3 * multiplier)
-    }.frame(height: 70 * multiplier)
-      .background(.thinMaterial, in: .rect(cornerRadius: 20 * multiplier))
-      .overlay(alignment: .bottomLeading) {
-        Circle().frame(width: 10 * multiplier, height: 10 * multiplier)
-          .offset(x: 30 * multiplier, y: -5 * multiplier).offset(x: Xoffset)
+        } label: {
+          VStack(spacing: 6 * multiplier) {
+            Image(systemName: item.iconname)
+              .font(.system(size: 22 * multiplier, weight: .medium))
+              .foregroundColor(selectedTab == item.tab ? 
+                            Color(hex: "#339AF0")! : 
+                            Color(hex: "#868E96")!)
+            
+            // 選択中のタブにインジケーターを表示
+            if selectedTab == item.tab {
+              Circle()
+                .fill(Color(hex: "#339AF0")!)
+                .frame(width: 5 * multiplier, height: 5 * multiplier)
+            } else {
+              Circle()
+                .fill(Color.clear)
+                .frame(width: 5 * multiplier, height: 5 * multiplier)
+            }
+          }
+          .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(PlainButtonStyle())
       }
+    }
+    .padding(.vertical, 12 * multiplier)
+    .frame(height: 70 * multiplier)
+    .background(
+      RoundedRectangle(cornerRadius: 20 * multiplier)
+        .fill(Color.white)
+        .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.15), radius: 8, x: 0, y: 4)
+    )
+    .padding(.horizontal, 30 * multiplier)
+    .onAppear(perform: prepareHaptics)
+  }
+  
+  // 触覚エンジンの準備
+  private func prepareHaptics() {
+    guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+    
+    do {
+      hapticEngine = try CHHapticEngine()
+      try hapticEngine?.start()
+    } catch {
+      print("触覚エンジンの開始に失敗: \(error.localizedDescription)")
+    }
   }
 }
 
