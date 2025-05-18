@@ -52,13 +52,13 @@ struct TabBarView: View {
       }
     }
     .padding(.vertical, 12 * multiplier)
-    .frame(height: 70 * multiplier)
+    .frame(width: 200 * multiplier, height: 70 * multiplier)
     .background(
       RoundedRectangle(cornerRadius: 20 * multiplier)
         .fill(Color.white)
         .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.15), radius: 8, x: 0, y: 4)
     )
-    .padding(.horizontal, 30 * multiplier)
+    .padding(.horizontal, 20 * multiplier)
     .onAppear(perform: prepareHaptics)
   }
   

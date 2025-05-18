@@ -34,6 +34,7 @@ protocol TimerPresenterProtocol: ObservableObject {
   func saveStartDate(_ date: Date)
   // MotionManager
   func updateIsFaceDown(isFaceDown: Bool)
+  func updateFaceUpCount(count: Int)
 //  func startMonitoringDeviceMotion()
   func stopMonitoringDeviceMotion()
   func updateSelectedCategory(_ category: String)
@@ -62,6 +63,10 @@ class TimerPresenter: NSObject, TimerPresenterProtocol {
   
   func updateIsFaceDown(isFaceDown: Bool) {
     view.model.updateIsFaceDown(isFaceDown: isFaceDown)
+  }
+  
+  func updateFaceUpCount(count: Int) {
+    view.model.updateFaceUpCount(count: count)
   }
   
   func updateShowAlertForPause(showAlert: Bool) {
@@ -123,6 +128,7 @@ class TimerPresenter: NSObject, TimerPresenterProtocol {
 extension TimerPresenter: TimerPageDelegate {
   
   func tapCategorySelectionButton() {
+    print("tapCategorySelectionButton: 開始")
     let presenter = CategoryPopupPresenter()
     let view = presenter.view
     let router = CategoryPopupRouter(view: view, parentView: self.view)
@@ -131,8 +137,18 @@ extension TimerPresenter: TimerPageDelegate {
     presenter.interactor = interactor
     presenter.router = router
     presenter.timerPresenter = self
+    
+    print("カテゴリーポップアップ初期化完了")
     self.view.model.categoryPopup = presenter.view
+    print("カテゴリーポップアップ設定完了: \(self.view.model.categoryPopup != nil)")
+    
+    // ポップアップ表示前のStateチェック
+    print("表示前: isCategoryPopupPresented=\(self.view.model.isCategoryPopupPresented)")
+    
     self.view.model.showCategoryPopup()
+    
+    // ポップアップ表示後のStateチェック
+    print("表示後: isCategoryPopupPresented=\(self.view.model.isCategoryPopupPresented)")
   }
   
   func tapResetAlertOKButton() {

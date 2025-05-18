@@ -63,6 +63,7 @@ struct TimerPage: View {
         
         // カテゴリーポップアップ
         if model.isCategoryPopupPresented {
+          let _ = print("ポップアップ表示条件成立: isCategoryPopupPresented=\(model.isCategoryPopupPresented)")
           Color.black.opacity(0.3)
           model.categoryPopup
             .opacity(model.isCategoryPopupPresented ? 1 : 0)
@@ -171,7 +172,7 @@ extension TimerPage {
           .font(.system(size: 16 * multiplier))
           .foregroundColor(Color(hex: "#339AF0")!)
         
-        Text(model.selectedCategory ?? "カテゴリーを選択")
+        Text(model.selectedCategory ?? "カテゴリー選択")
           .font(.custom("IBM Plex Mono", size: 18 * multiplier))
           .fontWeight(.medium)
           .foregroundColor(Color(hex: "#495057")!)
@@ -242,7 +243,7 @@ extension TimerPage {
           .padding(.bottom, 10 * multiplier)
         
         Button {
-          withAnimation(.easeInOut(duration: 1.0)) {
+          withAnimation(.easeInOut(duration: 0.5)) {
             model.showResultView = false
           }
           model.delegate?.tapCompletedButton()
@@ -296,6 +297,7 @@ class TimerPageViewModel: ObservableObject {
   @Published var showResultView: Bool = false
   @Published var progress: CGFloat = 0
   @Published var isPulsating: Bool = false // パルスアニメーション用
+  @Published var faceUpCount: Int = 0 // 上向きになった回数(内部保持用)
   
   // Category
   @Published var isCategoryPopupPresented = false
@@ -309,11 +311,13 @@ class TimerPageViewModel: ObservableObject {
   }
   
   func hideCategoryPopup() {
+    print("hideCategoryPopup呼び出し")
     withAnimation(.easeInOut(duration: 0.2)) {
       self.isCategoryPopupPresented = false
-//      categoryPopup = nil
+      print("isCategoryPopupPresented解除: \(self.isCategoryPopupPresented)")
     }
   }
+  
   func startProgressAnimation() {
     progress = 0
     
@@ -336,6 +340,10 @@ extension TimerPageViewModel {
   
   func updateIsFaceDown(isFaceDown: Bool) {
     self.isFaceDown = isFaceDown
+  }
+  
+  func updateFaceUpCount(count: Int) {
+    self.faceUpCount = count
   }
   
   func updateTimerState(timerState: TimerState) {

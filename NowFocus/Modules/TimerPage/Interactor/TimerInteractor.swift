@@ -23,6 +23,8 @@ protocol TimerInteractorProtocol: AnyObject {
   func resetMotionManager()
   
   func updateSelectedCategory(_ category: String)
+  func getFaceUpCount() -> Int
+  func resetFaceUpCount()
 }
 
 class TimerInteractor: TimerInteractorProtocol {
@@ -75,6 +77,15 @@ class TimerInteractor: TimerInteractorProtocol {
         } else {
           await self.handleTimerCompletion()
         }
+      }
+    }
+    .store(in: &cancellables)
+    
+    // 上向きになった回数の変更を監視
+    motionManagerService.$faceUpCount.sink { [weak self] count in
+      guard let self else { return }
+      Task {
+        await self.presenter?.updateFaceUpCount(count: count)
       }
     }
     .store(in: &cancellables)
@@ -200,10 +211,11 @@ class TimerInteractor: TimerInteractorProtocol {
       let focusHistory = FocusHistory(
         startDate: startDate,
         duration: (initialTime + extraFocusTime),
-        category: selectedCategory // 選択されたカテゴリーを保存
+        category: selectedCategory, // 選択されたカテゴリーを保存
+        faceUpCount: motionManagerService.faceUpCount // 上向きになった回数を保存
       )
       ModelContainerManager.shared.saveFocusHistory(history: focusHistory)
-      print("カテゴリー：\(focusHistory.category)、時間:\(focusHistory.duration.description)、開始時期：\(focusHistory.startDate.description)保存を完了しました")
+      print("カテゴリー：\(focusHistory.category)、時間:\(focusHistory.duration.description)、開始時期：\(focusHistory.startDate.description)、上向き回数：\(focusHistory.faceUpCount)保存を完了しました")
     } else {
       print("SwiftDataへ保存を失敗しました。：startDateが存在しませんでした")
     }
@@ -236,6 +248,14 @@ class TimerInteractor: TimerInteractorProtocol {
   
   func resetMotionManager() {
     motionManagerService.reset()
+  }
+  
+  func getFaceUpCount() -> Int {
+    return motionManagerService.faceUpCount
+  }
+  
+  func resetFaceUpCount() {
+    motionManagerService.resetFaceUpCount()
   }
   
   func updateSelectedCategory(_ category: String) {

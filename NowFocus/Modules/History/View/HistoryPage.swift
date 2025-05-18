@@ -12,6 +12,7 @@ struct HistoryPage: View {
   @Query(animation: .bouncy) private var allHistory: [FocusHistory]
   @StateObject private var viewModel = HistoryViewModel()
   @State private var showingCategoryList = false
+  
   var body: some View {
     GeometryReader { gp in
       let hm = gp.size.width / 375
@@ -19,49 +20,54 @@ struct HistoryPage: View {
       let multiplier = abs(hm - 1) < abs(vm - 1) ? hm : vm
       
       ZStack {
-        GradientBackgroundUtil.gradientBackground(size: gp.size, multiplier: multiplier)
+        // TimerPageと同じ背景グラデーション
+        LinearGradient(
+          gradient: Gradient(colors: [
+            Color(hex: "#F8F9FA")!,
+            Color(hex: "#E9ECEF")!
+          ]),
+          startPoint: .top,
+          endPoint: .bottom
+        )
+        .ignoresSafeArea()
         
-        VStack(spacing: 20 * multiplier) {
-          // カテゴリー選択ボタン
-          Button {
-            showingCategoryList = true
-          } label: {
-            HStack {
-              Spacer()
-              Text(viewModel.selectedCategory ?? "全て")
-                .font(.custom("IBM Plex Mono", size: 16 * multiplier))
-                .foregroundColor(.black)
-              Spacer()
-              Text("▼")
-                .foregroundColor(.black)
-            }
-            .padding(.horizontal, 20 * multiplier)
-            .padding(.vertical, 10 * multiplier)
-            .frame(width: 160 * multiplier, height: 54 * multiplier)
-            .background(Color(hex: "FFFAFA")!.opacity(0.8))
-            .cornerRadius(20 * multiplier)
-          }
+        VStack {
+          // 上部スペースを固定サイズに変更
+          Spacer().frame(height: 60 * multiplier)
           
-          Spacer()
-            .frame(height: 40 * multiplier)
-          
-          // 合計集中時間
-          VStack {
-            Text(viewModel.selectedCategory == nil ? "合計集中時間" : "\(viewModel.selectedCategory!)の集中時間")
-              .foregroundColor(.black)
-              .shadow(color: .black.opacity(0.2), radius: 2 * multiplier, x: 0, y: 4 * multiplier)
-              .font(.custom("IBM Plex Mono", size: 24 * multiplier))
-              .padding(.bottom, 10)
+          VStack(spacing: 30 * multiplier) {
+            // ヘッダー
+            Text("集中履歴")
+              .font(.system(size: 24 * multiplier, weight: .medium))
+              .foregroundColor(Color(hex: "#212529")!)
+              .padding(.bottom, 10 * multiplier)
             
-            Text(viewModel.formatDuration(viewModel.filteredDuration))
-              .foregroundColor(.black)
-              .shadow(color: .black.opacity(0.2), radius: 2 * multiplier, x: 0, y: 4 * multiplier)
-              .font(.custom("IBM Plex Mono", size: 44 * multiplier))
+            // カテゴリー選択ボタン
+            categorySelectionButton(multiplier: multiplier)
+              .padding(.bottom, 10 * multiplier)
+            
+            // 合計集中時間カード
+            timeStatisticsCard(gp: gp, multiplier: multiplier)
+            
+            // 履歴リスト
+            ScrollView {
+              LazyVStack(spacing: 12 * multiplier) {
+                // フィルター適用されたリスト表示
+                let filteredHistory = viewModel.selectedCategory == nil ? 
+                  allHistory : 
+                  allHistory.filter { $0.category == viewModel.selectedCategory }
+                
+                ForEach(filteredHistory.sorted(by: { $0.startDate > $1.startDate })) { history in
+                  historyCardView(history: history, multiplier: multiplier)
+                }
+              }
+              .padding(.horizontal, 5 * multiplier)
+            }
           }
           
-          Spacer()
-            .frame(width: 60 * multiplier, height: 60 * multiplier)
+          Spacer() // 下部スペース
         }
+        .padding(.horizontal, 20 * multiplier)
       }
       .sheet(isPresented: $showingCategoryList) {
         categoryListView(multiplier: multiplier)
@@ -74,6 +80,69 @@ struct HistoryPage: View {
     }
   }
   
+  // カテゴリー選択ボタン
+  private func categorySelectionButton(multiplier: CGFloat) -> some View {
+    Button {
+      showingCategoryList = true
+    } label: {
+      HStack(spacing: 10 * multiplier) {
+        Image(systemName: "tag.fill")
+          .font(.system(size: 16 * multiplier))
+          .foregroundColor(Color(hex: "#339AF0")!)
+        
+        Text(viewModel.selectedCategory ?? "全てのカテゴリー")
+          .font(.system(size: 18 * multiplier, weight: .medium))
+          .foregroundColor(Color(hex: "#495057")!)
+        
+        Spacer()
+        
+        Image(systemName: "chevron.down")
+          .font(.system(size: 14 * multiplier))
+          .foregroundColor(Color(hex: "#868E96")!)
+      }
+      .padding(.horizontal, 20 * multiplier)
+      .padding(.vertical, 16 * multiplier)
+      .background(
+        RoundedRectangle(cornerRadius: 12 * multiplier)
+          .fill(Color.white)
+          .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.1), radius: 4, x: 0, y: 2)
+      )
+    }
+  }
+  
+  // 集中時間統計カード
+  private func timeStatisticsCard(gp: GeometryProxy, multiplier: CGFloat) -> some View {
+    VStack(spacing: 16 * multiplier) {
+      // カテゴリー名またはテキスト
+      Text(viewModel.selectedCategory == nil ? "合計集中時間" : "\(viewModel.selectedCategory!)の集中時間")
+        .font(.system(size: 20 * multiplier, weight: .medium))
+        .foregroundColor(Color(hex: "#495057")!)
+      
+      // 時間表示
+      Text(viewModel.formatDuration(viewModel.filteredDuration))
+        .font(.system(size: 36 * multiplier, weight: .semibold, design: .monospaced))
+        .foregroundColor(Color(hex: "#339AF0")!)
+        .tracking(-0.5) // 文字間隔を少し詰める
+        .lineLimit(1)
+        .minimumScaleFactor(0.7) // 長い時間でも表示できるように
+        .padding(.vertical, 10 * multiplier)
+      
+      // 小さい説明文
+      Text("これまでの集計")
+        .font(.system(size: 14 * multiplier))
+        .foregroundColor(Color(hex: "#868E96")!)
+    }
+    .padding(.vertical, 30 * multiplier)
+    .padding(.horizontal, 25 * multiplier)
+    .frame(width: gp.size.width * 0.85)
+    .background(
+      RoundedRectangle(cornerRadius: 16 * multiplier)
+        .fill(Color.white)
+        .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.15), radius: 8, x: 0, y: 4)
+    )
+  }
+  
+  // カテゴリー選択リスト
   private func categoryListView(multiplier: CGFloat) -> some View {
     NavigationView {
       List {
@@ -82,12 +151,13 @@ struct HistoryPage: View {
           showingCategoryList = false
         } label: {
           HStack {
-            Text("全て")
-              .foregroundColor(.black)
+            Text("全てのカテゴリー")
+              .font(.system(size: 16 * multiplier))
+              .foregroundColor(Color(hex: "#495057")!)
             Spacer()
             if viewModel.selectedCategory == nil {
               Image(systemName: "checkmark")
-                .foregroundColor(.blue)
+                .foregroundColor(Color(hex: "#339AF0")!)
             }
           }
         }
@@ -99,16 +169,18 @@ struct HistoryPage: View {
           } label: {
             HStack {
               Text(category)
-                .font(.custom("IBM Plex Mono", size: 16 * multiplier))
+                .font(.system(size: 16 * multiplier))
+                .foregroundColor(Color(hex: "#495057")!)
               Spacer()
               if viewModel.selectedCategory == category {
                 Image(systemName: "checkmark")
-                  .foregroundColor(.blue)
+                  .foregroundColor(Color(hex: "#339AF0")!)
               }
             }
           }
         }
       }
+      .listStyle(InsetGroupedListStyle())
       .navigationTitle("カテゴリー選択")
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
@@ -116,14 +188,74 @@ struct HistoryPage: View {
           Button(action: {
             showingCategoryList = false
           }) {
-            Image("Category_CloseButton")
-              .resizable()
-              .foregroundStyle(Color(hex: "D9D9D9")!)
-              .frame(width: 35 * multiplier, height: 31 * multiplier)
+            Image(systemName: "xmark.circle.fill")
+              .font(.system(size: 20 * multiplier))
+              .foregroundColor(Color(hex: "#868E96")!)
           }
         }
       }
     }
+  }
+  
+  // 履歴カード表示
+  private func historyCardView(history: FocusHistory, multiplier: CGFloat) -> some View {
+    VStack(alignment: .leading, spacing: 10 * multiplier) {
+      // 日付と時間
+      HStack {
+        Text(formatDate(history.startDate))
+          .font(.system(size: 16 * multiplier, weight: .medium))
+          .foregroundColor(Color(hex: "#495057")!)
+        
+        Spacer()
+        
+        Text(viewModel.formatDuration(history.duration))
+          .font(.system(size: 16 * multiplier, weight: .semibold))
+          .foregroundColor(Color(hex: "#228BE6")!)
+      }
+      
+      // カテゴリーとトリガー回数
+      HStack {
+        if let category = history.category {
+          // カテゴリー表示
+          HStack(spacing: 6 * multiplier) {
+            Image(systemName: "tag.fill")
+              .font(.system(size: 14 * multiplier))
+              .foregroundColor(Color(hex: "#228BE6")!)
+            
+            Text(category)
+              .font(.system(size: 14 * multiplier))
+              .foregroundColor(Color(hex: "#495057")!)
+          }
+        }
+        
+        Spacer()
+        
+        // 上向き回数表示
+        HStack(spacing: 6 * multiplier) {
+          Image(systemName: "rotate.3d")
+            .font(.system(size: 14 * multiplier))
+            .foregroundColor(Color(hex: "#228BE6")!)
+          
+          Text("上向き: \(history.faceUpCount)回")
+            .font(.system(size: 14 * multiplier))
+            .foregroundColor(Color(hex: "#495057")!)
+        }
+      }
+    }
+    .padding(.horizontal, 16 * multiplier)
+    .padding(.vertical, 14 * multiplier)
+    .background(
+      RoundedRectangle(cornerRadius: 12 * multiplier)
+        .fill(Color.white)
+        .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.1), radius: 4, x: 0, y: 2)
+    )
+  }
+  
+  // 日付フォーマット
+  private func formatDate(_ date: Date) -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy/MM/dd HH:mm"
+    return formatter.string(from: date)
   }
 }
 
@@ -185,6 +317,30 @@ class HistoryViewModel: ObservableObject {
   
   func selectCategory(_ category: String?) {
     selectedCategory = category
+  }
+}
+
+// カードに上向き回数表示を追加
+struct HistoryItemCard: View {
+  let history: FocusHistory
+  let multiplier: CGFloat
+  
+  var body: some View {
+    VStack(alignment: .leading, spacing: 8 * multiplier) {
+      // 既存のコード
+      
+      // 上向きになった回数表示を追加
+      HStack {
+        Image(systemName: "rotate.3d")
+          .font(.system(size: 14 * multiplier))
+          .foregroundColor(Color(hex: "#228BE6")!)
+        
+        Text("上向き回数: \(history.faceUpCount)回")
+          .font(.system(size: 14 * multiplier))
+          .foregroundColor(Color(hex: "#495057")!)
+      }
+    }
+    // ... 残りの既存のコード
   }
 }
 

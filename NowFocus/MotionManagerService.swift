@@ -15,9 +15,11 @@ class MotionManagerService: ObservableObject {
   private let motionManager = CMMotionManager()
   @Published var isMonitoring = false
   @Published var isFaceDown = false
+  @Published var faceUpCount: Int = 0
   
   private var initialAttitude: CMAttitude?
   private var audioPlayer: AVAudioPlayer?
+  private var previousFaceDownState: Bool = false
   
   // 端末の動き検知を開始
   func startMonitoringDeviceMotion() {
@@ -49,6 +51,13 @@ class MotionManagerService: ObservableObject {
         
         // 状態が変わったときのみ更新
         if newIsFaceDown != self.isFaceDown {
+          // 前回の状態が下向きで、今回上向きになった場合にカウントアップ
+          if self.previousFaceDownState && !newIsFaceDown {
+            self.faceUpCount += 1
+            print("上向きになった回数: \(self.faceUpCount)")
+          }
+          
+          self.previousFaceDownState = self.isFaceDown
           self.isFaceDown = newIsFaceDown
         }
       }
@@ -89,5 +98,11 @@ class MotionManagerService: ObservableObject {
     initialAttitude = nil
     audioPlayer?.stop()
     isMonitoring = false
+    // リセット時にはカウントをリセットしない（セッション中の合計を記録するため）
+  }
+  
+  func resetFaceUpCount() {
+    faceUpCount = 0
+    previousFaceDownState = false
   }
 }
