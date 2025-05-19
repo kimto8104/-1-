@@ -16,7 +16,6 @@ enum TimerState: String {
 // MARK: Protocol
 protocol TimerPresenterProtocol: ObservableObject {
   var interactor: TimerInteractorProtocol? { get set }
-  var router: TimerRouterProtocol? { get set }
   
   var startDate: Date? { get }
   var totalFocusTimeInTimeInterval: TimeInterval? { get }
@@ -50,7 +49,6 @@ class TimerPresenter: NSObject, TimerPresenterProtocol {
   
   private(set) lazy var view = TimerPage().delegate(self)
   var interactor: TimerInteractorProtocol?
-  var router: TimerRouterProtocol?
   
   // 00:50のフォーマットに変えてViewに渡す
   func updateRemainingTime(remainingTime: String) {

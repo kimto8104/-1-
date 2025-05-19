@@ -367,6 +367,6 @@ extension TimerPageViewModel {
 
 struct TimerPage_Previews: PreviewProvider {
   static var previews: some View {
-    TimerRouter.initializeTimerModule(with: 1)
+//    TimerRouter.initializeTimerModule(with: 1)
   }
 }
