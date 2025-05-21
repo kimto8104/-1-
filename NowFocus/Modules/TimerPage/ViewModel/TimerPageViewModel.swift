@@ -6,10 +6,14 @@
 //
 
 import SwiftUI
+import Combine
 
 // MARK: ViewModel
 class TimerPageViewModel: ObservableObject {
-//  fileprivate var delegate: TimerPageDelegate?
+
+  private let motionManagerService: MotionManagerService
+  private var cancellables = Set<AnyCancellable>()
+  
   @Published var selectedTab: TabIcon = .Home
   // 合計集中時間文字列
   @Published var totalFocusTime: String?
@@ -21,14 +25,30 @@ class TimerPageViewModel: ObservableObject {
   @Published var progress: CGFloat = 0
   @Published var isPulsating: Bool = false // パルスアニメーション用
   @Published var faceUpCount: Int = 0 // 上向きになった回数(内部保持用)
-  
-  
-  // MotionManagerService
-  
   // Category
   @Published var isCategoryPopupPresented = false
   var categoryPopup: CategoryPopup?  // モジュールをここで保持
   @Published var selectedCategory: String?
+  
+  init(motionManagerService: MotionManagerService) {
+    self.motionManagerService = motionManagerService
+    // isFaceDownの状態変更を監視
+    motionManagerService.$isFaceDown.sink { [weak self] isFaceDown in
+      guard let self else { return }
+      
+    }
+    .store(in: &cancellables)
+  }
+  
+  private func handleDeviceOrientationChange(isFaceDown: Bool) {
+    if isFaceDown {
+      
+    } else {
+      
+    }
+  }
+  
+  
   
   func showCategoryPopup() {
     withAnimation(.easeInOut(duration: 0.2)) {
@@ -67,10 +87,6 @@ extension TimerPageViewModel {
   
   func updateTotalFocusTime(totalFocusTimeString: String) {
     self.totalFocusTime = totalFocusTimeString
-  }
-  
-  func updateIsFaceDown(isFaceDown: Bool) {
-    self.isFaceDown = isFaceDown
   }
   
   func updateFaceUpCount(count: Int) {
