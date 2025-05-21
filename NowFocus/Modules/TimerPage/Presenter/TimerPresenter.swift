@@ -47,7 +47,7 @@ class TimerPresenter: NSObject, TimerPresenterProtocol {
   // タブバー表示状態を保持
   var isTabBarVisible: Binding<Bool>?
   
-  private(set) lazy var view = TimerPage().delegate(self)
+  private(set) lazy var view = TimerPage()
   var interactor: TimerInteractorProtocol?
   
   // 00:50のフォーマットに変えてViewに渡す
@@ -99,7 +99,7 @@ class TimerPresenter: NSObject, TimerPresenterProtocol {
   func resetTimer() {
     interactor?.resetTimer()
     interactor?.updateTimerState(timerState: .start)
-    startMonitoringDeviceMotion()
+//    startMonitoringDeviceMotion()
 //    view.model.startProgressAnimation()
   }
   
@@ -123,41 +123,41 @@ class TimerPresenter: NSObject, TimerPresenterProtocol {
   }
 }
 
-extension TimerPresenter: TimerPageDelegate {
-  
-  func tapCategorySelectionButton() {
-    print("tapCategorySelectionButton: 開始")
-    let presenter = CategoryPopupPresenter()
-    let view = presenter.view
-    let router = CategoryPopupRouter(view: view, parentView: self.view)
-    let interactor = CategoryPopupInteractor()
-    interactor.presenter = presenter
-    presenter.interactor = interactor
-    presenter.router = router
-    presenter.timerPresenter = self
-    
-    print("カテゴリーポップアップ初期化完了")
-    self.view.model.categoryPopup = presenter.view
-    print("カテゴリーポップアップ設定完了: \(self.view.model.categoryPopup != nil)")
-    
-    // ポップアップ表示前のStateチェック
-    print("表示前: isCategoryPopupPresented=\(self.view.model.isCategoryPopupPresented)")
-    
-    self.view.model.showCategoryPopup()
-    
-    // ポップアップ表示後のStateチェック
-    print("表示後: isCategoryPopupPresented=\(self.view.model.isCategoryPopupPresented)")
-  }
-  
-  func tapResetAlertOKButton() {
-    self.resetTimer()
-  }
-  
-  func tapCompletedButton() {
-    self.resetTimer()
-  }
-  
-  func startMonitoringDeviceMotion() {
-    interactor?.startMonitoringDeviceMotion()
-  }
-}
+//extension TimerPresenter: TimerPageDelegate {
+//  
+//  func tapCategorySelectionButton() {
+//    print("tapCategorySelectionButton: 開始")
+//    let presenter = CategoryPopupPresenter()
+//    let view = presenter.view
+//    let router = CategoryPopupRouter(view: view, parentView: self.view)
+//    let interactor = CategoryPopupInteractor()
+//    interactor.presenter = presenter
+//    presenter.interactor = interactor
+//    presenter.router = router
+//    presenter.timerPresenter = self
+//    
+//    print("カテゴリーポップアップ初期化完了")
+//    self.view.model.categoryPopup = presenter.view
+//    print("カテゴリーポップアップ設定完了: \(self.view.model.categoryPopup != nil)")
+//    
+//    // ポップアップ表示前のStateチェック
+//    print("表示前: isCategoryPopupPresented=\(self.view.model.isCategoryPopupPresented)")
+//    
+//    self.view.model.showCategoryPopup()
+//    
+//    // ポップアップ表示後のStateチェック
+//    print("表示後: isCategoryPopupPresented=\(self.view.model.isCategoryPopupPresented)")
+//  }
+//  
+//  func tapResetAlertOKButton() {
+//    self.resetTimer()
+//  }
+//  
+//  func tapCompletedButton() {
+//    self.resetTimer()
+//  }
+//  
+//  func startMonitoringDeviceMotion() {
+//    interactor?.startMonitoringDeviceMotion()
+//  }
+//}

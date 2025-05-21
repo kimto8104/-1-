@@ -35,6 +35,7 @@
 		FEB8405A2998B6FA00B945BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FEB840592998B6FA00B945BA /* Assets.xcassets */; };
 		FEB8405D2998B6FA00B945BA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FEB8405C2998B6FA00B945BA /* Preview Assets.xcassets */; };
 		FEB840682998C24500B945BA /* TimeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB840672998C24500B945BA /* TimeSelectionView.swift */; };
+		FEC011662DDDF39B0047AC58 /* TimerPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC011652DDDF39B0047AC58 /* TimerPageViewModel.swift */; };
 		FEC5498E2D58CD1E009F9D08 /* AddCategoryPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC5498D2D58CD1E009F9D08 /* AddCategoryPopup.swift */; };
 		FEF885322C74BE63005A9198 /* TimerProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF885312C74BE63005A9198 /* TimerProgressRing.swift */; };
 		FEFB29D329B7691E007D8FDA /* TimerPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEFB29D229B7691E007D8FDA /* TimerPage.swift */; };
@@ -72,6 +73,7 @@
 		FEB840592998B6FA00B945BA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FEB8405C2998B6FA00B945BA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		FEB840672998C24500B945BA /* TimeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSelectionView.swift; sourceTree = "<group>"; };
+		FEC011652DDDF39B0047AC58 /* TimerPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerPageViewModel.swift; sourceTree = "<group>"; };
 		FEC5498D2D58CD1E009F9D08 /* AddCategoryPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryPopup.swift; sourceTree = "<group>"; };
 		FEF885312C74BE63005A9198 /* TimerProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerProgressRing.swift; sourceTree = "<group>"; };
 		FEFB29D229B7691E007D8FDA /* TimerPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerPage.swift; sourceTree = "<group>"; };
@@ -185,6 +187,9 @@
 		FE5825D12C4D4853007AB552 /* TimerPage */ = {
 			isa = PBXGroup;
 			children = (
+				FEC011642DDDF3760047AC58 /* ViewModel */,
+				FEC011632DDDF3700047AC58 /* Model */,
+				FEC011622DDDF35E0047AC58 /* New Group */,
 				FE5825D62C4D48A6007AB552 /* Entity */,
 				FE5825D42C4D4895007AB552 /* Presenter */,
 				FE5825D32C4D488F007AB552 /* Interactor */,
@@ -307,6 +312,28 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		FEC011622DDDF35E0047AC58 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		FEC011632DDDF3700047AC58 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		FEC011642DDDF3760047AC58 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				FEC011652DDDF39B0047AC58 /* TimerPageViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		FEDF19A52C60FE8C0091E033 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -415,6 +442,7 @@
 				FE8EAA352A00C9910040FB07 /* AppDelegate.swift in Sources */,
 				FE11013F2CE9729600C833C1 /* CustomAlert.swift in Sources */,
 				FE70E9EF2D4D8384002C0B7F /* CategoryPopup.swift in Sources */,
+				FEC011662DDDF39B0047AC58 /* TimerPageViewModel.swift in Sources */,
 				FE54F1AE2C32EBCA0029DCDD /* TimerManager.swift in Sources */,
 				FE11003E2CCE764800C833C1 /* TimeSelectionPresenter.swift in Sources */,
 				FEFB29D329B7691E007D8FDA /* TimerPage.swift in Sources */,

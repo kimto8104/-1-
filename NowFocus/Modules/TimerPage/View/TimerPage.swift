@@ -11,12 +11,12 @@ import CoreMotion
 import SwiftData
 
 // Presenterへ通知するためのProtocol
-protocol TimerPageDelegate: AnyObject {
-  func startMonitoringDeviceMotion()
-  func tapResetAlertOKButton()
-  func tapCompletedButton()
-  func tapCategorySelectionButton()
-}
+//protocol TimerPageDelegate: AnyObject {
+//  func startMonitoringDeviceMotion()
+//  func tapResetAlertOKButton()
+//  func tapCompletedButton()
+//  func tapCategorySelectionButton()
+//}
 
 // MARK: - View
 struct TimerPage: View {
@@ -71,14 +71,14 @@ struct TimerPage: View {
       }
     }
     .onAppear(perform: {
-      model.delegate?.startMonitoringDeviceMotion()
+//      model.delegate?.startMonitoringDeviceMotion()
       model.startProgressAnimation()
     })
     
     .ignoresSafeArea()
     .alert("タイマーをリセットしました", isPresented: $model.showAlertForPause) {
       Button("OK") {
-        model.delegate?.tapResetAlertOKButton()
+//        model.delegate?.tapResetAlertOKButton()
       }
     } message: {
       Text("１分始めることが大事")
@@ -165,7 +165,7 @@ extension TimerPage {
   
   func categorySelectionButton(multiplier: CGFloat) -> some View {
     Button {
-      model.delegate?.tapCategorySelectionButton()
+//      model.delegate?.tapCategorySelectionButton()
     } label: {
       HStack(spacing: 10 * multiplier) {
         Image(systemName: "tag.fill")
@@ -246,7 +246,7 @@ extension TimerPage {
           withAnimation(.easeInOut(duration: 0.5)) {
             model.showResultView = false
           }
-          model.delegate?.tapCompletedButton()
+//          model.delegate?.tapCompletedButton()
         } label: {
           Text("完了")
             .font(.custom("IBM Plex Mono", size: 18 * multiplier))
@@ -272,95 +272,6 @@ extension TimerPage {
           .shadow(color: .black.opacity(0.2), radius: 20, x: 0, y: 10)
       )
       .padding(.horizontal, 20 * multiplier)
-    }
-  }
-}
-
-// MARK: Modifier
-extension TimerPage {
-  func delegate(_ value: TimerPageDelegate) -> Self {
-    model.delegate = value
-    return self
-  }
-}
-
-// MARK: ViewModel
-class TimerPageViewModel: ObservableObject {
-  fileprivate var delegate: TimerPageDelegate?
-  @Published fileprivate var selectedTab: TabIcon = .Home
-  // 合計集中時間文字列
-  @Published var totalFocusTime: String?
-  @Published var isFaceDown: Bool = false
-  @Published var timerState: TimerState = .start
-  @Published var showAlertForPause = false
-  @Published var remainingTime: String = "01:00"
-  @Published var showResultView: Bool = false
-  @Published var progress: CGFloat = 0
-  @Published var isPulsating: Bool = false // パルスアニメーション用
-  @Published var faceUpCount: Int = 0 // 上向きになった回数(内部保持用)
-  
-  // Category
-  @Published var isCategoryPopupPresented = false
-  var categoryPopup: CategoryPopup?  // モジュールをここで保持
-  @Published var selectedCategory: String?
-  
-  func showCategoryPopup() {
-    withAnimation(.easeInOut(duration: 0.2)) {
-      self.isCategoryPopupPresented = true
-    }
-  }
-  
-  func hideCategoryPopup() {
-    print("hideCategoryPopup呼び出し")
-    withAnimation(.easeInOut(duration: 0.2)) {
-      self.isCategoryPopupPresented = false
-      print("isCategoryPopupPresented解除: \(self.isCategoryPopupPresented)")
-    }
-  }
-  
-  func startProgressAnimation() {
-    progress = 0
-    
-    // パルスアニメーションを開始
-    self.isPulsating = true
-  }
-  
-  func updateSelectedCategory(_ category: String?) {
-    self.selectedCategory = category
-    hideCategoryPopup()
-  }
-}
-
-// ViewModel Method
-extension TimerPageViewModel {
-  
-  func updateTotalFocusTime(totalFocusTimeString: String) {
-    self.totalFocusTime = totalFocusTimeString
-  }
-  
-  func updateIsFaceDown(isFaceDown: Bool) {
-    self.isFaceDown = isFaceDown
-  }
-  
-  func updateFaceUpCount(count: Int) {
-    self.faceUpCount = count
-  }
-  
-  func updateTimerState(timerState: TimerState) {
-    self.timerState = timerState
-  }
-  
-  func updateShowAlertForPause(showAlert: Bool) {
-    self.showAlertForPause = showAlert
-  }
-  
-  func updateRemainingTime(remainingTime: String) {
-    self.remainingTime = remainingTime
-  }
-  
-  func updateShowResultView(show: Bool) {
-    withAnimation(.easeInOut(duration: 1.0)) {
-      self.showResultView = show
     }
   }
 }
