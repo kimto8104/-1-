@@ -20,7 +20,7 @@ import SwiftData
 
 // MARK: - View
 struct TimerPage: View {
-  @ObservedObject var model = TimerPageViewModel()
+  @StateObject var model = TimerPageViewModel(motionManagerService: MotionManagerService(), timerService: TimerService(initialTime: 1))
   var body: some View {
     GeometryReader { gp in
       let hm = gp.size.width / 375
@@ -71,8 +71,9 @@ struct TimerPage: View {
       }
     }
     .onAppear(perform: {
-//      model.delegate?.startMonitoringDeviceMotion()
+      model.startMonitoringDeviceMotion()
       model.startProgressAnimation()
+      
     })
     
     .ignoresSafeArea()

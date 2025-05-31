@@ -6,14 +6,32 @@
 //
 
 import Foundation
+import SwiftUI
+import Combine
+
+// Time関連を管理するクラス
+enum TimerState: String {
+  case start
+  case paused
+  case completed
+  case continueFocusing
+}
 
 class TimerService {
   private var timer: Timer?
-  private var remainingTime: TimeInterval
+  @Published private(set) var remainingTime: TimeInterval
+  var remainingTimePublisher: AnyPublisher<String, Never> {
+    $remainingTime
+      .map { $0.toFormattedString() }
+      .eraseToAnyPublisher()
+  }
+  @Published private(set) var timerState: TimerState = .start
+  
+  
   private let initialTime: TimeInterval
   private var totalFocusTimeInterval: TimeInterval = 0
   
-  private var timerState: TimerState = .start
+  
   private var startDate: Date?
   
   private var extraFocusStartTime: Date? // タイマー完了後の計測開始時刻
@@ -22,14 +40,14 @@ class TimerService {
   private var selectedCategory: String?
   private var isFirstTimeActive = true
   
-  private init(initialTime: Int) {
+  init(initialTime: Int) {
     self.remainingTime = TimeInterval(initialTime * 60)
     self.initialTime = TimeInterval(initialTime * 60)
   }
   
   
   func startTimer() {
-    self.saveStartDate()
+//    self.saveStartDate()
     timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { [weak self] _ in
       guard let self else { return }
       
@@ -45,6 +63,10 @@ class TimerService {
       }
 //      self.updateFormattedRemainingTime()
     })
+  }
+  
+  func pauseTimer() {
+    timer?.invalidate()
   }
   
   func resetTimer() {

@@ -11,7 +11,9 @@ import Combine
 // MARK: ViewModel
 class TimerPageViewModel: ObservableObject {
 
+  // Services
   private let motionManagerService: MotionManagerService
+  private let timerService: TimerService
   private var cancellables = Set<AnyCancellable>()
   
   @Published var selectedTab: TabIcon = .Home
@@ -19,8 +21,8 @@ class TimerPageViewModel: ObservableObject {
   @Published var totalFocusTime: String?
   @Published var isFaceDown: Bool = false
   @Published var timerState: TimerState = .start
+  @Published var remainingTime: String = "00:00"
   @Published var showAlertForPause = false
-  @Published var remainingTime: String = "01:00"
   @Published var showResultView: Bool = false
   @Published var progress: CGFloat = 0
   @Published var isPulsating: Bool = false // パルスアニメーション用
@@ -30,21 +32,62 @@ class TimerPageViewModel: ObservableObject {
   var categoryPopup: CategoryPopup?  // モジュールをここで保持
   @Published var selectedCategory: String?
   
-  init(motionManagerService: MotionManagerService) {
+  init(motionManagerService: MotionManagerService, timerService: TimerService) {
     self.motionManagerService = motionManagerService
-    // isFaceDownの状態変更を監視
+    self.timerService = timerService
+    startObserving()
+  }
+  
+  private func startObserving() {
+    observeTimerState()
+    observeRemainingTime()
+    observeFaceDownState()
+  }
+  
+  
+  private func observeFaceDownState() {
     motionManagerService.$isFaceDown.sink { [weak self] isFaceDown in
       guard let self else { return }
-      
+      self.handleDeviceOrientationChange(isFaceDown: isFaceDown)
+    }
+    .store(in: &cancellables)
+  }
+  
+  private func observeTimerState() {
+    timerService.$timerState.sink { [weak self] timerState in
+      guard let self else { return }
+      self.handleTimerStateChange(timerState: timerState)
+    }
+    .store(in: &cancellables)
+  }
+  
+  private func observeRemainingTime() {
+    timerService.remainingTimePublisher.sink { [weak self] formattedRemainingTime in
+      guard let self else { return }
+      self.remainingTime = formattedRemainingTime
     }
     .store(in: &cancellables)
   }
   
   private func handleDeviceOrientationChange(isFaceDown: Bool) {
     if isFaceDown {
-      
+      // startTimer
+      timerService.startTimer()
     } else {
-      
+      timerService.pauseTimer()
+    }
+  }
+  
+  private func handleTimerStateChange(timerState: TimerState) {
+    switch timerState {
+    case .start:
+      print("start")
+    case .paused:
+      print("paused")
+    case .continueFocusing:
+      print("continuFocusing")
+    case .completed:
+      print("completed")
     }
   }
   
@@ -79,7 +122,13 @@ class TimerPageViewModel: ObservableObject {
 
 // MARK: - MotionManagerService
 extension TimerPageViewModel {
+  func startMonitoringDeviceMotion() {
+    motionManagerService.startMonitoringDeviceMotion()
+  }
   
+  func stopMonitoringDeviceMotion() {
+    motionManagerService.stopMonitoring()
+  }
 }
 
 // ViewModel Method
@@ -99,10 +148,6 @@ extension TimerPageViewModel {
   
   func updateShowAlertForPause(showAlert: Bool) {
     self.showAlertForPause = showAlert
-  }
-  
-  func updateRemainingTime(remainingTime: String) {
-    self.remainingTime = remainingTime
   }
   
   func updateShowResultView(show: Bool) {
