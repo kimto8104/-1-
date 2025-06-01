@@ -19,11 +19,10 @@ class TimerPageViewModel: ObservableObject {
   @Published var selectedTab: TabIcon = .Home
   // 合計集中時間文字列
   @Published var totalFocusTime: String?
-  @Published var isFaceDown: Bool = false
-  @Published var timerState: TimerState = .start
-  @Published var remainingTime: String = "00:00"
+  @Published var displayTime: String = "00:00"
   @Published var showAlertForPause = false
   @Published var showResultView: Bool = false
+  @Published var continueFocusingMode: Bool = false
   @Published var progress: CGFloat = 0
   @Published var isPulsating: Bool = false // パルスアニメーション用
   @Published var faceUpCount: Int = 0 // 上向きになった回数(内部保持用)
@@ -40,7 +39,7 @@ class TimerPageViewModel: ObservableObject {
   
   private func startObserving() {
     observeTimerState()
-    observeRemainingTime()
+    observeDisplayTime()
     observeFaceDownState()
   }
   
@@ -61,20 +60,27 @@ class TimerPageViewModel: ObservableObject {
     .store(in: &cancellables)
   }
   
-  private func observeRemainingTime() {
-    timerService.remainingTimePublisher.sink { [weak self] formattedRemainingTime in
+  private func observeDisplayTime() {
+    timerService.timeDisplayPublisher.sink { [weak self] formattedTime in
       guard let self else { return }
-      self.remainingTime = formattedRemainingTime
+      self.displayTime = formattedTime
     }
     .store(in: &cancellables)
   }
   
   private func handleDeviceOrientationChange(isFaceDown: Bool) {
     if isFaceDown {
-      // startTimer
       timerService.startTimer()
     } else {
+      // 画面を上向きにした時
       timerService.pauseTimer()
+      print("timerState: \(timerService.timerState.rawValue)")
+      if timerService.timerState == .continueFocusing {
+        // 追加集中時間中に上向きになった場合は結果を表示
+        let totalTime = timerService.getTotalFocusTime()
+        updateTotalFocusTime(totalFocusTimeString: totalTime.toFormattedString())
+        self.showResultView = true
+      }
     }
   }
   
@@ -86,6 +92,7 @@ class TimerPageViewModel: ObservableObject {
       print("paused")
     case .continueFocusing:
       print("continuFocusing")
+      self.continueFocusingMode = true
     case .completed:
       print("completed")
       self.showResultView = true
@@ -141,10 +148,6 @@ extension TimerPageViewModel {
   
   func updateFaceUpCount(count: Int) {
     self.faceUpCount = count
-  }
-  
-  func updateTimerState(timerState: TimerState) {
-    self.timerState = timerState
   }
   
   func updateShowAlertForPause(showAlert: Bool) {

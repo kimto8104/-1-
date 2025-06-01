@@ -97,7 +97,7 @@ extension TimerPage {
         instructionText(gp: gp, multiplier: multiplier)
           .opacity(model.showResultView ? 0 : 1)
         
-        circleTimer(multiplier: multiplier, time: model.remainingTime)
+        circleTimer(multiplier: multiplier, time: model.displayTime)
           .opacity(model.showResultView ? 0 : 1)
           
         categorySelectionButton(multiplier: multiplier)
@@ -129,11 +129,20 @@ extension TimerPage {
         .frame(width: 220 * multiplier, height: 220 * multiplier)
         .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.2), radius: 10, x: 0, y: 5)
       
-      // タイマーテキスト
-      Text(time)
-        .foregroundColor(Color(hex: "#212529")!)
-        .font(.system(size: 40 * multiplier, weight: .medium, design: .monospaced))
-        .monospacedDigit() // 数字が等幅になるように
+      VStack(spacing: 4 * multiplier) {
+        // タイマーテキスト
+        Text(model.displayTime)
+          .foregroundColor(Color(hex: "#212529")!)
+          .font(.system(size: 40 * multiplier, weight: .medium, design: .monospaced))
+          .monospacedDigit() // 数字が等幅になるように
+        
+        // 追加集中時間モードの場合は「継続中」と表示
+        if model.continueFocusingMode {
+          Text("継続中")
+            .foregroundColor(Color(hex: "#339AF0")!)
+            .font(.system(size: 16 * multiplier, weight: .medium))
+        }
+      }
     }
     .scaleEffect(model.isPulsating ? 1.05 : 0.95)
     .animation(

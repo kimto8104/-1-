@@ -19,20 +19,31 @@ enum TimerState: String {
 
 class TimerService {
   private var timer: Timer?
-  @Published private(set) var remainingTime: TimeInterval
-  var remainingTimePublisher: AnyPublisher<String, Never> {
-    $remainingTime
-      .map { $0.toFormattedString() }
-      .eraseToAnyPublisher()
-  }
+  // タイマーの状態を管理
   @Published private(set) var timerState: TimerState = .start
   
+  // 表示用の時間（通常モード：残り時間、追加集中モード：経過時間）
+  @Published private(set) var displayTime: TimeInterval
+  
+  var timeDisplayPublisher: AnyPublisher<String, Never> {
+    $displayTime
+      .map { time -> String in
+        if self.timerState == .continueFocusing {
+          // 追加集中時間中は経過時間を表示
+          return self.getElapsedTime().toFormattedString()
+        }
+        return time.toFormattedString()
+      }
+      .eraseToAnyPublisher()
+  }
   
   private let initialTime: TimeInterval
-  private var totalFocusTimeInterval: TimeInterval = 0
-  
-  
+  // タイマー開始時刻（通常のタイマーまたは追加集中時間の開始時）
   private var startDate: Date?
+  // 通常モードでの実際の集中時間
+  private var normalModeFocusTime: TimeInterval = 0
+  
+  private var totalFocusTimeInterval: TimeInterval = 0
   
   private var extraFocusStartTime: Date? // タイマー完了後の計測開始時刻
   private var extraFocusTime: TimeInterval = 0 // 追加集中時間
@@ -44,43 +55,80 @@ class TimerService {
 //    self.remainingTime = TimeInterval(initialTime * 60)
 //    self.initialTime = TimeInterval(initialTime * 60)
     // DEBUG 用に1秒に変更
-    self.remainingTime = TimeInterval(initialTime * 1)
+    self.displayTime = TimeInterval(initialTime * 1)
     self.initialTime = TimeInterval(initialTime * 1)
   }
   
-  
+  // タイマーを開始する
   func startTimer() {
-//    self.saveStartDate()
+    if timer == nil {
+      self.saveStartDate()
+    }
+    
     timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { [weak self] _ in
       guard let self else { return }
       
-      if self.remainingTime > 0 {
-        self.remainingTime -= 1
-      } else {
-        // タイマー完了
-        self.timerState = .completed
-//        self.saveStartDateOfExtraFocus() // 追加集中時間計測を開始
-        self.resetTimer()
-//        self.updateTimerState(timerState: .completed)
+      if self.timerState == .continueFocusing {
+        // 追加集中時間モード中は経過時間を更新して表示
+        self.displayTime = self.getElapsedTime()
         return
       }
-//      self.updateFormattedRemainingTime()
+      
+      if self.displayTime > 0 {
+        // 通常のタイマーモード中は残り時間をカウントダウン
+        self.displayTime -= 1
+        self.normalModeFocusTime = self.initialTime - self.displayTime
+      } else {
+        // 設定時間が終了したら追加集中時間モードへ移行
+        self.timerState = .continueFocusing
+        self.saveStartDate() // 追加集中時間の計測開始
+      }
     })
   }
   
+  // タイマーを一時停止
   func pauseTimer() {
     timer?.invalidate()
+    timer = nil
   }
   
+  // タイマーをリセット（初期状態に戻す）
   func resetTimer() {
     timer?.invalidate()
     timer = nil
-    remainingTime = initialTime
-//    self.updateFormattedRemainingTime()
-//    self.presenter?.updateTabBarVisibility(isVisible: true)
+    displayTime = initialTime
+    timerState = .start
+    startDate = nil
+    normalModeFocusTime = 0
   }
   
+  // 開始時刻を保存
   private func saveStartDate() {
     self.startDate = Date()
+  }
+  
+  private func saveStartDateOfExtraFocus() {
+    self.extraFocusStartTime = Date()
+  }
+  
+  func updateExtraFocusTime() {
+    guard let startTime = extraFocusStartTime else { return }
+    extraFocusTime = Date().timeIntervalSince(startTime)
+  }
+  
+  // 開始時刻からの経過時間を計算
+  private func getElapsedTime() -> TimeInterval {
+    guard let startDate = startDate else { return 0 }
+    return Date().timeIntervalSince(startDate)
+  }
+  
+  // 総集中時間を取得（通常モードの集中時間 + 追加集中時間）
+  func getTotalFocusTime() -> TimeInterval {
+    let additionalTime = timerState == .continueFocusing ? getElapsedTime() : 0
+    return normalModeFocusTime + additionalTime
+  }
+  
+  func updateTimerState(timerState: TimerState) {
+    self.timerState = timerState
   }
 }
