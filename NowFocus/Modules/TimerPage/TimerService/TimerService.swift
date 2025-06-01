@@ -41,8 +41,11 @@ class TimerService {
   private var isFirstTimeActive = true
   
   init(initialTime: Int) {
-    self.remainingTime = TimeInterval(initialTime * 60)
-    self.initialTime = TimeInterval(initialTime * 60)
+//    self.remainingTime = TimeInterval(initialTime * 60)
+//    self.initialTime = TimeInterval(initialTime * 60)
+    // DEBUG 用に1秒に変更
+    self.remainingTime = TimeInterval(initialTime * 1)
+    self.initialTime = TimeInterval(initialTime * 1)
   }
   
   
@@ -55,7 +58,7 @@ class TimerService {
         self.remainingTime -= 1
       } else {
         // タイマー完了
-//        self.updateCompletedTimeStatus()
+        self.timerState = .completed
 //        self.saveStartDateOfExtraFocus() // 追加集中時間計測を開始
         self.resetTimer()
 //        self.updateTimerState(timerState: .completed)

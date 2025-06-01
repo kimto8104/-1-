@@ -88,6 +88,7 @@ class TimerPageViewModel: ObservableObject {
       print("continuFocusing")
     case .completed:
       print("completed")
+      self.showResultView = true
     }
   }
   

@@ -42,7 +42,7 @@ struct TimerPage: View {
         VStack {
           if !model.showResultView && model.selectedTab == .Home {
             timerView(gp: gp, multiplier: multiplier)
-          } else if model.totalFocusTime?.isEmpty != nil && model.selectedTab != .Clock {
+          } else if model.selectedTab != .Clock {
             let _ = print("totalFocusTime: \(model.totalFocusTime)")
             resultView(gp: gp, multiplier: multiplier)
               .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))
