@@ -254,9 +254,8 @@ extension TimerPage {
         
         Button {
           withAnimation(.easeInOut(duration: 0.5)) {
-            model.showResultView = false
+            model.handleCompletionButtonTap()
           }
-//          model.delegate?.tapCompletedButton()
         } label: {
           Text("完了")
             .font(.custom("IBM Plex Mono", size: 18 * multiplier))

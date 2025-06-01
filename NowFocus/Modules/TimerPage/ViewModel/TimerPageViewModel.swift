@@ -159,4 +159,10 @@ extension TimerPageViewModel {
       self.showResultView = show
     }
   }
+  
+  func handleCompletionButtonTap() {
+    timerService.resetTimer()
+    self.showResultView = false
+    self.continueFocusingMode = false
+  }
 }
