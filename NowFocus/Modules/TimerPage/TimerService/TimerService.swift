@@ -87,7 +87,8 @@ class TimerService {
   // 追加集中時間の処理
   private func handleAdditionalFocusTimer() {
     elapsedSeconds += 1
-    displayTime = TimeInterval(elapsedSeconds)
+    // 初期時間 + 追加経過時間
+    displayTime = initialTime + TimeInterval(elapsedSeconds)
   }
   
   // タイマーを一時停止
