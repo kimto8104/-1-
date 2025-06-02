@@ -22,6 +22,8 @@ class TimerPageViewModel: ObservableObject {
   @Published var displayTime: String = "00:00"
   @Published var showAlertForPause = false
   @Published var showResultView: Bool = false
+  // Failed Page
+  @Published var showFailedView: Bool = false
   @Published var continueFocusingMode: Bool = false
   @Published var progress: CGFloat = 0
   @Published var isPulsating: Bool = false // パルスアニメーション用
@@ -73,23 +75,33 @@ class TimerPageViewModel: ObservableObject {
       timerService.startTimer()
     } else {
       // 画面を上向きにした時
-      timerService.pauseTimer()
-      print("timerState: \(timerService.timerState.rawValue)")
-      if timerService.timerState == .continueFocusing {
-        // 追加集中時間中に上向きになった場合は結果を表示
+      switch timerService.timerState {
+      case .focusing:
+        // 集中中に画面が上向きになった
+        print("Failed")
+        self.showFailedView = true
+        // 失敗画面を出す
+      case .completed, .continueFocusing:
+        // 追加集中時間中に上向きになった場合&タイマー完了した時は結果を表示
         let totalTime = timerService.getTotalFocusTime()
         updateTotalFocusTime(totalFocusTimeString: totalTime.toFormattedString())
         self.showResultView = true
+      default: break
       }
+      // MotionMangerの判定を止める
+      motionManagerService.stopMonitoring()
+      // タイマーを止める
+      timerService.resetTimer()
+      
     }
   }
   
   private func handleTimerStateChange(timerState: TimerState) {
     switch timerState {
-    case .start:
+    case .focusing:
       print("start")
-    case .paused:
-      print("paused")
+    case .ready:
+      print("ready")
     case .continueFocusing:
       print("continuFocusing")
       self.continueFocusingMode = true
@@ -163,6 +175,7 @@ extension TimerPageViewModel {
   func handleCompletionButtonTap() {
     timerService.resetTimer()
     self.showResultView = false
+    self.showFailedView = false
     self.continueFocusingMode = false
   }
 }

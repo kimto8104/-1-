@@ -21,6 +21,7 @@ import SwiftData
 // MARK: - View
 struct TimerPage: View {
   @StateObject var model = TimerPageViewModel(motionManagerService: MotionManagerService(), timerService: TimerService(initialTime: 1))
+  
   var body: some View {
     GeometryReader { gp in
       let hm = gp.size.width / 375
@@ -40,22 +41,14 @@ struct TimerPage: View {
         
         // メインコンテンツ
         VStack {
-          if !model.showResultView && model.selectedTab == .Home {
-            timerView(gp: gp, multiplier: multiplier)
-          } else if model.selectedTab != .Clock {
-            let _ = print("totalFocusTime: \(model.totalFocusTime)")
-            resultView(gp: gp, multiplier: multiplier)
-              .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))
-          } else {
-            HistoryPage()
-          }
+          currentView(gp: gp, multiplier: multiplier)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         
         // タブバーを下部に固定
         VStack {
           Spacer()
-          if !model.showResultView {
+          if !model.showResultView && !model.showFailedView {
             tabBarView(multiplier: multiplier)
               .padding(.bottom, 30 * multiplier)
           }
@@ -85,6 +78,25 @@ struct TimerPage: View {
       Text("１分始めることが大事")
     }
   } // body ここまで
+}
+
+// MARK: Private CurrentView
+extension TimerPage {
+  private func currentView(gp: GeometryProxy, multiplier: CGFloat) -> some View {
+    Group {
+      if model.selectedTab == .Clock {
+        HistoryPage()
+      } else if model.showFailedView {
+        failedPage(gp: gp, multiplier: multiplier)
+          .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))
+      } else if model.showResultView {
+        resultView(gp: gp, multiplier: multiplier)
+          .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))
+      } else {
+        timerView(gp: gp, multiplier: multiplier)
+      }
+    }
+  }
 }
 
 // MARK: Private TimerPage
@@ -271,6 +283,82 @@ extension TimerPage {
             )
             .cornerRadius(27 * multiplier)
             .shadow(color: Color(hex: "#1971C2")!.opacity(0.3), radius: 8, x: 0, y: 4)
+        }
+      }
+      .padding(.horizontal, 30 * multiplier)
+      .padding(.vertical, 40 * multiplier)
+      .background(
+        RoundedRectangle(cornerRadius: 24 * multiplier)
+          .fill(Color(hex: "#343A40")!)
+          .shadow(color: .black.opacity(0.2), radius: 20, x: 0, y: 10)
+      )
+      .padding(.horizontal, 20 * multiplier)
+    }
+  }
+}
+
+// MARK: Failed Page
+extension TimerPage {
+  func failedPage(gp: GeometryProxy, multiplier: CGFloat) -> some View {
+    ZStack {
+      // 背景をブラー効果付きの半透明に
+      Color(hex: "#212529")!.opacity(0.9)
+        .ignoresSafeArea()
+        .blur(radius: 0.5)
+      
+      // コンテンツカード
+      VStack(spacing: 24 * multiplier) {
+        // 失敗アイコン
+        Image(systemName: "xmark.circle.fill")
+          .font(.system(size: 60 * multiplier))
+          .foregroundColor(Color(hex: "#FA5252")!)
+          .padding(.bottom, 10 * multiplier)
+        
+        Text("集中が中断されました")
+          .font(.custom("IBM Plex Mono", size: 28 * multiplier))
+          .fontWeight(.bold)
+          .foregroundColor(.white)
+        
+        VStack(spacing: 10 * multiplier) {
+          Text("今回は")
+            .foregroundColor(Color(hex: "#DEE2E6")!)
+            .font(.custom("IBM Plex Mono", size: 20 * multiplier))
+          
+          Text("\(model.totalFocusTime ?? "3分26秒")")
+            .foregroundColor(Color(hex: "#FF8787")!)
+            .font(.custom("IBM Plex Mono", size: 42 * multiplier))
+            .fontWeight(.bold)
+          
+          Text("集中できました")
+            .foregroundColor(Color(hex: "#DEE2E6")!)
+            .font(.custom("IBM Plex Mono", size: 20 * multiplier))
+        }
+        .padding(.vertical, 20 * multiplier)
+        
+        Text("次は1分からでも始めてみましょう")
+          .foregroundColor(Color(hex: "#ADB5BD")!)
+          .font(.custom("IBM Plex Mono", size: 16 * multiplier))
+          .padding(.bottom, 10 * multiplier)
+        
+        Button {
+          withAnimation(.easeInOut(duration: 0.5)) {
+            model.handleCompletionButtonTap()
+          }
+        } label: {
+          Text("もう一度チャレンジ")
+            .font(.custom("IBM Plex Mono", size: 18 * multiplier))
+            .fontWeight(.medium)
+            .foregroundColor(.white)
+            .frame(width: 220 * multiplier, height: 54 * multiplier)
+            .background(
+              LinearGradient(
+                gradient: Gradient(colors: [Color(hex: "#FA5252")!, Color(hex: "#E03131")!]),
+                startPoint: .leading,
+                endPoint: .trailing
+              )
+            )
+            .cornerRadius(27 * multiplier)
+            .shadow(color: Color(hex: "#C92A2A")!.opacity(0.3), radius: 8, x: 0, y: 4)
         }
       }
       .padding(.horizontal, 30 * multiplier)

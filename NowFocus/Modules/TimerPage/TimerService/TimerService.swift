@@ -11,17 +11,17 @@ import Combine
 
 // Time関連を管理するクラス
 enum TimerState: String {
-  case start
-  case paused
-  case completed
-  case continueFocusing
+  case ready // 停止
+  case focusing // 開始
+  case completed // 完了
+  case continueFocusing // 追加集中
 }
 
 class TimerService {
   private var timer: Timer?
   
   // タイマーの状態を管理
-  @Published private(set) var timerState: TimerState = .start
+  @Published private(set) var timerState: TimerState = .ready
   
   private let initialTime: TimeInterval
   
@@ -38,14 +38,15 @@ class TimerService {
   
   init(initialTime: Int) {
     // DEBUG 用に3秒に変更
-    self.initialTime = TimeInterval(initialTime * 3)
+    self.initialTime = TimeInterval(initialTime * 60)
     self.displayTime = self.initialTime
   }
   
   // タイマーを開始する
   func startTimer() {
     if timer == nil {
-      if timerState == .start {
+      if timerState == .ready {
+        timerState = .focusing
         normalTimerStartDate = Date()
         elapsedSeconds = 0
       } else if timerState == .continueFocusing {
@@ -58,7 +59,7 @@ class TimerService {
       guard let self else { return }
       
       switch self.timerState {
-      case .start:
+      case .focusing:
         self.handleNormalTimer()
       case .continueFocusing:
         self.handleAdditionalFocusTimer()
@@ -95,6 +96,7 @@ class TimerService {
   func pauseTimer() {
     timer?.invalidate()
     timer = nil
+    timerState = .ready
   }
   
   // タイマーをリセット
@@ -102,7 +104,7 @@ class TimerService {
     timer?.invalidate()
     timer = nil
     displayTime = initialTime
-    timerState = .start
+    timerState = .ready
     normalTimerStartDate = nil
     additionalFocusStartDate = nil
     elapsedSeconds = 0
