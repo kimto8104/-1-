@@ -319,22 +319,6 @@ extension TimerPage {
           .fontWeight(.bold)
           .foregroundColor(.white)
         
-        VStack(spacing: 10 * multiplier) {
-          Text("今回は")
-            .foregroundColor(Color(hex: "#DEE2E6")!)
-            .font(.custom("IBM Plex Mono", size: 20 * multiplier))
-          
-          Text("\(model.totalFocusTime ?? "3分26秒")")
-            .foregroundColor(Color(hex: "#FF8787")!)
-            .font(.custom("IBM Plex Mono", size: 42 * multiplier))
-            .fontWeight(.bold)
-          
-          Text("集中できました")
-            .foregroundColor(Color(hex: "#DEE2E6")!)
-            .font(.custom("IBM Plex Mono", size: 20 * multiplier))
-        }
-        .padding(.vertical, 20 * multiplier)
-        
         Text("次は1分からでも始めてみましょう")
           .foregroundColor(Color(hex: "#ADB5BD")!)
           .font(.custom("IBM Plex Mono", size: 16 * multiplier))
