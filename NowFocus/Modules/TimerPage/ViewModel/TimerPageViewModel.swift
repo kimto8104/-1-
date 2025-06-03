@@ -177,5 +177,6 @@ extension TimerPageViewModel {
     self.showResultView = false
     self.showFailedView = false
     self.continueFocusingMode = false
+    motionManagerService.startMonitoringDeviceMotion()
   }
 }
