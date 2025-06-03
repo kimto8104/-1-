@@ -56,8 +56,16 @@ struct TimerPage: View {
         
         // カテゴリーポップアップ
         if model.isCategoryPopupPresented {
-//          model.categoryPopup
-//            .opacity(model.isCategoryPopupPresented ? 1 : 0)
+          CategoryPopup(
+            onCategorySelect: { category in
+              model.selectedCategory = category
+              model.isCategoryPopupPresented = false
+            },
+            onDismiss: {
+              model.isCategoryPopupPresented = false
+            }
+          )
+          .opacity(model.isCategoryPopupPresented ? 1 : 0)
         }
       }
     }
@@ -351,6 +359,51 @@ extension TimerPage {
           .shadow(color: .black.opacity(0.2), radius: 20, x: 0, y: 10)
       )
       .padding(.horizontal, 20 * multiplier)
+    }
+  }
+}
+
+// MARK: - CategoryPopup Handling
+extension TimerPageViewModel {
+  var categoryPopupDelegate: CategoryPopupDelegate {
+    CategoryPopupDelegateImpl(parent: self)
+  }
+  
+  class CategoryPopupDelegateImpl: CategoryPopupDelegate {
+    private weak var parent: TimerPageViewModel?
+    
+    init(parent: TimerPageViewModel) {
+      self.parent = parent
+    }
+    
+    func updateCategoryList(categories: [String]) {
+      // カテゴリーリストの更新は CategoryPopupViewModel に任せる
+    }
+    
+    func closePopup() {
+      parent?.isCategoryPopupPresented = false
+    }
+    
+    func showAddCategoryPopup() {
+      // 新規カテゴリー追加ポップアップの表示は CategoryPopupViewModel に任せる
+    }
+    
+    func hideAddCategoryPopup() {
+      // 新規カテゴリー追加ポップアップの非表示は CategoryPopupViewModel に任せる
+    }
+    
+    func addCategory(name: String) {
+      parent?.selectedCategory = name
+      parent?.isCategoryPopupPresented = false
+    }
+    
+    func didSelectCategory(name: String) {
+      parent?.selectedCategory = name
+      parent?.isCategoryPopupPresented = false
+    }
+    
+    @MainActor func removeCategoryFromHistory(category: String) {
+      // カテゴリーの削除は CategoryPopupViewModel に任せる
     }
   }
 }

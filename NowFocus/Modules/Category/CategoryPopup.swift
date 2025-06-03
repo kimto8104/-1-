@@ -18,7 +18,20 @@ protocol CategoryPopupDelegate: AnyObject {
 }
 
 struct CategoryPopup: View {
-  @ObservedObject var model = CategoryPopupViewModel()
+  @StateObject var viewModel: CategoryPopupViewModel
+  
+  init(
+    onCategorySelect: @escaping (String) -> Void,
+    onDismiss: @escaping () -> Void
+  ) {
+    _viewModel = StateObject(
+      wrappedValue: CategoryPopupViewModel(
+        onCategorySelect: onCategorySelect,
+        onDismiss: onDismiss
+      )
+    )
+  }
+  
   var body: some View {
     GeometryReader { gp in
       let hm = gp.size.width / 375
@@ -44,16 +57,16 @@ struct CategoryPopup: View {
           
           // リスト部分
           List {
-            ForEach(model.categories, id: \.self) { category in
+            ForEach(viewModel.categories, id: \.self) { category in
               cell(multiplier: multiplier, category: category)
                 .onTapGesture {
-                  model.delegate?.didSelectCategory(name: category)
+                  viewModel.selectCategory(category)
                 }
             }
             .onDelete { indexSet in
               indexSet.forEach { index in
-                let category = model.categories[index]
-                model.removeCategory(category)
+                let category = viewModel.categories[index]
+                viewModel.removeCategory(category)
               }
             }
           }
@@ -73,12 +86,12 @@ struct CategoryPopup: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
       }
       .overlay {
-        if model.showingAddCategoryPopup {
+        if viewModel.showingAddCategoryPopup {
           AddCategoryPopup(
-            isPresented: $model.showingAddCategoryPopup,
+            isPresented: $viewModel.showingAddCategoryPopup,
             multiplier: multiplier
           ) { newCategory in
-            model.delegate?.addCategory(name: newCategory)
+            viewModel.addNewCategory(newCategory)
           }
         }
       }
@@ -96,7 +109,7 @@ extension CategoryPopup {
         .foregroundColor(Color(hex: "#212529")!)
       Spacer()
       Button(action: {
-        model.closePopup()
+        viewModel.dismiss()
       }) {
         Image(systemName: "xmark")
           .font(.system(size: 20 * multiplier))
@@ -141,7 +154,7 @@ extension CategoryPopup {
   
   func addCategoryButton(multiplier: CGFloat) -> some View {
     Button(action: {
-      model.showAddCategoryPopup()
+      viewModel.showAddCategoryPopup()
     }) {
       HStack(spacing: 10 * multiplier) {
         Image(systemName: "plus")
@@ -165,27 +178,38 @@ extension CategoryPopup {
   }
 }
 
-// MARK: Modifier
-extension CategoryPopup {
-  func delegate(_ value: CategoryPopupDelegate) -> Self {
-    model.delegate = value
-    return self
-  }
-}
-
-// ViewModel for CategoryPopup
+// MARK: - ViewModel
 class CategoryPopupViewModel: ObservableObject {
-  weak var delegate: CategoryPopupDelegate?
   @Published var categories: [String] = []
   @Published var showingAddCategoryPopup = false
   
-  init() {
-    self.loadCategories()
+  private let onCategorySelect: (String) -> Void
+  private let onDismiss: () -> Void
+  
+  init(
+    onCategorySelect: @escaping (String) -> Void,
+    onDismiss: @escaping () -> Void
+  ) {
+    self.onCategorySelect = onCategorySelect
+    self.onDismiss = onDismiss
+    loadCategories()
+  }
+  
+  func selectCategory(_ category: String) {
+    onCategorySelect(category)
+  }
+  
+  func dismiss() {
+    onDismiss()
+  }
+  
+  func addNewCategory(_ category: String) {
+    categories.append(category)
+    saveCategories()
+    selectCategory(category)
   }
   
   @MainActor func removeCategory(_ category: String) {
-    // SwiftDataの更新
-    delegate?.removeCategoryFromHistory(category: category)
     if let index = categories.firstIndex(of: category) {
       categories.remove(at: index)
       saveCategories()
@@ -193,17 +217,11 @@ class CategoryPopupViewModel: ObservableObject {
   }
   
   func showAddCategoryPopup() {
-    delegate?.showAddCategoryPopup()
+    showingAddCategoryPopup = true
   }
   
   func hideAddCategoryPopup() {
-    delegate?.hideAddCategoryPopup()
-  }
-  
-  // Add new category
-  func addCategory(newCategory: String = "新しいカテゴリー") {
-    categories.append(newCategory)
-    saveCategories()
+    showingAddCategoryPopup = false
   }
   
   private func loadCategories() {
@@ -213,15 +231,14 @@ class CategoryPopupViewModel: ObservableObject {
   private func saveCategories() {
     UserDefaultManager.savedCategories = categories
   }
-  
-  func closePopup() {
-    delegate?.closePopup()
-  }
 }
 
 struct CategoryPopup_Previews: PreviewProvider {
   static var previews: some View {
-    CategoryPopup()
+    CategoryPopup(
+      onCategorySelect: { _ in },
+      onDismiss: {}
+    )
   }
 }
 
