@@ -113,19 +113,7 @@ class TimerPageViewModel: ObservableObject {
   
   
   
-  func showCategoryPopup() {
-    withAnimation(.easeInOut(duration: 0.2)) {
-      self.isCategoryPopupPresented = true
-    }
-  }
-  
-  func hideCategoryPopup() {
-    print("hideCategoryPopup呼び出し")
-    withAnimation(.easeInOut(duration: 0.2)) {
-      self.isCategoryPopupPresented = false
-      print("isCategoryPopupPresented解除: \(self.isCategoryPopupPresented)")
-    }
-  }
+ 
   
   func startProgressAnimation() {
     progress = 0
@@ -178,5 +166,26 @@ extension TimerPageViewModel {
     self.showFailedView = false
     self.continueFocusingMode = false
     motionManagerService.startMonitoringDeviceMotion()
+  }
+}
+
+// MARK: Category
+extension TimerPageViewModel {
+  func tapCategorySelectionButton() {
+    showCategoryPopup()
+  }
+  
+  func showCategoryPopup() {
+    withAnimation(.easeInOut(duration: 0.2)) {
+      self.isCategoryPopupPresented = true
+    }
+  }
+  
+  func hideCategoryPopup() {
+    print("hideCategoryPopup呼び出し")
+    withAnimation(.easeInOut(duration: 0.2)) {
+      self.isCategoryPopupPresented = false
+      print("isCategoryPopupPresented解除: \(self.isCategoryPopupPresented)")
+    }
   }
 }

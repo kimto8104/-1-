@@ -25,6 +25,17 @@ struct CategoryPopup: View {
       let vm = gp.size.height / 667
       let multiplier = abs(hm - 1) < abs(vm - 1) ? hm : vm
       ZStack {
+        // 背景のブラー効果
+        LinearGradient(
+          gradient: Gradient(colors: [
+            Color(hex: "#F8F9FA")!,
+            Color(hex: "#E9ECEF")!
+          ]),
+          startPoint: .top,
+          endPoint: .bottom
+        )
+        .ignoresSafeArea()
+        
         VStack {
           Spacer()
             .frame(height: 26 * multiplier)
@@ -52,14 +63,15 @@ struct CategoryPopup: View {
           
           // カテゴリーを追加ボタン
           addCategoryButton(multiplier: multiplier)
+            .padding(.bottom, 30 * multiplier)
           
         }
         .frame(width: 320 * multiplier, height: 565 * multiplier)
-        .background(Color(hex: "FFFAFA"))
-        .cornerRadius(20 * multiplier)
+        .background(Color.white)
+        .cornerRadius(24 * multiplier)
+        .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.2), radius: 10, x: 0, y: 5)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
       }
-      .shadow(color: .black.opacity(0.25), radius: 4, x: 4, y: 4)
       .overlay {
         if model.showingAddCategoryPopup {
           AddCategoryPopup(
@@ -81,13 +93,14 @@ extension CategoryPopup {
         .frame(width: 90 * multiplier)
       Text("カテゴリー")
         .font(.custom("IBM Plex Mono", size: 24 * multiplier))
+        .foregroundColor(Color(hex: "#212529")!)
       Spacer()
       Button(action: {
         model.closePopup()
       }) {
-        Image("Category_CloseButton")
-          .resizable()
-          .foregroundStyle(Color(hex: "D9D9D9")!)
+        Image(systemName: "xmark")
+          .font(.system(size: 20 * multiplier))
+          .foregroundColor(Color(hex: "#868E96")!)
       }
       .frame(width: 35 * multiplier, height: 31 * multiplier)
       Spacer()
@@ -98,31 +111,29 @@ extension CategoryPopup {
   }
   
   func cell(multiplier: CGFloat, category: String) -> some View {
-    HStack {
-      Spacer()
-        .frame(width: 32 * multiplier)
+    HStack(spacing: 10 * multiplier) {
+      Image(systemName: "tag.fill")
+        .font(.system(size: 16 * multiplier))
+        .foregroundColor(Color(hex: "#339AF0")!)
       
       Text(category)
-        .font(.custom("IBM Plex Mono", size: 14 * multiplier))
+        .font(.custom("IBM Plex Mono", size: 18 * multiplier))
+        .fontWeight(.medium)
+        .foregroundColor(Color(hex: "#495057")!)
       
       Spacer()
       
-      Button(action: {
-        model.delegate?.didSelectCategory(name: category)
-      }) {
-        Text("")
-          .frame(width: 68 * multiplier, height: 28 * multiplier)
-//          .foregroundColor(.black)
-//          .padding(.horizontal, 2 * multiplier)
-//          .padding(.vertical, 2 * multiplier)
-//          .background(Color.gray.opacity(0.2))
-//          .cornerRadius(20 * multiplier)
-      }
-      
-      Spacer()
-        .frame(width: 16 * multiplier)
+      Image(systemName: "chevron.right")
+        .font(.system(size: 14 * multiplier))
+        .foregroundColor(Color(hex: "#868E96")!)
     }
-    .frame(height: 56 * multiplier)
+    .padding(.horizontal, 20 * multiplier)
+    .padding(.vertical, 16 * multiplier)
+    .background(
+      RoundedRectangle(cornerRadius: 12 * multiplier)
+        .fill(Color.white)
+        .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.1), radius: 4, x: 0, y: 2)
+    )
     .listRowInsets(EdgeInsets())
     .listRowSeparator(.hidden)
     .listRowBackground(Color.clear)
@@ -132,13 +143,24 @@ extension CategoryPopup {
     Button(action: {
       model.showAddCategoryPopup()
     }) {
-      Text("カテゴリーを追加")
-        .font(.custom("IBM Plex Mono", size: 16 * multiplier))
-        .frame(width: 246 * multiplier)
-        .frame(height: 46 * multiplier)
-        .background(Color(hex: "4C4545"))
-        .foregroundColor(.white)
-        .cornerRadius(20 * multiplier)
+      HStack(spacing: 10 * multiplier) {
+        Image(systemName: "plus")
+          .font(.system(size: 16 * multiplier))
+        Text("カテゴリーを追加")
+          .font(.custom("IBM Plex Mono", size: 18 * multiplier))
+          .fontWeight(.medium)
+      }
+      .foregroundColor(.white)
+      .frame(width: 220 * multiplier, height: 54 * multiplier)
+      .background(
+        LinearGradient(
+          gradient: Gradient(colors: [Color(hex: "#339AF0")!, Color(hex: "#228BE6")!]),
+          startPoint: .leading,
+          endPoint: .trailing
+        )
+      )
+      .cornerRadius(27 * multiplier)
+      .shadow(color: Color(hex: "#1971C2")!.opacity(0.3), radius: 8, x: 0, y: 4)
     }
   }
 }

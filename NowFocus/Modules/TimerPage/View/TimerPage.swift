@@ -56,10 +56,8 @@ struct TimerPage: View {
         
         // カテゴリーポップアップ
         if model.isCategoryPopupPresented {
-          let _ = print("ポップアップ表示条件成立: isCategoryPopupPresented=\(model.isCategoryPopupPresented)")
-          Color.black.opacity(0.3)
-          model.categoryPopup
-            .opacity(model.isCategoryPopupPresented ? 1 : 0)
+//          model.categoryPopup
+//            .opacity(model.isCategoryPopupPresented ? 1 : 0)
         }
       }
     }
@@ -187,7 +185,7 @@ extension TimerPage {
   
   func categorySelectionButton(multiplier: CGFloat) -> some View {
     Button {
-//      model.delegate?.tapCategorySelectionButton()
+      model.tapCategorySelectionButton()
     } label: {
       HStack(spacing: 10 * multiplier) {
         Image(systemName: "tag.fill")
