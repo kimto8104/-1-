@@ -18,13 +18,10 @@ class FocusHistory {
   var duration: TimeInterval
   // カテゴリー
   var category: String?
-  // 上向きになった回数
-  var faceUpCount: Int = 0
   
-  init(startDate: Date, duration: TimeInterval, category: String? = nil, faceUpCount: Int = 0) {
+  init(startDate: Date, duration: TimeInterval, category: String? = nil) {
     self.startDate = startDate
     self.duration = duration
     self.category = category
-    self.faceUpCount = faceUpCount
   }
 }

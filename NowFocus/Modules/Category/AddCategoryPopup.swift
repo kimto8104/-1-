@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// AddCategoryPopupの修正
 struct AddCategoryPopup: View {
   @StateObject private var model: AddCategoryPopupViewModel
   @FocusState private var isFocused: Bool

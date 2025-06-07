@@ -369,7 +369,7 @@ extension TimerPageViewModel {
     CategoryPopupDelegateImpl(parent: self)
   }
   
-  class CategoryPopupDelegateImpl: CategoryPopupDelegate {
+  class CategoryPopupDelegateImpl: @preconcurrency CategoryPopupDelegate {
     private weak var parent: TimerPageViewModel?
     
     init(parent: TimerPageViewModel) {
@@ -380,7 +380,7 @@ extension TimerPageViewModel {
       // カテゴリーリストの更新は CategoryPopupViewModel に任せる
     }
     
-    func closePopup() {
+    @MainActor func closePopup() {
       parent?.isCategoryPopupPresented = false
     }
     
@@ -392,12 +392,12 @@ extension TimerPageViewModel {
       // 新規カテゴリー追加ポップアップの非表示は CategoryPopupViewModel に任せる
     }
     
-    func addCategory(name: String) {
+    @MainActor func addCategory(name: String) {
       parent?.selectedCategory = name
       parent?.isCategoryPopupPresented = false
     }
     
-    func didSelectCategory(name: String) {
+    @MainActor func didSelectCategory(name: String) {
       parent?.selectedCategory = name
       parent?.isCategoryPopupPresented = false
     }

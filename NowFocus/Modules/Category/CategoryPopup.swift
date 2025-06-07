@@ -91,6 +91,7 @@ struct CategoryPopup: View {
             isPresented: $viewModel.showingAddCategoryPopup,
             multiplier: multiplier
           ) { newCategory in
+            // closure for add category
             viewModel.addNewCategory(newCategory)
           }
         }

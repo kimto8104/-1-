@@ -9,11 +9,13 @@ import SwiftUI
 import Combine
 
 // MARK: ViewModel
+@MainActor
 class TimerPageViewModel: ObservableObject {
 
   // Services
   private let motionManagerService: MotionManagerService
   private let timerService: TimerService
+  
   private var cancellables = Set<AnyCancellable>()
   
   @Published var selectedTab: TabIcon = .Home
@@ -27,7 +29,6 @@ class TimerPageViewModel: ObservableObject {
   @Published var continueFocusingMode: Bool = false
   @Published var progress: CGFloat = 0
   @Published var isPulsating: Bool = false // パルスアニメーション用
-  @Published var faceUpCount: Int = 0 // 上向きになった回数(内部保持用)
   // Category
   @Published var isCategoryPopupPresented = false
   var categoryPopup: CategoryPopup?  // モジュールをここで保持
@@ -44,7 +45,6 @@ class TimerPageViewModel: ObservableObject {
     observeDisplayTime()
     observeFaceDownState()
   }
-  
   
   private func observeFaceDownState() {
     motionManagerService.$isFaceDown.sink { [weak self] isFaceDown in
@@ -85,6 +85,7 @@ class TimerPageViewModel: ObservableObject {
         // 追加集中時間中に上向きになった場合&タイマー完了した時は結果を表示
         let totalTime = timerService.getTotalFocusTime()
         updateTotalFocusTime(totalFocusTimeString: totalTime.toFormattedString())
+        saveFocusHistory() // 集中履歴を保存
         self.showResultView = true
       default: break
       }
@@ -92,7 +93,6 @@ class TimerPageViewModel: ObservableObject {
       motionManagerService.stopMonitoring()
       // タイマーを止める
       timerService.resetTimer()
-      
     }
   }
   
@@ -110,10 +110,6 @@ class TimerPageViewModel: ObservableObject {
       self.showResultView = true
     }
   }
-  
-  
-  
- 
   
   func startProgressAnimation() {
     progress = 0
@@ -144,10 +140,6 @@ extension TimerPageViewModel {
   
   func updateTotalFocusTime(totalFocusTimeString: String) {
     self.totalFocusTime = totalFocusTimeString
-  }
-  
-  func updateFaceUpCount(count: Int) {
-    self.faceUpCount = count
   }
   
   func updateShowAlertForPause(showAlert: Bool) {
@@ -187,5 +179,19 @@ extension TimerPageViewModel {
       self.isCategoryPopupPresented = false
       print("isCategoryPopupPresented解除: \(self.isCategoryPopupPresented)")
     }
+  }
+}
+
+// MARK: - FocusHistoryDataManager
+extension TimerPageViewModel {
+  // 集中できた記録を保存
+  func saveFocusHistory() {
+    guard let startDate = timerService.normalTimerStartDate else { return }
+    let duration = timerService.getTotalFocusTime()
+    FocusHistoryDataManager.shared.saveFocusHistoryData(
+      startDate: startDate,
+      duration: duration,
+      category: selectedCategory
+    )
   }
 }

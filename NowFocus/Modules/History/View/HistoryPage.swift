@@ -235,10 +235,6 @@ struct HistoryPage: View {
           Image(systemName: "rotate.3d")
             .font(.system(size: 14 * multiplier))
             .foregroundColor(Color(hex: "#228BE6")!)
-          
-          Text("上向き: \(history.faceUpCount)回")
-            .font(.system(size: 14 * multiplier))
-            .foregroundColor(Color(hex: "#495057")!)
         }
       }
     }
@@ -334,10 +330,6 @@ struct HistoryItemCard: View {
         Image(systemName: "rotate.3d")
           .font(.system(size: 14 * multiplier))
           .foregroundColor(Color(hex: "#228BE6")!)
-        
-        Text("上向き回数: \(history.faceUpCount)回")
-          .font(.system(size: 14 * multiplier))
-          .foregroundColor(Color(hex: "#495057")!)
       }
     }
     // ... 残りの既存のコード

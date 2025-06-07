@@ -32,8 +32,8 @@ class TimerService {
     $displayTime.map { $0.toFormattedString() }.eraseToAnyPublisher()
   }
   
-  private var normalTimerStartDate: Date?  // 通常タイマーの開始時刻
-  private var additionalFocusStartDate: Date?  // 追加集中の開始時刻
+  private(set) var normalTimerStartDate: Date?  // 通常タイマーの開始時刻
+  private(set) var additionalFocusStartDate: Date?  // 追加集中の開始時刻
   private var elapsedSeconds: Int = 0  // 経過秒数
   
   init(initialTime: Int) {

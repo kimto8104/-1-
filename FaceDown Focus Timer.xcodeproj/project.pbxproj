@@ -39,6 +39,7 @@
 		FEC011662DDDF39B0047AC58 /* TimerPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC011652DDDF39B0047AC58 /* TimerPageViewModel.swift */; };
 		FEC011692DDDF7FE0047AC58 /* TimerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC011682DDDF7FE0047AC58 /* TimerService.swift */; };
 		FEC5498E2D58CD1E009F9D08 /* AddCategoryPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC5498D2D58CD1E009F9D08 /* AddCategoryPopup.swift */; };
+		FED5E0112DF465CD006A350C /* FocusHistoryDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED5E0102DF465CD006A350C /* FocusHistoryDataManager.swift */; };
 		FEF885322C74BE63005A9198 /* TimerProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF885312C74BE63005A9198 /* TimerProgressRing.swift */; };
 		FEFB29D329B7691E007D8FDA /* TimerPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEFB29D229B7691E007D8FDA /* TimerPage.swift */; };
 /* End PBXBuildFile section */
@@ -79,6 +80,7 @@
 		FEC011652DDDF39B0047AC58 /* TimerPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerPageViewModel.swift; sourceTree = "<group>"; };
 		FEC011682DDDF7FE0047AC58 /* TimerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerService.swift; sourceTree = "<group>"; };
 		FEC5498D2D58CD1E009F9D08 /* AddCategoryPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryPopup.swift; sourceTree = "<group>"; };
+		FED5E0102DF465CD006A350C /* FocusHistoryDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusHistoryDataManager.swift; sourceTree = "<group>"; };
 		FEF885312C74BE63005A9198 /* TimerProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerProgressRing.swift; sourceTree = "<group>"; };
 		FEFB29D229B7691E007D8FDA /* TimerPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerPage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -100,6 +102,7 @@
 				FE1100402CDBAF9200C833C1 /* UserDefaultManager.swift */,
 				FE8A06BC2D0FA10100F9F206 /* GradientBackgroundUtil.swift */,
 				FE70E9EB2D4443CE002C0B7F /* ModelContainerManager.swift */,
+				FED5E0102DF465CD006A350C /* FocusHistoryDataManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -472,6 +475,7 @@
 				FE4D27B12D1B832D00962E92 /* TabBar.swift in Sources */,
 				FE8A06BD2D0FA10100F9F206 /* GradientBackgroundUtil.swift in Sources */,
 				FE9ADB672D2D4F930036EA85 /* FocusHistory.swift in Sources */,
+				FED5E0112DF465CD006A350C /* FocusHistoryDataManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

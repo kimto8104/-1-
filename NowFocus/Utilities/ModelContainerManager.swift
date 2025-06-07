@@ -5,8 +5,16 @@
 //  Created by Tomofumi Kimura on 2025/01/25.
 //
 
+/// ModelContainerManagerは、SwiftDataを使用したフォーカス履歴の永続化を管理するクラスです。
+/// 主な機能：
+/// - フォーカス履歴の保存（saveFocusHistory）
+/// - カテゴリーの削除とそれに関連する履歴の更新（removeCategoryFromHistory）
+/// - SwiftDataのコンテナとコンテキストの管理
+/// シングルトンパターンを採用しており、アプリケーション全体で一つのインスタンスを共有します。
+
 import SwiftData
 import Foundation
+
 @MainActor
 class ModelContainerManager {
   static let shared = ModelContainerManager()
