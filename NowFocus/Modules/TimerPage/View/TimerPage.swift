@@ -193,8 +193,8 @@ extension TimerPage {
   
   func categorySelectionButton(multiplier: CGFloat) -> some View {
     Button {
-//      model.tapCategorySelectionButton()
-      model.saveMockDataHistory()
+      model.tapCategorySelectionButton()
+//      model.saveMockDataHistory()
     } label: {
       HStack(spacing: 10 * multiplier) {
         Image(systemName: "tag.fill")
