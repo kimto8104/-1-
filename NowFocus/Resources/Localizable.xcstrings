@@ -20,6 +20,18 @@
             "state" : "translated",
             "value" : "%"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%"
+          }
         }
       }
     },
@@ -38,6 +50,18 @@
           }
         },
         "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@"
@@ -64,6 +88,18 @@
             "state" : "translated",
             "value" : "Thời gian tập trung cho %@"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@の集中時間"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@的專注時間"
+          }
         }
       }
     },
@@ -82,6 +118,18 @@
           }
         },
         "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld"
@@ -108,6 +156,18 @@
             "state" : "translated",
             "value" : "Bắt đầu từ 1 phút"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "１分から"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從1分鐘開始"
+          }
         }
       }
     },
@@ -129,6 +189,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hãy tạo thói quen, ngay cả khi bắt đầu từ 1 phút"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1分からでも習慣化させよう"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "即使從1分鐘開始也要養成習慣"
           }
         }
       }
@@ -152,6 +224,18 @@
             "state" : "translated",
             "value" : "Bắt đầu với 1 phút là điều quan trọng"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "１分始めることが大事"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從1分鐘開始很重要"
+          }
         }
       }
     },
@@ -173,6 +257,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Đồng ý"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "確定"
           }
         }
       }
@@ -196,6 +292,18 @@
             "state" : "translated",
             "value" : "Danh mục"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリー"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "類別"
+          }
         }
       }
     },
@@ -217,6 +325,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thêm danh mục"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリーを追加"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新增類別"
           }
         }
       }
@@ -240,6 +360,18 @@
             "state" : "translated",
             "value" : "Tên danh mục"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリー名"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "類別名稱"
+          }
         }
       }
     },
@@ -261,6 +393,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Chọn danh mục"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリー選択"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇類別"
           }
         }
       }
@@ -284,6 +428,18 @@
             "state" : "translated",
             "value" : "Nhiều tùy chọn hơn sẽ được mở khóa khi bạn hoàn thành các nhiệm vụ"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クリアするごと選択肢が増えていきます"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每完成一項任務就會解鎖更多選項"
+          }
         }
       }
     },
@@ -305,6 +461,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thống kê tổng hợp"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "これまでの集計"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "總計統計"
           }
         }
       }
@@ -328,6 +496,18 @@
             "state" : "translated",
             "value" : "Đã đặt lại bộ đếm thời gian"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーをリセットしました"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "計時器已重置"
+          }
         }
       }
     },
@@ -349,6 +529,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thử lại"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "もう一度チャレンジ"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再次挑戰"
           }
         }
       }
@@ -372,6 +564,18 @@
             "state" : "translated",
             "value" : "Tôi cũng có thể tập trung!"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "も集中できた！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我也能專注！"
+          }
         }
       }
     },
@@ -393,6 +597,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tất cả danh mục"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全てのカテゴリー"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所有類別"
           }
         }
       }
@@ -416,6 +632,18 @@
             "state" : "translated",
             "value" : "Tổng thời gian tập trung"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "合計集中時間"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "總專注時間"
+          }
         }
       }
     },
@@ -437,6 +665,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hoàn thành"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成"
           }
         }
       }
@@ -460,6 +700,18 @@
             "state" : "translated",
             "value" : "Về thời gian"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "時間について"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "關於時間"
+          }
         }
       }
     },
@@ -481,6 +733,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lần sau hãy bắt đầu từ 1 phút"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次は1分からでも始めてみましょう"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下次讓我們從1分鐘開始"
           }
         }
       }
@@ -504,6 +768,18 @@
             "state" : "translated",
             "value" : "Bắt đầu bộ đếm thời gian bằng cách úp màn hình xuống"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画面を下向きにしてタイマーを開始"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "將螢幕朝下開始計時"
+          }
         }
       }
     },
@@ -525,6 +801,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Đang thực hiện"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "継続中"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "進行中"
           }
         }
       }
@@ -548,6 +836,18 @@
             "state" : "translated",
             "value" : "Thêm"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "追加"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新增"
+          }
         }
       }
     },
@@ -569,6 +869,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Phiên tập trung đã bị gián đoạn"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "集中が中断されました"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "專注已中斷"
           }
         }
       }
@@ -592,6 +904,18 @@
             "state" : "translated",
             "value" : "Tập trung hoàn thành!"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "集中完了！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "專注完成！"
+          }
         }
       }
     },
@@ -613,6 +937,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lịch sử tập trung"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "集中履歴"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "專注記錄"
           }
         }
       }
