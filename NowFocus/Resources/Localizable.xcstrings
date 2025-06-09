@@ -14,6 +14,12 @@
             "state" : "translated",
             "value" : "%"
           }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%"
+          }
         }
       }
     },
@@ -26,6 +32,12 @@
           }
         },
         "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
+        "vi" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@"
@@ -46,6 +58,12 @@
             "state" : "translated",
             "value" : "%@ 집중 시간"
           }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thời gian tập trung cho %@"
+          }
         }
       }
     },
@@ -58,6 +76,12 @@
           }
         },
         "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "vi" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld"
@@ -78,6 +102,12 @@
             "state" : "translated",
             "value" : "1분부터 시작"
           }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bắt đầu từ 1 phút"
+          }
         }
       }
     },
@@ -93,6 +123,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "1분부터라도 습관을 만들어봅시다"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hãy tạo thói quen, ngay cả khi bắt đầu từ 1 phút"
           }
         }
       }
@@ -110,6 +146,12 @@
             "state" : "translated",
             "value" : "1분부터 시작하는 것이 중요합니다"
           }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bắt đầu với 1 phút là điều quan trọng"
+          }
         }
       }
     },
@@ -125,6 +167,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "확인"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đồng ý"
           }
         }
       }
@@ -142,6 +190,12 @@
             "state" : "translated",
             "value" : "카테고리"
           }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Danh mục"
+          }
         }
       }
     },
@@ -157,6 +211,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "카테고리 추가"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thêm danh mục"
           }
         }
       }
@@ -174,6 +234,12 @@
             "state" : "translated",
             "value" : "카테고리 이름"
           }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tên danh mục"
+          }
         }
       }
     },
@@ -189,6 +255,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "카테고리 선택"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chọn danh mục"
           }
         }
       }
@@ -206,6 +278,12 @@
             "state" : "translated",
             "value" : "완료할 때마다 더 많은 옵션이 제공됩니다"
           }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nhiều tùy chọn hơn sẽ được mở khóa khi bạn hoàn thành các nhiệm vụ"
+          }
         }
       }
     },
@@ -221,6 +299,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "전체 통계"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thống kê tổng hợp"
           }
         }
       }
@@ -238,6 +322,12 @@
             "state" : "translated",
             "value" : "타이머가 초기화되었습니다"
           }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã đặt lại bộ đếm thời gian"
+          }
         }
       }
     },
@@ -253,6 +343,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "다시 도전"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thử lại"
           }
         }
       }
@@ -270,6 +366,12 @@
             "state" : "translated",
             "value" : "나도 집중할 수 있었어요!"
           }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tôi cũng có thể tập trung!"
+          }
         }
       }
     },
@@ -285,6 +387,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "모든 카테고리"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tất cả danh mục"
           }
         }
       }
@@ -302,6 +410,12 @@
             "state" : "translated",
             "value" : "총 집중 시간"
           }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tổng thời gian tập trung"
+          }
         }
       }
     },
@@ -317,6 +431,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "완료"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoàn thành"
           }
         }
       }
@@ -334,6 +454,12 @@
             "state" : "translated",
             "value" : "시간에 대하여"
           }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Về thời gian"
+          }
         }
       }
     },
@@ -349,6 +475,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "다음에는 1분부터 시작해봅시다"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lần sau hãy bắt đầu từ 1 phút"
           }
         }
       }
@@ -366,6 +498,12 @@
             "state" : "translated",
             "value" : "화면을 아래로 향하게 하여 타이머 시작"
           }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bắt đầu bộ đếm thời gian bằng cách úp màn hình xuống"
+          }
         }
       }
     },
@@ -381,6 +519,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "진행 중"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đang thực hiện"
           }
         }
       }
@@ -398,6 +542,12 @@
             "state" : "translated",
             "value" : "추가"
           }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thêm"
+          }
         }
       }
     },
@@ -413,6 +563,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "집중이 중단되었습니다"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phiên tập trung đã bị gián đoạn"
           }
         }
       }
@@ -430,6 +586,12 @@
             "state" : "translated",
             "value" : "집중 완료!"
           }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tập trung hoàn thành!"
+          }
         }
       }
     },
@@ -445,6 +607,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "집중 기록"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lịch sử tập trung"
           }
         }
       }
