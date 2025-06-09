@@ -38,6 +38,7 @@
 		FEB840682998C24500B945BA /* TimeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB840672998C24500B945BA /* TimeSelectionView.swift */; };
 		FEC011662DDDF39B0047AC58 /* TimerPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC011652DDDF39B0047AC58 /* TimerPageViewModel.swift */; };
 		FEC011692DDDF7FE0047AC58 /* TimerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC011682DDDF7FE0047AC58 /* TimerService.swift */; };
+		FEC0813A2DF710DA00DC0B0E /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = FEC081392DF710DA00DC0B0E /* Localizable.xcstrings */; };
 		FEC5498E2D58CD1E009F9D08 /* AddCategoryPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC5498D2D58CD1E009F9D08 /* AddCategoryPopup.swift */; };
 		FED5E0112DF465CD006A350C /* FocusHistoryDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED5E0102DF465CD006A350C /* FocusHistoryDataManager.swift */; };
 		FEF885322C74BE63005A9198 /* TimerProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF885312C74BE63005A9198 /* TimerProgressRing.swift */; };
@@ -79,6 +80,7 @@
 		FEB840672998C24500B945BA /* TimeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSelectionView.swift; sourceTree = "<group>"; };
 		FEC011652DDDF39B0047AC58 /* TimerPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerPageViewModel.swift; sourceTree = "<group>"; };
 		FEC011682DDDF7FE0047AC58 /* TimerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerService.swift; sourceTree = "<group>"; };
+		FEC081392DF710DA00DC0B0E /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		FEC5498D2D58CD1E009F9D08 /* AddCategoryPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryPopup.swift; sourceTree = "<group>"; };
 		FED5E0102DF465CD006A350C /* FocusHistoryDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusHistoryDataManager.swift; sourceTree = "<group>"; };
 		FEF885312C74BE63005A9198 /* TimerProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerProgressRing.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				FE54F1AA2C2082D30029DCDD /* Warning-Siren04-02(Low-Long).mp3 */,
+				FEC081392DF710DA00DC0B0E /* Localizable.xcstrings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -415,6 +418,9 @@
 				en,
 				Base,
 				ja,
+				ko,
+				vi,
+				"zh-Hant",
 			);
 			mainGroup = FEB840492998B6F800B945BA;
 			productRefGroup = FEB840532998B6F900B945BA /* Products */;
@@ -433,6 +439,7 @@
 			files = (
 				FEB8405D2998B6FA00B945BA /* Preview Assets.xcassets in Resources */,
 				FEB8405A2998B6FA00B945BA /* Assets.xcassets in Resources */,
+				FEC0813A2DF710DA00DC0B0E /* Localizable.xcstrings in Resources */,
 				FE54F1AB2C2082D30029DCDD /* Warning-Siren04-02(Low-Long).mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -540,6 +547,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -595,6 +603,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
