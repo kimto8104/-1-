@@ -201,7 +201,7 @@ extension TimerPage {
           .font(.system(size: 16 * multiplier))
           .foregroundColor(Color(hex: "#339AF0")!)
         
-        Text(model.selectedCategory ?? "カテゴリー選択")
+        Text(String(localized: String.LocalizationValue(model.selectedCategory)))
           .font(.custom("IBM Plex Mono", size: 18 * multiplier))
           .fontWeight(.medium)
           .foregroundColor(Color(hex: "#495057")!)
@@ -409,8 +409,27 @@ extension TimerPageViewModel {
   }
 }
 
-struct TimerPage_Previews: PreviewProvider {
-  static var previews: some View {
-//    TimerRouter.initializeTimerModule(with: 1)
-  }
+#Preview("English") {
+  TimerPage()
+    .environment(\.locale, .init(identifier: "en"))
+}
+
+#Preview("Korean") {
+  TimerPage()
+    .environment(\.locale, .init(identifier: "ko"))
+}
+
+#Preview("Japanese") {
+  TimerPage()
+    .environment(\.locale, .init(identifier: "ja"))
+}
+
+#Preview("Traditional Chinese") {
+  TimerPage()
+    .environment(\.locale, .init(identifier: "zh-Hant"))
+}
+
+#Preview("Vietnamese") {
+  TimerPage()
+    .environment(\.locale, .init(identifier: "vi"))
 }

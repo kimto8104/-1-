@@ -105,7 +105,10 @@ extension UserDefaultManager {
       
       // 既存のデータがない場合
       // デフォルトカテゴリーを保存し、返す
-      let defaultCategories = ["仕事", "勉強", "読書"]
+//      let defaultCategories = ["仕事", "勉強", "読書"]
+      let defaultCategories = [
+          String(localized: "reading_category", comment: "Category for reading-related content")
+      ]
       self.savedCategories = defaultCategories
       return self.savedCategories
     }

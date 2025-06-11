@@ -9,6 +9,12 @@
             "value" : "%"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16,12 +22,6 @@
           }
         },
         "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%"
-          }
-        },
-        "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%"
@@ -43,6 +43,12 @@
             "value" : "%@"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -50,12 +56,6 @@
           }
         },
         "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@"
-          }
-        },
-        "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@"
@@ -77,6 +77,12 @@
             "value" : "Focus time for %@"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@の集中時間"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -87,12 +93,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thời gian tập trung cho %@"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@の集中時間"
           }
         },
         "zh-Hant" : {
@@ -111,6 +111,12 @@
             "value" : "%lld"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -118,12 +124,6 @@
           }
         },
         "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld"
-          }
-        },
-        "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld"
@@ -145,6 +145,12 @@
             "value" : "Starting from 1 minute"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "１分から"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -155,12 +161,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bắt đầu từ 1 phút"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "１分から"
           }
         },
         "zh-Hant" : {
@@ -179,6 +179,12 @@
             "value" : "Let's make it a habit, even starting from 1 minute"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1分からでも習慣化させよう"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -189,12 +195,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hãy tạo thói quen, ngay cả khi bắt đầu từ 1 phút"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1分からでも習慣化させよう"
           }
         },
         "zh-Hant" : {
@@ -213,6 +213,12 @@
             "value" : "Starting with 1 minute is important"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "１分始めることが大事"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -223,12 +229,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bắt đầu với 1 phút là điều quan trọng"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "１分始めることが大事"
           }
         },
         "zh-Hant" : {
@@ -247,6 +247,12 @@
             "value" : "OK"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -259,16 +265,45 @@
             "value" : "Đồng ý"
           }
         },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "確定"
+          }
+        }
+      }
+    },
+    "reading_category" : {
+      "comment" : "Category for reading-related content",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reading"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "OK"
+            "value" : "読書"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "독서"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "đọc sách"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "確定"
+            "value" : "読書"
           }
         }
       }
@@ -281,6 +316,12 @@
             "value" : "Category"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリー"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -291,12 +332,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Danh mục"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "カテゴリー"
           }
         },
         "zh-Hant" : {
@@ -315,6 +350,12 @@
             "value" : "Add Category"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリーを追加"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -325,12 +366,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thêm danh mục"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "カテゴリーを追加"
           }
         },
         "zh-Hant" : {
@@ -349,6 +384,12 @@
             "value" : "Category Name"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリー名"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -359,12 +400,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tên danh mục"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "カテゴリー名"
           }
         },
         "zh-Hant" : {
@@ -383,6 +418,12 @@
             "value" : "Select Category"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリー選択"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -393,12 +434,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Chọn danh mục"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "カテゴリー選択"
           }
         },
         "zh-Hant" : {
@@ -417,6 +452,12 @@
             "value" : "More options become available as you clear tasks"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クリアするごと選択肢が増えていきます"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -427,12 +468,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nhiều tùy chọn hơn sẽ được mở khóa khi bạn hoàn thành các nhiệm vụ"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "クリアするごと選択肢が増えていきます"
           }
         },
         "zh-Hant" : {
@@ -451,6 +486,12 @@
             "value" : "Total Statistics"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "これまでの集計"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -461,12 +502,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thống kê tổng hợp"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "これまでの集計"
           }
         },
         "zh-Hant" : {
@@ -485,6 +520,12 @@
             "value" : "Timer has been reset"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーをリセットしました"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -495,12 +536,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Đã đặt lại bộ đếm thời gian"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "タイマーをリセットしました"
           }
         },
         "zh-Hant" : {
@@ -519,6 +554,12 @@
             "value" : "Try Again"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "もう一度チャレンジ"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -529,12 +570,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thử lại"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "もう一度チャレンジ"
           }
         },
         "zh-Hant" : {
@@ -553,6 +588,12 @@
             "value" : "I could focus too!"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "も集中できた！"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -563,12 +604,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tôi cũng có thể tập trung!"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "も集中できた！"
           }
         },
         "zh-Hant" : {
@@ -587,6 +622,12 @@
             "value" : "All Categories"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全てのカテゴリー"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -597,12 +638,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tất cả danh mục"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "全てのカテゴリー"
           }
         },
         "zh-Hant" : {
@@ -621,6 +656,12 @@
             "value" : "Total Focus Time"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "合計集中時間"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -631,12 +672,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tổng thời gian tập trung"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "合計集中時間"
           }
         },
         "zh-Hant" : {
@@ -655,6 +690,12 @@
             "value" : "Complete"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -665,12 +706,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hoàn thành"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "完了"
           }
         },
         "zh-Hant" : {
@@ -689,6 +724,12 @@
             "value" : "About Time"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "時間について"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -699,12 +740,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Về thời gian"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "時間について"
           }
         },
         "zh-Hant" : {
@@ -723,6 +758,12 @@
             "value" : "Let's start with 1 minute next time"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次は1分からでも始めてみましょう"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -733,12 +774,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lần sau hãy bắt đầu từ 1 phút"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "次は1分からでも始めてみましょう"
           }
         },
         "zh-Hant" : {
@@ -757,6 +792,12 @@
             "value" : "Start timer by turning the screen face down"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画面を下向きにしてタイマーを開始"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -767,12 +808,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bắt đầu bộ đếm thời gian bằng cách úp màn hình xuống"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "画面を下向きにしてタイマーを開始"
           }
         },
         "zh-Hant" : {
@@ -791,6 +826,12 @@
             "value" : "In Progress"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "継続中"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -801,12 +842,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Đang thực hiện"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "継続中"
           }
         },
         "zh-Hant" : {
@@ -825,6 +860,12 @@
             "value" : "Add"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "追加"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -835,12 +876,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thêm"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "追加"
           }
         },
         "zh-Hant" : {
@@ -859,6 +894,12 @@
             "value" : "Focus session interrupted"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "集中が中断されました"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -869,12 +910,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Phiên tập trung đã bị gián đoạn"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "集中が中断されました"
           }
         },
         "zh-Hant" : {
@@ -893,6 +928,12 @@
             "value" : "Focus Complete!"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "集中完了！"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -903,12 +944,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tập trung hoàn thành!"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "集中完了！"
           }
         },
         "zh-Hant" : {
@@ -927,6 +962,12 @@
             "value" : "Focus History"
           }
         },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "集中履歴"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -937,12 +978,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lịch sử tập trung"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "集中履歴"
           }
         },
         "zh-Hant" : {

@@ -32,7 +32,7 @@ class TimerPageViewModel: ObservableObject {
   // Category
   @Published var isCategoryPopupPresented = false
   var categoryPopup: CategoryPopup?  // モジュールをここで保持
-  @Published var selectedCategory: String?
+  @Published var selectedCategory: String = "reading_category"
   
   init(motionManagerService: MotionManagerService, timerService: TimerService) {
     self.motionManagerService = motionManagerService
@@ -118,7 +118,7 @@ class TimerPageViewModel: ObservableObject {
     self.isPulsating = true
   }
   
-  func updateSelectedCategory(_ category: String?) {
+  func updateSelectedCategory(_ category: String) {
     self.selectedCategory = category
     hideCategoryPopup()
   }

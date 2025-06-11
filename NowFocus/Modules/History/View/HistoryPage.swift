@@ -90,7 +90,7 @@ struct HistoryPage: View {
           .font(.system(size: 16 * multiplier))
           .foregroundColor(Color(hex: "#339AF0")!)
         
-        Text(viewModel.selectedCategory ?? "全てのカテゴリー")
+        Text(viewModel.selectedCategory ?? String(localized: "全てのカテゴリー"))
           .font(.system(size: 18 * multiplier, weight: .medium))
           .foregroundColor(Color(hex: "#495057")!)
         
