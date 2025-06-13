@@ -35,40 +35,6 @@
         }
       }
     },
-    "%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@"
-          }
-        }
-      }
-    },
     "%@の集中時間" : {
       "localizations" : {
         "en" : {
@@ -137,40 +103,6 @@
         }
       }
     },
-    "１分から" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starting from 1 minute"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "１分から"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1분부터 시작"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bắt đầu từ 1 phút"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "從1分鐘開始"
-          }
-        }
-      }
-    },
     "1分からでも習慣化させよう" : {
       "localizations" : {
         "en" : {
@@ -204,6 +136,9 @@
           }
         }
       }
+    },
+    "１分もだてじゃない" : {
+
     },
     "１分始めることが大事" : {
       "localizations" : {
@@ -274,39 +209,17 @@
       }
     },
     "reading_category" : {
-      "comment" : "Category for reading-related content",
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reading"
-          }
-        },
         "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "読書"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "독서"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "đọc sách"
-          }
-        },
-        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "読書"
           }
         }
       }
+    },
+    "おめでとうございます！" : {
+
     },
     "カテゴリー" : {
       "localizations" : {
@@ -580,40 +493,6 @@
         }
       }
     },
-    "も集中できた！" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "I could focus too!"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "も集中できた！"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "나도 집중할 수 있었어요!"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tôi cũng có thể tập trung!"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "我也能專注！"
-          }
-        }
-      }
-    },
     "全てのカテゴリー" : {
       "localizations" : {
         "en" : {
@@ -715,6 +594,9 @@
           }
         }
       }
+    },
+    "日" : {
+
     },
     "時間について" : {
       "localizations" : {
@@ -886,6 +768,12 @@
         }
       }
     },
+    "閉じる" : {
+
+    },
+    "集中" : {
+
+    },
     "集中が中断されました" : {
       "localizations" : {
         "en" : {
@@ -916,40 +804,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "專注已中斷"
-          }
-        }
-      }
-    },
-    "集中完了！" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Focus Complete!"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "集中完了！"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "집중 완료!"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tập trung hoàn thành!"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "專注完成！"
           }
         }
       }

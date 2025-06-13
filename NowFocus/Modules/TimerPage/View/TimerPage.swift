@@ -67,6 +67,11 @@ struct TimerPage: View {
           )
           .opacity(model.isCategoryPopupPresented ? 1 : 0)
         }
+        
+        // 連続日数お祝いポップアップ
+        if model.showCelebrationPopup {
+          CelebrationPopupView(consecutiveDays: model.consecutiveDays, isPresented: $model.showCelebrationPopup)
+        }
       }
     }
     .onAppear(perform: {
@@ -96,8 +101,8 @@ extension TimerPage {
         failedPage(gp: gp, multiplier: multiplier)
           .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))
       } else if model.showResultView {
-        resultView(gp: gp, multiplier: multiplier)
-          .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))
+        // resultViewの代わりに空のViewを表示
+        Color.clear
       } else {
         timerView(gp: gp, multiplier: multiplier)
       }
@@ -232,74 +237,74 @@ extension TimerPage {
 extension TimerPage {
   func resultView(gp: GeometryProxy, multiplier: CGFloat) -> some View {
     ZStack {
-      // 背景をブラー効果付きの半透明に
-      Color(hex: "#212529")!.opacity(0.9)
-        .ignoresSafeArea()
-        .blur(radius: 0.5)
+      // 背景のオーバーレイ
+      Color.black.opacity(0.4)
+        .edgesIgnoringSafeArea(.all)
       
       // コンテンツカード
-      VStack(spacing: 24 * multiplier) {
-        // 成功アイコン
-        Image(systemName: "checkmark.circle.fill")
-          .font(.system(size: 60 * multiplier))
-          .foregroundColor(Color(hex: "#51CF66")!)
-          .padding(.bottom, 10 * multiplier)
-        
-        Text("集中完了！")
-          .font(.custom("IBM Plex Mono", size: 28 * multiplier))
-          .fontWeight(.bold)
-          .foregroundColor(.white)
-        
-        VStack(spacing: 10 * multiplier) {
-          Text("１分から")
-            .foregroundColor(Color(hex: "#DEE2E6")!)
-            .font(.custom("IBM Plex Mono", size: 20 * multiplier))
+      VStack(spacing: 28 * multiplier) {
+        // 達成時間の強調表示
+        ZStack {
+          Circle()
+            .fill(Color(hex: "#339AF0")!.opacity(0.1))
+            .frame(width: 160 * multiplier, height: 160 * multiplier)
+            .scaleEffect(model.isResultViewAnimating ? 1 : 0.8)
           
-          Text("\(model.totalFocusTime ?? "20分14秒")")
-            .foregroundColor(Color(hex: "#74C0FC")!)
-            .font(.custom("IBM Plex Mono", size: 42 * multiplier))
-            .fontWeight(.bold)
-          
-          Text("も集中できた！")
-            .foregroundColor(Color(hex: "#DEE2E6")!)
-            .font(.custom("IBM Plex Mono", size: 20 * multiplier))
+          VStack(spacing: 4 * multiplier) {
+            Text(model.totalFocusTime ?? "20分14秒")
+              .font(.system(size: 42 * multiplier, weight: .bold, design: .rounded))
+              .foregroundColor(Color(hex: "#339AF0")!)
+            
+            Text("集中")
+              .font(.title2)
+              .foregroundColor(Color(hex: "#339AF0")!)
+              .opacity(model.isResultViewAnimating ? 1 : 0)
+              .offset(y: model.isResultViewAnimating ? 0 : 10)
+          }
         }
-        .padding(.vertical, 20 * multiplier)
+        .rotation3DEffect(
+          .degrees(model.isResultViewAnimating ? 360 : 0),
+          axis: (x: 0, y: 1, z: 0)
+        )
         
-        Text("1分からでも習慣化させよう")
-          .foregroundColor(Color(hex: "#ADB5BD")!)
-          .font(.custom("IBM Plex Mono", size: 16 * multiplier))
-          .padding(.bottom, 10 * multiplier)
+        // メッセージ
+        VStack(spacing: 12 * multiplier) {
+          Text("おめでとうございます！")
+            .font(.title2)
+            .fontWeight(.bold)
+            .opacity(model.isResultViewAnimating ? 1 : 0)
+            .offset(y: model.isResultViewAnimating ? 0 : 20)
+          
+          Text("1分からでも習慣化させよう")
+            .font(.title3)
+            .opacity(model.isResultViewAnimating ? 1 : 0)
+            .offset(y: model.isResultViewAnimating ? 0 : 20)
+        }
         
+        // 完了ボタン
         Button {
-          withAnimation(.easeInOut(duration: 0.5)) {
+          withAnimation(.spring()) {
             model.handleCompletionButtonTap()
           }
         } label: {
           Text("完了")
-            .font(.custom("IBM Plex Mono", size: 18 * multiplier))
-            .fontWeight(.medium)
+            .font(.headline)
             .foregroundColor(.white)
-            .frame(width: 180 * multiplier, height: 54 * multiplier)
-            .background(
-              LinearGradient(
-                gradient: Gradient(colors: [Color(hex: "#339AF0")!, Color(hex: "#228BE6")!]),
-                startPoint: .leading,
-                endPoint: .trailing
-              )
-            )
-            .cornerRadius(27 * multiplier)
-            .shadow(color: Color(hex: "#1971C2")!.opacity(0.3), radius: 8, x: 0, y: 4)
+            .frame(width: 200 * multiplier, height: 44 * multiplier)
+            .background(Color.blue)
+            .cornerRadius(22 * multiplier)
         }
+        .opacity(model.isResultViewAnimating ? 1 : 0)
+        .scaleEffect(model.isResultViewAnimating ? 1 : 0.8)
       }
-      .padding(.horizontal, 30 * multiplier)
-      .padding(.vertical, 40 * multiplier)
+      .padding(32 * multiplier)
       .background(
         RoundedRectangle(cornerRadius: 24 * multiplier)
-          .fill(Color(hex: "#343A40")!)
-          .shadow(color: .black.opacity(0.2), radius: 20, x: 0, y: 10)
+          .fill(Color(UIColor.systemBackground))
+          .shadow(color: Color.black.opacity(0.1), radius: 20, x: 0, y: 10)
       )
-      .padding(.horizontal, 20 * multiplier)
+      .padding(.horizontal, 40 * multiplier)
+      .scaleEffect(model.isResultViewAnimating ? 1 : 0.8)
     }
   }
 }
