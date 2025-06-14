@@ -18,6 +18,15 @@ class UserDefaultManager: NSObject {
     UserDefaults.standard.bool(forKey: key)
   }
   
+  class func setInteger(_ intValue: Int, forKey: String) {
+    UserDefaults.standard.set(intValue, forKey: forKey)
+    UserDefaults.standard.synchronize() // 即座にディスクに保存
+  }
+  
+  class func integerForKey(_ key: String) -> Int {
+    UserDefaults.standard.integer(forKey: key)
+  }
+  
   class func deleteAll() {
     UserDefaults.standard.removePersistentDomain(forName: "com.tomoapp.face.down.timer")
   }
@@ -86,6 +95,12 @@ extension UserDefaultManager {
     set { setBool(newValue, forKey: #function) }
   }
   
+  // 連続記録
+  static var consecutiveDays: Int {
+    get { return integerForKey(#function) }
+    set { setInteger(newValue, forKey: #function) }
+  }
+  
   // FloatingBottomSheetが一度表示されているかどうか？
 //  static var isFloatingBottomSheetShown: Bool {
 //    get { return boolForKey(#function) }
@@ -98,23 +113,13 @@ extension UserDefaultManager {
   // カテゴリーリストの取得・保存
   static var savedCategories: [String] {
     get {
-      // 既存のデータあるならそれを返す
       if let data = UserDefaults.standard.array(forKey: #function) as? [String] {
         return data
       }
-      
-      // 既存のデータがない場合
-      // デフォルトカテゴリーを保存し、返す
-//      let defaultCategories = ["仕事", "勉強", "読書"]
-      let defaultCategories = [
-          String(localized: "reading_category", comment: "Category for reading-related content")
-      ]
-      self.savedCategories = defaultCategories
-      return self.savedCategories
+      // データがない場合はローカライズキーを返す
+      return ["reading"]
     }
-    
     set {
-      // 新しい値をセットする
       UserDefaults.standard.set(newValue, forKey: #function)
     }
   }

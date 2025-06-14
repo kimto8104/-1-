@@ -29,14 +29,21 @@ class TimerPageViewModel: ObservableObject {
   @Published var continueFocusingMode: Bool = false
   @Published var progress: CGFloat = 0
   @Published var isPulsating: Bool = false // パルスアニメーション用
+  @Published var isResultViewAnimating: Bool = false // 結果画面のアニメーション用
   // Category
   @Published var isCategoryPopupPresented = false
   var categoryPopup: CategoryPopup?  // モジュールをここで保持
-  @Published var selectedCategory: String = "reading_category"
+  @Published var selectedCategory: String = UserDefaultManager.savedCategories.first ?? "reading"
+  
+  // お祝いポップアップ関連のプロパティ
+  @Published var showCelebrationPopup = false
+  @Published var consecutiveDays = 0
   
   init(motionManagerService: MotionManagerService, timerService: TimerService) {
     self.motionManagerService = motionManagerService
     self.timerService = timerService
+    print("TimerPageViewModel init - savedCategories: \(UserDefaultManager.savedCategories)")
+    print("TimerPageViewModel init - selectedCategory: \(selectedCategory)")
     startObserving()
   }
   
@@ -86,7 +93,9 @@ class TimerPageViewModel: ObservableObject {
         let totalTime = timerService.getTotalFocusTime()
         updateTotalFocusTime(totalFocusTimeString: totalTime.toFormattedString())
         saveFocusHistory() // 集中履歴を保存
-        self.showResultView = true
+        // 連続記録を更新
+        ConsecutiveDaysRecordManager.shared.recordFocusSession()
+        updateShowCelebrationPopup(show: true)
       default: break
       }
       // MotionMangerの判定を止める
@@ -107,7 +116,6 @@ class TimerPageViewModel: ObservableObject {
       self.continueFocusingMode = true
     case .completed:
       print("completed")
-      self.showResultView = true
     }
   }
   
@@ -146,9 +154,26 @@ extension TimerPageViewModel {
     self.showAlertForPause = showAlert
   }
   
+  func updateShowCelebrationPopup(show: Bool) {
+    withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
+      showCelebrationPopup = show
+      // 連続日数を取得
+      consecutiveDays = ConsecutiveDaysRecordManager.shared.getCurrentConsecutiveDays()
+    }
+  }
+  
+  
   func updateShowResultView(show: Bool) {
     withAnimation(.easeInOut(duration: 1.0)) {
       self.showResultView = show
+      if show {
+        // 結果画面を表示する時にアニメーションを開始
+        withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
+          self.isResultViewAnimating = true
+        }
+      } else {
+        self.isResultViewAnimating = false
+      }
     }
   }
   
@@ -164,6 +189,8 @@ extension TimerPageViewModel {
 // MARK: Category
 extension TimerPageViewModel {
   func tapCategorySelectionButton() {
+    print("tapCategorySelectionButton - current categories: \(UserDefaultManager.savedCategories)")
+    print("tapCategorySelectionButton - selectedCategory: \(selectedCategory)")
     showCategoryPopup()
   }
   
