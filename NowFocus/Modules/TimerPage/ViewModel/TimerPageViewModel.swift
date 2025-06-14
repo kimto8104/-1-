@@ -42,6 +42,8 @@ class TimerPageViewModel: ObservableObject {
   init(motionManagerService: MotionManagerService, timerService: TimerService) {
     self.motionManagerService = motionManagerService
     self.timerService = timerService
+    print("TimerPageViewModel init - savedCategories: \(UserDefaultManager.savedCategories)")
+    print("TimerPageViewModel init - selectedCategory: \(selectedCategory)")
     startObserving()
   }
   
@@ -188,6 +190,8 @@ extension TimerPageViewModel {
 // MARK: Category
 extension TimerPageViewModel {
   func tapCategorySelectionButton() {
+    print("tapCategorySelectionButton - current categories: \(UserDefaultManager.savedCategories)")
+    print("tapCategorySelectionButton - selectedCategory: \(selectedCategory)")
     showCategoryPopup()
   }
   

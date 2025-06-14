@@ -130,7 +130,7 @@ extension CategoryPopup {
         .font(.system(size: 16 * multiplier))
         .foregroundColor(Color(hex: "#339AF0")!)
       
-      Text(category)
+      Text(String(localized: String.LocalizationValue(category)))
         .font(.custom("IBM Plex Mono", size: 18 * multiplier))
         .fontWeight(.medium)
         .foregroundColor(Color(hex: "#495057")!)
@@ -226,10 +226,18 @@ class CategoryPopupViewModel: ObservableObject {
   }
   
   private func loadCategories() {
+    print("CategoryPopupViewModel loadCategories - before: \(categories)")
     categories = UserDefaultManager.savedCategories
+    print("CategoryPopupViewModel loadCategories - after: \(categories)")
+    // カテゴリーが空の場合はデフォルトの"reading"を追加
+    if categories.isEmpty {
+      categories = ["reading"]
+      saveCategories()
+    }
   }
   
   private func saveCategories() {
+    print("CategoryPopupViewModel saveCategories - saving: \(categories)")
     UserDefaultManager.savedCategories = categories
   }
 }
