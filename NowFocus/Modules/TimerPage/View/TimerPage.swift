@@ -70,7 +70,13 @@ struct TimerPage: View {
         
         // 連続日数お祝いポップアップ
         if model.showCelebrationPopup {
-          CelebrationPopupView(consecutiveDays: model.consecutiveDays, isPresented: $model.showCelebrationPopup)
+          CelebrationPopupView(
+            consecutiveDays: model.consecutiveDays,
+            isPresented: $model.showCelebrationPopup,
+            onClose: {
+              model.handleCompletionButtonTap()
+            }
+          )
         }
       }
     }

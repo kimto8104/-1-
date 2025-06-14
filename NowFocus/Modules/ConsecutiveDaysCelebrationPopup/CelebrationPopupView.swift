@@ -10,6 +10,7 @@ import SwiftUI
 struct CelebrationPopupView: View {
   let consecutiveDays: Int
   @Binding var isPresented: Bool
+  let onClose: () -> Void
   
   // アニメーション用の状態変数
   @State private var displayedNumber: Int = 0
@@ -33,20 +34,20 @@ struct CelebrationPopupView: View {
         // 連続日数の強調表示
         ZStack {
           Circle()
-            .fill(Color.blue.opacity(0.1))
+            .fill(Color(hex: "#FA5252")!.opacity(0.1))
             .frame(width: 160, height: 160)
             .scaleEffect(isAnimating ? 1 : 0.8)
           
           VStack(spacing: 4) {
             Text("\(displayedNumber)")
               .font(.system(size: isNumberScaling ? 72 : 64, weight: .bold, design: .rounded))
-              .foregroundColor(.blue)
+              .foregroundColor(Color(hex: "#FA5252")!)
               .contentTransition(.numericText())
               .animation(.spring(response: 0.5, dampingFraction: 0.6), value: isNumberScaling)
             
             Text("日")
               .font(.title2)
-              .foregroundColor(.blue)
+              .foregroundColor(Color(hex: "#FA5252")!)
               .opacity(isAnimating ? 1 : 0)
               .offset(y: isAnimating ? 0 : 10)
           }
@@ -74,6 +75,7 @@ struct CelebrationPopupView: View {
         Button(action: {
           withAnimation(.spring()) {
             isPresented = false
+            onClose()
           }
         }) {
           Text("閉じる")
@@ -121,5 +123,9 @@ struct CelebrationPopupView: View {
 }
 
 #Preview {
-  CelebrationPopupView(consecutiveDays: 7, isPresented: .constant(true))
+  CelebrationPopupView(
+    consecutiveDays: 7,
+    isPresented: .constant(true),
+    onClose: {}
+  )
 }
