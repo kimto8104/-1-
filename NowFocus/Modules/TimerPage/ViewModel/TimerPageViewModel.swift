@@ -33,7 +33,7 @@ class TimerPageViewModel: ObservableObject {
   // Category
   @Published var isCategoryPopupPresented = false
   var categoryPopup: CategoryPopup?  // モジュールをここで保持
-  @Published var selectedCategory: String = UserDefaultManager.savedCategories.first ?? "reading_category"
+  @Published var selectedCategory: String = UserDefaultManager.savedCategories.first ?? "reading"
   
   // お祝いポップアップ関連のプロパティ
   @Published var showCelebrationPopup = false

@@ -64,7 +64,7 @@ struct CelebrationPopupView: View {
             .opacity(isAnimating ? 1 : 0)
             .offset(y: isAnimating ? 0 : 20)
           
-          Text("１分もだてじゃない")
+          Text("1分から始まる")
             .font(.title3)
             .opacity(isAnimating ? 1 : 0)
             .offset(y: isAnimating ? 0 : 20)

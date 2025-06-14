@@ -120,7 +120,7 @@ extension UserDefaultManager {
       
       // 既存のデータがない場合
       // デフォルトカテゴリーを保存し、返す
-      let defaultCategories = [String(localized: "reading_category")]  // ローカライズキーをそのまま保存
+      let defaultCategories = ["reading"]  // ローカライズキーをそのまま保存
       self.savedCategories = defaultCategories
       return self.savedCategories
     }
