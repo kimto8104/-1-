@@ -479,6 +479,7 @@
       }
     },
     "これまでの集計" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -545,6 +546,9 @@
           }
         }
       }
+    },
+    "タップして詳細を見る" : {
+
     },
     "もう一度チャレンジ" : {
       "localizations" : {
@@ -784,6 +788,9 @@
         }
       }
     },
+    "現在の記録" : {
+
+    },
     "画面を下向きにしてタイマーを開始" : {
       "localizations" : {
         "en" : {
@@ -885,6 +892,9 @@
           }
         }
       }
+    },
+    "連続集中日数" : {
+
     },
     "閉じる" : {
       "localizations" : {
@@ -989,6 +999,7 @@
       }
     },
     "集中履歴" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

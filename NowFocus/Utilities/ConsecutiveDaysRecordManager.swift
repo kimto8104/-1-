@@ -23,20 +23,69 @@ class ConsecutiveDaysRecordManager {
   @MainActor
   func recordFocusSession() {
     // 連続日数を計算して更新
-    calculateConsecutiveDays()
+    calculateAndSaveCurrentFocusStreakToUserDefaults()
   }
   
-  // 現在の連続日数を取得
+  // 全カテゴリーの連続集中日数を取得
   @MainActor
-  func getCurrentConsecutiveDays() -> Int {
+  func getTotalConsecutiveFocusDays() -> Int {
     // 毎回最新のデータから計算
-    calculateConsecutiveDays()
+    calculateAndSaveCurrentFocusStreakToUserDefaults()
     return consecutiveDays
   }
   
-  // SwiftDataの履歴から連続日数を計算
+  // 特定のカテゴリーの連続集中記録を取得
   @MainActor
-  private func calculateConsecutiveDays() {
+  func getCurrentFocusStreakByCategory(_ category: String) -> Int {
+    let calendar = Calendar.current
+    let today = calendar.startOfDay(for: Date())
+    let thirtyDaysAgo = calendar.date(byAdding: .day, value: -30, to: today)!
+    
+    // 過去30日分の履歴を取得
+    let descriptor = FetchDescriptor<FocusHistory>(
+      predicate: #Predicate<FocusHistory> { history in
+        history.startDate >= thirtyDaysAgo && history.category == category
+      },
+      sortBy: [SortDescriptor(\.startDate, order: .reverse)]
+    )
+    
+    do {
+      let histories = try ModelContainerManager.shared.container?.mainContext.fetch(descriptor) ?? []
+      
+      // 日付ごとにグループ化（同じ日の複数セッションは1日としてカウント）
+      var uniqueDates = Set<Date>()
+      for history in histories {
+        let dayStart = calendar.startOfDay(for: history.startDate)
+        uniqueDates.insert(dayStart)
+      }
+      
+      // 連続日数を計算
+      var currentStreak = 0
+      var checkDate = today
+      
+      while true {
+        if uniqueDates.contains(checkDate) {
+          currentStreak += 1
+          // 前日をチェック
+          guard let previousDay = calendar.date(byAdding: .day, value: -1, to: checkDate) else { break }
+          checkDate = previousDay
+        } else {
+          break
+        }
+      }
+      
+      return currentStreak
+      
+    } catch {
+      print("ConsecutiveDaysRecordManager: カテゴリー別履歴の取得に失敗 - \(error)")
+      return 0
+    }
+  }
+  
+  // 全カテゴリーを考慮した連続集中記録を計算してUserDefaultsに保存
+  // 同じ日に複数のカテゴリーで集中しても1日としてカウント
+  @MainActor
+  private func calculateAndSaveCurrentFocusStreakToUserDefaults() {
     let calendar = Calendar.current
     let today = calendar.startOfDay(for: Date())
     let thirtyDaysAgo = calendar.date(byAdding: .day, value: -30, to: today)!
