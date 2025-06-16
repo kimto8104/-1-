@@ -29,11 +29,11 @@ class ModelContainerManager {
   }
   
   @MainActor func saveFocusHistory(history: FocusHistory) {
-    print("ModelContainerManager: 保存開始 - カテゴリー: \(history.category ?? "nil"), 時間: \(history.duration)")
+    print("ModelContainerManager: 保存開始 - カテゴリー: \(history.category ?? "nil"), 時間: \(history.duration), 開始日時: \(history.startDate)")
     self.container?.mainContext.insert(history)
     do {
         try self.container?.mainContext.save()
-        print("ModelContainerManager: 保存成功 - カテゴリー: \(history.category ?? "nil"), 時間: \(history.duration)")
+        print("ModelContainerManager: 保存成功 - カテゴリー: \(history.category ?? "nil"), 時間: \(history.duration), 開始日時: \(history.startDate)")
     } catch {
         print("ModelContainerManager: 保存失敗 - \(error)")
     }

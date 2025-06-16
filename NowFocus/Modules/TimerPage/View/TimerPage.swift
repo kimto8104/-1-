@@ -103,6 +103,7 @@ extension TimerPage {
     Group {
       if model.selectedTab == .Clock {
         HistoryPage()
+          .environmentObject(model)
       } else if model.showFailedView {
         failedPage(gp: gp, multiplier: multiplier)
           .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))

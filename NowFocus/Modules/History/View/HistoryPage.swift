@@ -12,71 +12,67 @@ struct HistoryPage: View {
   @Query(animation: .bouncy) private var allHistory: [FocusHistory]
   @StateObject private var viewModel = HistoryViewModel()
   @State private var showingCategoryList = false
+  @EnvironmentObject private var timerViewModel: TimerPageViewModel  // TimerPageViewModelを環境オブジェクトとして取得
   
   var body: some View {
-    GeometryReader { gp in
-      let hm = gp.size.width / 375
-      let vm = gp.size.height / 667
-      let multiplier = abs(hm - 1) < abs(vm - 1) ? hm : vm
-      
-      ZStack {
-        // TimerPageと同じ背景グラデーション
-        LinearGradient(
-          gradient: Gradient(colors: [
-            Color(hex: "#F8F9FA")!,
-            Color(hex: "#E9ECEF")!
-          ]),
-          startPoint: .top,
-          endPoint: .bottom
-        )
-        .ignoresSafeArea()
+    NavigationView {
+      GeometryReader { gp in
+        let hm = gp.size.width / 375
+        let vm = gp.size.height / 667
+        let multiplier = abs(hm - 1) < abs(vm - 1) ? hm : vm
         
-        VStack {
-          // 上部スペースを固定サイズに変更
-          Spacer().frame(height: 60 * multiplier)
+        ZStack {
+          // TimerPageと同じ背景グラデーション
+          LinearGradient(
+            gradient: Gradient(colors: [
+              Color(hex: "#F8F9FA")!,
+              Color(hex: "#E9ECEF")!
+            ]),
+            startPoint: .top,
+            endPoint: .bottom
+          )
+          .ignoresSafeArea()
           
-          VStack(spacing: 30 * multiplier) {
-            // ヘッダー
-            Text("集中履歴")
-              .font(.system(size: 24 * multiplier, weight: .medium))
-              .foregroundColor(Color(hex: "#212529")!)
-              .padding(.bottom, 10 * multiplier)
+          VStack {
+            // 上部スペースを固定サイズに変更
+            Spacer().frame(height: 60 * multiplier)
             
-            // カテゴリー選択ボタン
-            categorySelectionButton(multiplier: multiplier)
-              .padding(.bottom, 10 * multiplier)
-            
-            // 合計集中時間カード
-            timeStatisticsCard(gp: gp, multiplier: multiplier)
-            
-            // 履歴リスト
-            ScrollView {
-              LazyVStack(spacing: 12 * multiplier) {
-                // フィルター適用されたリスト表示
-                let filteredHistory = viewModel.selectedCategory == nil ? 
-                  allHistory : 
-                  allHistory.filter { $0.category == viewModel.selectedCategory }
-                
-                ForEach(filteredHistory.sorted(by: { $0.startDate > $1.startDate })) { history in
-                  historyCardView(history: history, multiplier: multiplier)
-                }
-              }
-              .padding(.horizontal, 5 * multiplier)
+            VStack(spacing: 30 * multiplier) {
+              // カテゴリー選択ボタン
+              categorySelectionButton(multiplier: multiplier)
+                .padding(.bottom, 10 * multiplier)
+              
+              // 連続日数カード
+              consecutiveDaysCard(gp: gp, multiplier: multiplier)
+              
+              // 合計時間カード
+              totalTimeCard(gp: gp, multiplier: multiplier)
             }
+            
+            Spacer() // 下部スペース
           }
-          
-          Spacer() // 下部スペース
+          .padding(.horizontal, 20 * multiplier)
         }
-        .padding(.horizontal, 20 * multiplier)
+        .sheet(isPresented: $showingCategoryList) {
+          categoryListView(multiplier: multiplier)
+        }
       }
-      .sheet(isPresented: $showingCategoryList) {
-        categoryListView(multiplier: multiplier)
-      }
+      .navigationBarHidden(true)
     }
     .onAppear {
       print("HistoryPage: onAppear - 履歴数: \(allHistory.count)")
       print("HistoryPage: カテゴリー一覧: \(allHistory.compactMap { $0.category })")
+      print("HistoryPage: 履歴の詳細:")
+      for (index, history) in allHistory.enumerated() {
+        print("HistoryPage: 履歴\(index + 1) - 日付: \(history.startDate), カテゴリー: \(history.category ?? "nil"), 時間: \(history.duration)")
+      }
       viewModel.updateHistory(with: allHistory)
+    }
+    .onChange(of: timerViewModel.selectedTab) { oldValue, newValue in
+      if newValue == .Clock {
+        print("HistoryPage: Tab changed to Clock - アニメーション開始")
+        viewModel.startNumberAnimation()
+      }
     }
   }
   
@@ -110,29 +106,29 @@ struct HistoryPage: View {
     }
   }
   
-  // 集中時間統計カード
-  private func timeStatisticsCard(gp: GeometryProxy, multiplier: CGFloat) -> some View {
+  // 連続日数カード
+  private func consecutiveDaysCard(gp: GeometryProxy, multiplier: CGFloat) -> some View {
     VStack(spacing: 16 * multiplier) {
-      // カテゴリー名またはテキスト
-      Text(viewModel.selectedCategory == nil ? "合計集中時間" : "\(viewModel.selectedCategory!)の集中時間")
+      Text("連続集中日数")
         .font(.system(size: 20 * multiplier, weight: .medium))
         .foregroundColor(Color(hex: "#495057")!)
       
-      // 時間表示
-      Text(viewModel.formatDuration(viewModel.filteredDuration))
-        .font(.system(size: 36 * multiplier, weight: .semibold, design: .monospaced))
-        .foregroundColor(Color(hex: "#339AF0")!)
-        .tracking(-0.5) // 文字間隔を少し詰める
-        .lineLimit(1)
-        .minimumScaleFactor(0.7) // 長い時間でも表示できるように
-        .padding(.vertical, 10 * multiplier)
+      VStack(spacing: 4 * multiplier) {
+        Text("\(viewModel.displayedConsecutiveDays)")
+          .font(.system(size: 48 * multiplier, weight: .bold, design: .rounded))
+          .foregroundColor(Color(hex: "#339AF0")!)
+          .contentTransition(.numericText())
+        
+        Text("日")
+          .font(.system(size: 20 * multiplier))
+          .foregroundColor(Color(hex: "#339AF0")!)
+      }
       
-      // 小さい説明文
-      Text("これまでの集計")
+      Text("現在の記録")
         .font(.system(size: 14 * multiplier))
         .foregroundColor(Color(hex: "#868E96")!)
     }
-    .padding(.vertical, 30 * multiplier)
+    .padding(.vertical, 20 * multiplier)
     .padding(.horizontal, 25 * multiplier)
     .frame(width: gp.size.width * 0.85)
     .background(
@@ -140,6 +136,59 @@ struct HistoryPage: View {
         .fill(Color.white)
         .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.15), radius: 8, x: 0, y: 4)
     )
+  }
+
+  // 合計時間カード
+  private func totalTimeCard(gp: GeometryProxy, multiplier: CGFloat) -> some View {
+    NavigationLink(destination: HistoryDetailPage(initialCategory: viewModel.selectedCategory)) {
+      ZStack {
+        // メインコンテンツ
+        VStack(spacing: 16 * multiplier) {
+          Text(viewModel.selectedCategory == nil ? "合計集中時間" : "\(viewModel.selectedCategory!)の集中時間")
+            .font(.system(size: 20 * multiplier, weight: .medium))
+            .foregroundColor(Color(hex: "#495057")!)
+          
+          Text(viewModel.formatDuration(viewModel.filteredDuration))
+            .font(.system(size: 36 * multiplier, weight: .semibold, design: .monospaced))
+            .foregroundColor(Color(hex: "#339AF0")!)
+            .tracking(-0.5)
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
+            .padding(.vertical, 10 * multiplier)
+          
+          Text("タップして詳細を見る")
+            .font(.system(size: 14 * multiplier))
+            .foregroundColor(Color(hex: "#868E96")!)
+            .opacity(viewModel.isPulsing ? 0.4 : 1.0)  // ViewModelの状態を使用
+            .onAppear {
+              // アニメーションを開始
+              withAnimation(Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
+                viewModel.startPulsingAnimation()  // ViewModelのメソッドを呼び出し
+              }
+            }
+        }
+        .frame(maxWidth: .infinity)
+        
+        // 右側の矢印
+        HStack {
+          Spacer()
+          Image(systemName: "chevron.right")
+            .font(.system(size: 16 * multiplier, weight: .medium))
+            .foregroundColor(Color(hex: "#868E96")!)
+            .padding(.trailing, 10 * multiplier)
+        }
+      }
+      .padding(.vertical, 20 * multiplier)
+      .padding(.horizontal, 25 * multiplier)
+      .frame(width: gp.size.width * 0.85)
+      .background(
+        RoundedRectangle(cornerRadius: 16 * multiplier)
+          .fill(Color.white)
+          .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.15), radius: 8, x: 0, y: 4)
+      )
+      .contentShape(Rectangle())
+    }
+    .buttonStyle(PlainButtonStyle())
   }
   
   // カテゴリー選択リスト
@@ -196,63 +245,6 @@ struct HistoryPage: View {
       }
     }
   }
-  
-  // 履歴カード表示
-  private func historyCardView(history: FocusHistory, multiplier: CGFloat) -> some View {
-    VStack(alignment: .leading, spacing: 10 * multiplier) {
-      // 日付と時間
-      HStack {
-        Text(formatDate(history.startDate))
-          .font(.system(size: 16 * multiplier, weight: .medium))
-          .foregroundColor(Color(hex: "#495057")!)
-        
-        Spacer()
-        
-        Text(viewModel.formatDuration(history.duration))
-          .font(.system(size: 16 * multiplier, weight: .semibold))
-          .foregroundColor(Color(hex: "#228BE6")!)
-      }
-      
-      // カテゴリーとトリガー回数
-      HStack {
-        if let category = history.category {
-          // カテゴリー表示
-          HStack(spacing: 6 * multiplier) {
-            Image(systemName: "tag.fill")
-              .font(.system(size: 14 * multiplier))
-              .foregroundColor(Color(hex: "#228BE6")!)
-            
-            Text(category)
-              .font(.system(size: 14 * multiplier))
-              .foregroundColor(Color(hex: "#495057")!)
-          }
-        }
-        
-        Spacer()
-        
-        // 上向き回数表示
-        HStack(spacing: 6 * multiplier) {
-          Image(systemName: "rotate.3d")
-            .font(.system(size: 14 * multiplier))
-            .foregroundColor(Color(hex: "#228BE6")!)
-        }
-      }
-    }
-    .padding(.horizontal, 16 * multiplier)
-    .padding(.vertical, 14 * multiplier)
-    .background(
-      RoundedRectangle(cornerRadius: 12 * multiplier)
-        .fill(Color.white)
-        .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.1), radius: 4, x: 0, y: 2)
-    )
-  }
-  
-  // 日付フォーマット
-  private func formatDate(_ date: Date) -> String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "yyyy/MM/dd HH:mm"
-    return formatter.string(from: date)
-  }
 }
 
 // MARK: ViewModel
@@ -260,6 +252,15 @@ class HistoryViewModel: ObservableObject {
   @Published var allHistory: [FocusHistory] = []
   @Published var categoryDurations: [String: TimeInterval] = [:]
   @Published var selectedCategory: String? = nil
+  @Published var consecutiveDays: Int = 0
+  @Published var isPulsing: Bool = false
+  
+  // 数字アニメーション用の状態
+  @Published var displayedConsecutiveDays: Int = 0
+  
+  init() {
+    print("HistoryViewModel: 初期化")
+  }
   
   var filteredDuration: TimeInterval {
     if let selectedCategory = selectedCategory {
@@ -273,28 +274,56 @@ class HistoryViewModel: ObservableObject {
   }
   
   func updateHistory(with history: [FocusHistory]) {
-    print("HistoryViewModel: 更新開始 - 履歴数: \(history.count)")
+    print("HistoryViewModel: updateHistory開始")
+    print("HistoryViewModel: 受け取った履歴数: \(history.count)")
+    print("HistoryViewModel: 現在の選択カテゴリー: \(selectedCategory ?? "nil")")
+    
     self.allHistory = history
     updateCategoryDurations()
+    updateConsecutiveDays()
     
     // 選択中のカテゴリーが削除されていた場合、選択を解除
     if let selectedCategory = selectedCategory,
        !categoryDurations.keys.contains(selectedCategory) {
+      print("HistoryViewModel: 選択中のカテゴリーが削除されたため、選択を解除: \(selectedCategory)")
       self.selectedCategory = nil
     }
   }
   
   private func updateCategoryDurations() {
+    print("HistoryViewModel: updateCategoryDurations開始")
     var durations: [String: TimeInterval] = [:]
     
     for history in allHistory {
       if let category = history.category {  // nilの場合は集計しない
         durations[category, default: 0] += history.duration
+        print("HistoryViewModel: カテゴリー '\(category)' に \(history.duration)秒 を追加")
+      } else {
+        print("HistoryViewModel: カテゴリーがnilの履歴をスキップ - 日付: \(history.startDate)")
       }
     }
     
     print("HistoryViewModel: カテゴリー集計結果: \(durations)")
     categoryDurations = durations
+  }
+  
+  private func updateConsecutiveDays() {
+    Task { @MainActor in
+      print("HistoryViewModel: updateConsecutiveDays開始")
+      print("HistoryViewModel: 選択中のカテゴリー: \(selectedCategory ?? "nil")")
+      
+      if let selectedCategory = selectedCategory {
+        print("HistoryViewModel: カテゴリー別連続日数を取得中...")
+        consecutiveDays = ConsecutiveDaysRecordManager.shared.getCurrentFocusStreakByCategory(selectedCategory)
+        print("HistoryViewModel: カテゴリー別連続日数: \(consecutiveDays)")
+      } else {
+        print("HistoryViewModel: 全カテゴリー連続日数を取得中...")
+        consecutiveDays = ConsecutiveDaysRecordManager.shared.getTotalConsecutiveFocusDays()
+        print("HistoryViewModel: 全カテゴリー連続日数: \(consecutiveDays)")
+      }
+      // 連続日数が更新されたらアニメーションを開始
+      startNumberAnimation()
+    }
   }
   
   func formatDuration(_ duration: TimeInterval) -> String {
@@ -312,27 +341,32 @@ class HistoryViewModel: ObservableObject {
   }
   
   func selectCategory(_ category: String?) {
+    print("HistoryViewModel: selectCategory呼び出し")
+    print("HistoryViewModel: 前のカテゴリー: \(selectedCategory ?? "nil")")
+    print("HistoryViewModel: 新しいカテゴリー: \(category ?? "nil")")
+    
     selectedCategory = category
+    updateConsecutiveDays()  // カテゴリー変更時に連続日数を更新
   }
-}
-
-// カードに上向き回数表示を追加
-struct HistoryItemCard: View {
-  let history: FocusHistory
-  let multiplier: CGFloat
   
-  var body: some View {
-    VStack(alignment: .leading, spacing: 8 * multiplier) {
-      // 既存のコード
-      
-      // 上向きになった回数表示を追加
-      HStack {
-        Image(systemName: "rotate.3d")
-          .font(.system(size: 14 * multiplier))
-          .foregroundColor(Color(hex: "#228BE6")!)
+  // アニメーションを開始するメソッド
+  func startPulsingAnimation() {
+    isPulsing = true
+  }
+  
+  // 数字のアニメーションを開始
+  func startNumberAnimation() {
+    // アニメーションの初期状態にリセット
+    displayedConsecutiveDays = 0
+    
+    // 数字のカウントアップアニメーション
+    for i in 0...consecutiveDays {
+      DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.05) {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+          self.displayedConsecutiveDays = i
+        }
       }
     }
-    // ... 残りの既存のコード
   }
 }
 

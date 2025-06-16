@@ -157,8 +157,8 @@ extension TimerPageViewModel {
   func updateShowCelebrationPopup(show: Bool) {
     withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
       showCelebrationPopup = show
-      // 連続日数を取得
-      consecutiveDays = ConsecutiveDaysRecordManager.shared.getCurrentConsecutiveDays()
+      // 選択されているカテゴリーの連続集中日数を取得
+      consecutiveDays = ConsecutiveDaysRecordManager.shared.getCurrentFocusStreakByCategory(selectedCategory)
     }
   }
   
