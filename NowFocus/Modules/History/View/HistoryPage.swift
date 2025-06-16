@@ -319,6 +319,7 @@ class HistoryViewModel: ObservableObject {
   
   func selectCategory(_ category: String?) {
     selectedCategory = category
+    updateConsecutiveDays()  // カテゴリー変更時に連続日数を更新
   }
   
   // アニメーションを開始するメソッド
