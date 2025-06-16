@@ -62,6 +62,10 @@ struct HistoryPage: View {
     .onAppear {
       print("HistoryPage: onAppear - 履歴数: \(allHistory.count)")
       print("HistoryPage: カテゴリー一覧: \(allHistory.compactMap { $0.category })")
+      print("HistoryPage: 履歴の詳細:")
+      for (index, history) in allHistory.enumerated() {
+        print("HistoryPage: 履歴\(index + 1) - 日付: \(history.startDate), カテゴリー: \(history.category ?? "nil"), 時間: \(history.duration)")
+      }
       viewModel.updateHistory(with: allHistory)
     }
     .onChange(of: timerViewModel.selectedTab) { oldValue, newValue in
@@ -254,6 +258,10 @@ class HistoryViewModel: ObservableObject {
   // 数字アニメーション用の状態
   @Published var displayedConsecutiveDays: Int = 0
   
+  init() {
+    print("HistoryViewModel: 初期化")
+  }
+  
   var filteredDuration: TimeInterval {
     if let selectedCategory = selectedCategory {
       return categoryDurations[selectedCategory] ?? 0
@@ -266,7 +274,10 @@ class HistoryViewModel: ObservableObject {
   }
   
   func updateHistory(with history: [FocusHistory]) {
-    print("HistoryViewModel: 更新開始 - 履歴数: \(history.count)")
+    print("HistoryViewModel: updateHistory開始")
+    print("HistoryViewModel: 受け取った履歴数: \(history.count)")
+    print("HistoryViewModel: 現在の選択カテゴリー: \(selectedCategory ?? "nil")")
+    
     self.allHistory = history
     updateCategoryDurations()
     updateConsecutiveDays()
@@ -274,16 +285,21 @@ class HistoryViewModel: ObservableObject {
     // 選択中のカテゴリーが削除されていた場合、選択を解除
     if let selectedCategory = selectedCategory,
        !categoryDurations.keys.contains(selectedCategory) {
+      print("HistoryViewModel: 選択中のカテゴリーが削除されたため、選択を解除: \(selectedCategory)")
       self.selectedCategory = nil
     }
   }
   
   private func updateCategoryDurations() {
+    print("HistoryViewModel: updateCategoryDurations開始")
     var durations: [String: TimeInterval] = [:]
     
     for history in allHistory {
       if let category = history.category {  // nilの場合は集計しない
         durations[category, default: 0] += history.duration
+        print("HistoryViewModel: カテゴリー '\(category)' に \(history.duration)秒 を追加")
+      } else {
+        print("HistoryViewModel: カテゴリーがnilの履歴をスキップ - 日付: \(history.startDate)")
       }
     }
     
@@ -293,10 +309,17 @@ class HistoryViewModel: ObservableObject {
   
   private func updateConsecutiveDays() {
     Task { @MainActor in
+      print("HistoryViewModel: updateConsecutiveDays開始")
+      print("HistoryViewModel: 選択中のカテゴリー: \(selectedCategory ?? "nil")")
+      
       if let selectedCategory = selectedCategory {
-        consecutiveDays = await ConsecutiveDaysRecordManager.shared.getCurrentFocusStreakByCategory(selectedCategory)
+        print("HistoryViewModel: カテゴリー別連続日数を取得中...")
+        consecutiveDays = ConsecutiveDaysRecordManager.shared.getCurrentFocusStreakByCategory(selectedCategory)
+        print("HistoryViewModel: カテゴリー別連続日数: \(consecutiveDays)")
       } else {
-        consecutiveDays = await ConsecutiveDaysRecordManager.shared.getTotalConsecutiveFocusDays()
+        print("HistoryViewModel: 全カテゴリー連続日数を取得中...")
+        consecutiveDays = ConsecutiveDaysRecordManager.shared.getTotalConsecutiveFocusDays()
+        print("HistoryViewModel: 全カテゴリー連続日数: \(consecutiveDays)")
       }
       // 連続日数が更新されたらアニメーションを開始
       startNumberAnimation()
@@ -318,6 +341,10 @@ class HistoryViewModel: ObservableObject {
   }
   
   func selectCategory(_ category: String?) {
+    print("HistoryViewModel: selectCategory呼び出し")
+    print("HistoryViewModel: 前のカテゴリー: \(selectedCategory ?? "nil")")
+    print("HistoryViewModel: 新しいカテゴリー: \(category ?? "nil")")
+    
     selectedCategory = category
     updateConsecutiveDays()  // カテゴリー変更時に連続日数を更新
   }
