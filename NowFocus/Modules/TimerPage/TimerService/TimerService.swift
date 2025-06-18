@@ -13,7 +13,6 @@ import Combine
 enum TimerState: String {
   case ready // 停止
   case focusing // 開始
-  case completed // 完了
   case continueFocusing // 追加集中
 }
 

@@ -80,6 +80,9 @@ class TimerPageViewModel: ObservableObject {
   private func handleDeviceOrientationChange(isFaceDown: Bool) {
     if isFaceDown {
       timerService.startTimer()
+      if timerService.timerState == .focusing || timerService.timerState == .continueFocusing {
+        UIApplication.shared.isIdleTimerDisabled = true
+      }
     } else {
       // 画面を上向きにした時
       switch timerService.timerState {
@@ -88,7 +91,7 @@ class TimerPageViewModel: ObservableObject {
         print("Failed")
         self.showFailedView = true
         // 失敗画面を出す
-      case .completed, .continueFocusing:
+      case .continueFocusing:
         // 追加集中時間中に上向きになった場合&タイマー完了した時は結果を表示
         let totalTime = timerService.getTotalFocusTime()
         updateTotalFocusTime(totalFocusTimeString: totalTime.toFormattedString())
@@ -102,6 +105,9 @@ class TimerPageViewModel: ObservableObject {
       motionManagerService.stopMonitoring()
       // タイマーを止める
       timerService.resetTimer()
+      if timerService.timerState == .ready {
+        UIApplication.shared.isIdleTimerDisabled = false
+      }
     }
   }
   
@@ -114,8 +120,6 @@ class TimerPageViewModel: ObservableObject {
     case .continueFocusing:
       print("continuFocusing")
       self.continueFocusingMode = true
-    case .completed:
-      print("completed")
     }
   }
   
