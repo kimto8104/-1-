@@ -27,9 +27,9 @@ class TimerPageViewModel: ObservableObject {
   // Failed Page
   @Published var showFailedView: Bool = false
   @Published var continueFocusingMode: Bool = false
-  @Published var progress: CGFloat = 0
-  @Published var isPulsating: Bool = false // パルスアニメーション用
-  @Published var isResultViewAnimating: Bool = false // 結果画面のアニメーション用
+  @Published var isPulsating: Bool = false
+  @Published var isResultViewAnimating: Bool = false
+  @Published var isInstructionTextPulsing: Bool = false // instructionText用の点滅アニメーション
   // Category
   @Published var isCategoryPopupPresented = false
   var categoryPopup: CategoryPopup?  // モジュールをここで保持
@@ -124,8 +124,7 @@ class TimerPageViewModel: ObservableObject {
   }
   
   func startProgressAnimation() {
-    progress = 0
-    
+    print("instruction pulse: \(self.isInstructionTextPulsing)")
     // パルスアニメーションを開始
     self.isPulsating = true
   }

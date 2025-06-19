@@ -144,43 +144,31 @@ struct HistoryPage: View {
   // 合計時間カード
   private func totalTimeCard(gp: GeometryProxy, multiplier: CGFloat) -> some View {
     NavigationLink(destination: HistoryDetailPage(initialCategory: viewModel.selectedCategory)) {
-      ZStack {
-        // メインコンテンツ
-        VStack(spacing: 16 * multiplier) {
-          Text(viewModel.selectedCategory == nil ? "合計集中時間" : "\(viewModel.selectedCategory!)の集中時間")
-            .font(.system(size: 20 * multiplier, weight: .medium))
-            .foregroundColor(Color(hex: "#495057")!)
-          
-          Text(viewModel.formatDuration(viewModel.filteredDuration))
-            .font(.system(size: 36 * multiplier, weight: .semibold, design: .monospaced))
-            .foregroundColor(Color(hex: "#339AF0")!)
-            .tracking(-0.5)
-            .lineLimit(1)
-            .minimumScaleFactor(0.7)
-            .padding(.vertical, 10 * multiplier)
-          
-          Text("タップして詳細を見る")
-            .font(.system(size: 14 * multiplier))
-            .foregroundColor(Color(hex: "#868E96")!)
-            .opacity(viewModel.isPulsing ? 0.4 : 1.0)  // ViewModelの状態を使用
-            .onAppear {
-              // アニメーションを開始
-              withAnimation(Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
-                viewModel.startPulsingAnimation()  // ViewModelのメソッドを呼び出し
-              }
-            }
-        }
-        .frame(maxWidth: .infinity)
+      VStack(spacing: 16 * multiplier) {
+        Text(viewModel.selectedCategory == nil ? "合計集中時間" : "\(viewModel.selectedCategory!)の集中時間")
+          .font(.system(size: 20 * multiplier, weight: .medium))
+          .foregroundColor(Color(hex: "#495057")!)
         
-        // 右側の矢印
-        HStack {
-          Spacer()
-          Image(systemName: "chevron.right")
-            .font(.system(size: 16 * multiplier, weight: .medium))
-            .foregroundColor(Color(hex: "#868E96")!)
-            .padding(.trailing, 10 * multiplier)
-        }
+        Text(viewModel.formatDuration(viewModel.filteredDuration))
+          .font(.system(size: 36 * multiplier, weight: .semibold, design: .monospaced))
+          .foregroundColor(Color(hex: "#339AF0")!)
+          .tracking(-0.5)
+          .lineLimit(1)
+          .minimumScaleFactor(0.7)
+          .padding(.vertical, 10 * multiplier)
+        
+        Text("タップして詳細を見る")
+          .font(.system(size: 14 * multiplier))
+          .foregroundColor(Color(hex: "#868E96")!)
+          .opacity(viewModel.isPulsing ? 0.4 : 1.0)  // ViewModelの状態を使用
+          .onAppear {
+            // アニメーションを開始
+            withAnimation(Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
+              viewModel.startPulsingAnimation()  // ViewModelのメソッドを呼び出し
+            }
+          }
       }
+      .frame(maxWidth: .infinity)
       .padding(.vertical, 20 * multiplier)
       .padding(.horizontal, 25 * multiplier)
       .frame(width: gp.size.width * 0.85)
