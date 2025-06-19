@@ -68,6 +68,9 @@ struct HistoryPage: View {
       }
       viewModel.updateHistory(with: allHistory)
     }
+    .onChange(of: allHistory) { newValue in
+      viewModel.updateHistory(with: newValue)
+    }
     .onChange(of: timerViewModel.selectedTab) { oldValue, newValue in
       if newValue == .Clock {
         print("HistoryPage: Tab changed to Clock - アニメーション開始")
@@ -228,7 +231,9 @@ struct HistoryPage: View {
             }
           }
         }
+        .onDelete(perform: viewModel.deleteCategory)
       }
+      
       .listStyle(InsetGroupedListStyle())
       .navigationTitle("カテゴリー選択")
       .navigationBarTitleDisplayMode(.inline)
@@ -347,6 +352,30 @@ class HistoryViewModel: ObservableObject {
     
     selectedCategory = category
     updateConsecutiveDays()  // カテゴリー変更時に連続日数を更新
+  }
+  
+  @MainActor func deleteCategory(at offsets: IndexSet) {
+    // 1. まずcategoryDurationsから即座に削除
+    let categories = Array(categoryDurations.keys.sorted())
+    for index in offsets {
+      let category = categories[index]
+      categoryDurations.removeValue(forKey: category)
+      if selectedCategory == category {
+        selectedCategory = nil
+      }
+    }
+    updateConsecutiveDays()
+    // 2. 履歴データの更新は非同期で遅らせる
+    DispatchQueue.main.async {
+      for index in offsets {
+        let category = categories[index]
+        ModelContainerManager.shared.removeCategoryFromHistory(category: category)
+      }
+      // 少し遅らせてViewModelを再計算
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        self.updateHistory(with: self.allHistory)
+      }
+    }
   }
   
   // アニメーションを開始するメソッド

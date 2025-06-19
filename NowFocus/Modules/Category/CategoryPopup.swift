@@ -97,6 +97,9 @@ struct CategoryPopup: View {
         }
       }
     }
+    .alert("同じカテゴリーが既に存在します", isPresented: $viewModel.showDuplicateAlert) {
+      Button("OK", role: .cancel) {}
+    }
   }
 }
 
@@ -183,6 +186,7 @@ extension CategoryPopup {
 class CategoryPopupViewModel: ObservableObject {
   @Published var categories: [String] = []
   @Published var showingAddCategoryPopup = false
+  @Published var showDuplicateAlert = false
   
   private let onCategorySelect: (String) -> Void
   private let onDismiss: () -> Void
@@ -205,6 +209,10 @@ class CategoryPopupViewModel: ObservableObject {
   }
   
   func addNewCategory(_ category: String) {
+    if categories.contains(category) {
+      showDuplicateAlert = true
+      return
+    }
     categories.append(category)
     saveCategories()
     selectCategory(category)
