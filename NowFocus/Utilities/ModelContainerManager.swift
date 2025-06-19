@@ -44,6 +44,7 @@ class ModelContainerManager {
     
     // UserDefaultsからカテゴリーを削除
     var savedCategories = UserDefaultManager.savedCategories
+    // カテゴリーが一致すればUserDefaultから削除
     savedCategories.removeAll { $0 == category }
     // UserDefaultのカテゴリーを更新
     UserDefaultManager.savedCategories = savedCategories
@@ -59,9 +60,9 @@ class ModelContainerManager {
       let histories = try container?.mainContext.fetch(descriptor) ?? []
       print("ModelContainerManager: 対象履歴数 - \(histories.count)")
       
-      // 該当する履歴のカテゴリーをnilに更新
+      // 該当する履歴を完全に削除
       for history in histories {
-        history.category = nil
+        container?.mainContext.delete(history)
       }
       // SwiftData保存
       try container?.mainContext.save()

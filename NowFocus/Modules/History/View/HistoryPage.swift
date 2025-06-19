@@ -68,6 +68,9 @@ struct HistoryPage: View {
       }
       viewModel.updateHistory(with: allHistory)
     }
+    .onChange(of: allHistory) { newValue in
+      viewModel.updateHistory(with: newValue)
+    }
     .onChange(of: timerViewModel.selectedTab) { oldValue, newValue in
       if newValue == .Clock {
         print("HistoryPage: Tab changed to Clock - アニメーション開始")
@@ -141,43 +144,31 @@ struct HistoryPage: View {
   // 合計時間カード
   private func totalTimeCard(gp: GeometryProxy, multiplier: CGFloat) -> some View {
     NavigationLink(destination: HistoryDetailPage(initialCategory: viewModel.selectedCategory)) {
-      ZStack {
-        // メインコンテンツ
-        VStack(spacing: 16 * multiplier) {
-          Text(viewModel.selectedCategory == nil ? "合計集中時間" : "\(viewModel.selectedCategory!)の集中時間")
-            .font(.system(size: 20 * multiplier, weight: .medium))
-            .foregroundColor(Color(hex: "#495057")!)
-          
-          Text(viewModel.formatDuration(viewModel.filteredDuration))
-            .font(.system(size: 36 * multiplier, weight: .semibold, design: .monospaced))
-            .foregroundColor(Color(hex: "#339AF0")!)
-            .tracking(-0.5)
-            .lineLimit(1)
-            .minimumScaleFactor(0.7)
-            .padding(.vertical, 10 * multiplier)
-          
-          Text("タップして詳細を見る")
-            .font(.system(size: 14 * multiplier))
-            .foregroundColor(Color(hex: "#868E96")!)
-            .opacity(viewModel.isPulsing ? 0.4 : 1.0)  // ViewModelの状態を使用
-            .onAppear {
-              // アニメーションを開始
-              withAnimation(Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
-                viewModel.startPulsingAnimation()  // ViewModelのメソッドを呼び出し
-              }
-            }
-        }
-        .frame(maxWidth: .infinity)
+      VStack(spacing: 16 * multiplier) {
+        Text(viewModel.selectedCategory == nil ? "合計集中時間" : "\(viewModel.selectedCategory!)の集中時間")
+          .font(.system(size: 20 * multiplier, weight: .medium))
+          .foregroundColor(Color(hex: "#495057")!)
         
-        // 右側の矢印
-        HStack {
-          Spacer()
-          Image(systemName: "chevron.right")
-            .font(.system(size: 16 * multiplier, weight: .medium))
-            .foregroundColor(Color(hex: "#868E96")!)
-            .padding(.trailing, 10 * multiplier)
-        }
+        Text(viewModel.formatDuration(viewModel.filteredDuration))
+          .font(.system(size: 36 * multiplier, weight: .semibold, design: .monospaced))
+          .foregroundColor(Color(hex: "#339AF0")!)
+          .tracking(-0.5)
+          .lineLimit(1)
+          .minimumScaleFactor(0.7)
+          .padding(.vertical, 10 * multiplier)
+        
+        Text("タップして詳細を見る")
+          .font(.system(size: 14 * multiplier))
+          .foregroundColor(Color(hex: "#868E96")!)
+          .opacity(viewModel.isPulsing ? 0.4 : 1.0)  // ViewModelの状態を使用
+          .onAppear {
+            // アニメーションを開始
+            withAnimation(Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
+              viewModel.startPulsingAnimation()  // ViewModelのメソッドを呼び出し
+            }
+          }
       }
+      .frame(maxWidth: .infinity)
       .padding(.vertical, 20 * multiplier)
       .padding(.horizontal, 25 * multiplier)
       .frame(width: gp.size.width * 0.85)
@@ -228,7 +219,9 @@ struct HistoryPage: View {
             }
           }
         }
+        .onDelete(perform: viewModel.deleteCategory)
       }
+      
       .listStyle(InsetGroupedListStyle())
       .navigationTitle("カテゴリー選択")
       .navigationBarTitleDisplayMode(.inline)
@@ -347,6 +340,30 @@ class HistoryViewModel: ObservableObject {
     
     selectedCategory = category
     updateConsecutiveDays()  // カテゴリー変更時に連続日数を更新
+  }
+  
+  @MainActor func deleteCategory(at offsets: IndexSet) {
+    // 1. まずcategoryDurationsから即座に削除
+    let categories = Array(categoryDurations.keys.sorted())
+    for index in offsets {
+      let category = categories[index]
+      categoryDurations.removeValue(forKey: category)
+      if selectedCategory == category {
+        selectedCategory = nil
+      }
+    }
+    updateConsecutiveDays()
+    // 2. 履歴データの更新は非同期で遅らせる
+    DispatchQueue.main.async {
+      for index in offsets {
+        let category = categories[index]
+        ModelContainerManager.shared.removeCategoryFromHistory(category: category)
+      }
+      // 少し遅らせてViewModelを再計算
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        self.updateHistory(with: self.allHistory)
+      }
+    }
   }
   
   // アニメーションを開始するメソッド

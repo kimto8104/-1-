@@ -30,9 +30,9 @@
             filePath = "NowFocus/Modules/TimerPage/ViewModel/TimerPageViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "161"
-            endingLineNumber = "161"
-            landmarkName = "updateShowCelebrationPopup(show:)"
+            startingLineNumber = "160"
+            endingLineNumber = "160"
+            landmarkName = "updateShowAlertForPause(showAlert:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

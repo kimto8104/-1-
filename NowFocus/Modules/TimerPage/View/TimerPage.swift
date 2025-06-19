@@ -83,7 +83,6 @@ struct TimerPage: View {
     .onAppear(perform: {
       model.startMonitoringDeviceMotion()
       model.startProgressAnimation()
-      
     })
     
     .ignoresSafeArea()
@@ -140,19 +139,6 @@ extension TimerPage {
   
   func circleTimer(multiplier: CGFloat, time: String) -> some View {
     ZStack {
-      Circle()
-        .trim(from: 0, to: model.progress)
-        .stroke(
-          LinearGradient(
-            colors: [Color(hex: "#339AF0")!, Color(hex: "#228BE6")!],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-          ),
-          style: StrokeStyle(lineWidth: 10 * multiplier, lineCap: .round)
-        )
-        .frame(width: 260 * multiplier, height: 260 * multiplier)
-        .rotationEffect(.degrees(-90))
-      
       // タイマー背景円
       Circle()
         .fill(Color.white)
@@ -173,15 +159,6 @@ extension TimerPage {
             .font(.system(size: 16 * multiplier, weight: .medium))
         }
       }
-    }
-    .scaleEffect(model.isPulsating ? 1.05 : 0.95)
-    .animation(
-      Animation.easeInOut(duration: 1.8)
-        .repeatForever(autoreverses: true),
-      value: model.isPulsating
-    )
-    .onAppear {
-      model.isPulsating = true
     }
   }
   
