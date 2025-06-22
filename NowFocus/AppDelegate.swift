@@ -7,9 +7,11 @@
 
 import Foundation
 import UIKit
+import FirebaseCore
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    FirebaseApp.configure()
     UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in
       if granted {
         print("通知の許可が得られました")
