@@ -48,7 +48,7 @@ struct TimerPage: View {
         // タブバーを下部に固定
         VStack {
           Spacer()
-          if !model.showResultView && !model.showFailedView {
+          if !model.showResultView && (!model.showFailedView || model.selectedTab == .Clock) {
             tabBarView(multiplier: multiplier)
               .padding(.bottom, 30 * multiplier)
           }
