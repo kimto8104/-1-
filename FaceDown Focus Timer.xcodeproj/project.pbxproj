@@ -17,6 +17,7 @@
 		FE1101442CEAABF100C833C1 /* FloatingBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1101432CEAABF100C833C1 /* FloatingBottomSheet.swift */; };
 		FE1101462CEAB4D600C833C1 /* FloatingBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1101452CEAB4D600C833C1 /* FloatingBottomSheetView.swift */; };
 		FE4176C82C9DA72500D671ED /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4176C72C9DA72500D671ED /* Color+Extension.swift */; };
+		FE42FA592E0980AC00123F2F /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42FA582E0980AC00123F2F /* AnalyticsManager.swift */; };
 		FE4D27B12D1B832D00962E92 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4D27B02D1B832D00962E92 /* TabBar.swift */; };
 		FE4D27B42D1C3D6000962E92 /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4D27B32D1C3D6000962E92 /* HistoryPage.swift */; };
 		FE54F1AB2C2082D30029DCDD /* Warning-Siren04-02(Low-Long).mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FE54F1AA2C2082D30029DCDD /* Warning-Siren04-02(Low-Long).mp3 */; };
@@ -60,6 +61,7 @@
 		FE1101432CEAABF100C833C1 /* FloatingBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingBottomSheet.swift; sourceTree = "<group>"; };
 		FE1101452CEAB4D600C833C1 /* FloatingBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingBottomSheetView.swift; sourceTree = "<group>"; };
 		FE4176C72C9DA72500D671ED /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
+		FE42FA582E0980AC00123F2F /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
 		FE4D27B02D1B832D00962E92 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		FE4D27B32D1C3D6000962E92 /* HistoryPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPage.swift; sourceTree = "<group>"; };
 		FE54F1AA2C2082D30029DCDD /* Warning-Siren04-02(Low-Long).mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Warning-Siren04-02(Low-Long).mp3"; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				FE70E9EB2D4443CE002C0B7F /* ModelContainerManager.swift */,
 				FED5E0102DF465CD006A350C /* FocusHistoryDataManager.swift */,
 				FE73AA742DFC693F0092CD4C /* ConsecutiveDaysRecordManager.swift */,
+				FE42FA582E0980AC00123F2F /* AnalyticsManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -523,6 +526,7 @@
 				FE4D27B42D1C3D6000962E92 /* HistoryPage.swift in Sources */,
 				FEC5498E2D58CD1E009F9D08 /* AddCategoryPopup.swift in Sources */,
 				FE70E9F12D4F98F4002C0B7F /* CategoryPopupPresenter.swift in Sources */,
+				FE42FA592E0980AC00123F2F /* AnalyticsManager.swift in Sources */,
 				FEB840562998B6F900B945BA /* NowFocusApp.swift in Sources */,
 				FE8EAA322A0000BC0040FB07 /* Int+Extension.swift in Sources */,
 				FE70E9EC2D4443CE002C0B7F /* ModelContainerManager.swift in Sources */,
