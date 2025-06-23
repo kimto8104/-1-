@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FE0635202E07D77E0078D0A7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FE06351F2E07D77E0078D0A7 /* GoogleService-Info.plist */; };
 		FE0635232E07D9770078D0A7 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = FE0635222E07D9770078D0A7 /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		FE0635252E07D9770078D0A7 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = FE0635242E07D9770078D0A7 /* FirebaseCrashlytics */; };
 		FE0635272E07D9770078D0A7 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = FE0635262E07D9770078D0A7 /* FirebaseMessaging */; };
@@ -54,6 +53,7 @@
 
 /* Begin PBXFileReference section */
 		FE06351F2E07D77E0078D0A7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FE06352A2E07DDF70078D0A7 /* GoogleService-Info-Debug.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Debug.plist"; sourceTree = "<group>"; };
 		FE11003D2CCE763C00C833C1 /* TimeSelectionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSelectionPresenter.swift; sourceTree = "<group>"; };
 		FE1100402CDBAF9200C833C1 /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
 		FE11013E2CE9729600C833C1 /* CustomAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlert.swift; sourceTree = "<group>"; };
@@ -328,6 +328,7 @@
 				FE54F1A92C2082AF0029DCDD /* Resources */,
 				FE8EAA362A00CC3C0040FB07 /* Info.plist */,
 				FE8EAA332A00C2DC0040FB07 /* NowFocus.entitlements */,
+				FE06352A2E07DDF70078D0A7 /* GoogleService-Info-Debug.plist */,
 				FE06351F2E07D77E0078D0A7 /* GoogleService-Info.plist */,
 				FE8EAA302A0000AD0040FB07 /* Extension */,
 				FEB840552998B6F900B945BA /* NowFocusApp.swift */,
@@ -410,6 +411,7 @@
 				FEB8404E2998B6F900B945BA /* Sources */,
 				FEB8404F2998B6F900B945BA /* Frameworks */,
 				FEB840502998B6F900B945BA /* Resources */,
+				FE06352D2E07E28A0078D0A7 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -467,13 +469,32 @@
 			files = (
 				FEB8405D2998B6FA00B945BA /* Preview Assets.xcassets in Resources */,
 				FEB8405A2998B6FA00B945BA /* Assets.xcassets in Resources */,
-				FE0635202E07D77E0078D0A7 /* GoogleService-Info.plist in Resources */,
 				FEC0813A2DF710DA00DC0B0E /* Localizable.xcstrings in Resources */,
 				FE54F1AB2C2082D30029DCDD /* Warning-Siren04-02(Low-Long).mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		FE06352D2E07E28A0078D0A7 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\n# 開発と本番でGoogleService-Info.plistを切り替える\necho \"Configuration: ${CONFIGURATION}\"\necho \"PROJECT_DIR: ${PROJECT_DIR}\"\necho \"BUILT_PRODUCTS_DIR: ${BUILT_PRODUCTS_DIR}\"\necho \"PRODUCT_NAME: ${PRODUCT_NAME}\"\n\n# ソースファイルの存在確認\nif [ \"${CONFIGURATION}\" = \"Debug\" ]; then\n    SOURCE_FILE=\"${PROJECT_DIR}/NowFocus/GoogleService-Info-Debug.plist\"\nelif [ \"${CONFIGURATION}\" = \"Release\" ]; then\n    SOURCE_FILE=\"${PROJECT_DIR}/NowFocus/GoogleService-Info-Release.plist\"\nelse\n    echo \"Error: Unknown configuration '${CONFIGURATION}'\"\n    exit 1\nfi\n\necho \"Source file: ${SOURCE_FILE}\"\n\n# ソースファイルの存在確認\nif [ ! -f \"${SOURCE_FILE}\" ]; then\n    echo \"Error: Source file does not exist: ${SOURCE_FILE}\"\n    exit 1\nfi\n\necho \"Source file exists\"\n\n# 既存のGoogleService-Infoファイルを削除\nrm -f \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info-Debug.plist\"\nrm -f \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info-Release.plist\"\nrm -f \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\n\n# 新しいファイルをコピー\ncp \"${SOURCE_FILE}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\n\necho \"Copied ${SOURCE_FILE} to ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\necho \"GoogleService-Info.plist copy completed\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		FEB8404E2998B6F900B945BA /* Sources */ = {
