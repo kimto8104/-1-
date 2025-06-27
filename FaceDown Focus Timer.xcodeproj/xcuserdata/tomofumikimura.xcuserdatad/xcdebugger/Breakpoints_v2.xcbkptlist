@@ -32,7 +32,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "160"
             endingLineNumber = "160"
-            landmarkName = "updateShowCelebrationPopup(show:)"
+            landmarkName = "startProgressAnimation()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

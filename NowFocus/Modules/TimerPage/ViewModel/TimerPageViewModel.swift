@@ -51,6 +51,7 @@ class TimerPageViewModel: ObservableObject {
     observeTimerState()
     observeDisplayTime()
     observeFaceDownState()
+    observeSelectedTab()
   }
   
   private func observeFaceDownState() {
@@ -75,6 +76,38 @@ class TimerPageViewModel: ObservableObject {
       self.displayTime = formattedTime
     }
     .store(in: &cancellables)
+  }
+  
+  private func observeSelectedTab() {
+    // selectedTabの変更を監視
+    $selectedTab.sink { [weak self] newTab in
+      guard let self else { return }
+      self.handleTabChange(newTab: newTab)
+    }
+    .store(in: &cancellables)
+  }
+  
+  private func handleTabChange(newTab: TabIcon) {
+    print("Tab changed to: \(newTab)")
+    
+    switch newTab {
+    case .Home:
+      // Homeタブに切り替わった時はMotionManagerを開始
+      print("Starting motion monitoring for Home tab")
+      motionManagerService.startMonitoringDeviceMotion()
+      
+    case .Clock:
+      // HistoryPageに切り替わった時はMotionManagerを停止
+      print("Stopping motion monitoring for HistoryPage")
+      motionManagerService.stopMonitoring()
+      
+      // タイマーが実行中だった場合はリセット
+      if timerService.timerState == .focusing || timerService.timerState == .continueFocusing {
+        print("Resetting timer when switching to HistoryPage")
+        timerService.resetTimer()
+        UIApplication.shared.isIdleTimerDisabled = false
+      }
+    }
   }
   
   private func handleDeviceOrientationChange(isFaceDown: Bool) {
