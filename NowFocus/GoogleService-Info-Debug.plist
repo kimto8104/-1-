@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyBz-PZ6AHrodw4CmwVJ64YuLQAHQL9CYrQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>354691189062</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.tomoapp.face.down.timer.debug</string>
+	<key>PROJECT_ID</key>
+	<string>minutedebug</string>
+	<key>STORAGE_BUCKET</key>
+	<string>minutedebug.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:354691189062:ios:23ae0136af834a6862fd47</string>
+</dict>
+</plist>
