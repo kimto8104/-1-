@@ -30,6 +30,7 @@ class AnalyticsManager {
         case focusSessionComplete = "focus_session_complete"
         case consecutiveDaysAchieved = "consecutive_days_achieved"
         case settingsChanged = "settings_changed"
+        case screenView = "screen_view"
     }
     
     // MARK: - Parameter Keys
@@ -42,6 +43,8 @@ class AnalyticsManager {
         case settingValue = "setting_value"
         case timestamp = "timestamp"
         case debugMode = "debug_mode"
+        case screenName = "screen_name"
+        case screenClass = "screen_class"
     }
     
     // MARK: - Public Methods
@@ -58,9 +61,8 @@ class AnalyticsManager {
     /// - Parameters:
     ///   - duration: タイマーの時間（秒）
     ///   - category: カテゴリ名
-    func logTimerStart(duration: TimeInterval, category: String) {
+    func logTimerStart(category: String) {
         logEvent(.timerStart, parameters: [
-            ParameterKey.duration.rawValue: duration,
             ParameterKey.category.rawValue: category,
             ParameterKey.timestamp.rawValue: Date().timeIntervalSince1970
         ])
@@ -173,6 +175,18 @@ class AnalyticsManager {
         logEvent(.settingsChanged, parameters: [
             ParameterKey.settingName.rawValue: settingName,
             ParameterKey.settingValue.rawValue: settingValue,
+            ParameterKey.timestamp.rawValue: Date().timeIntervalSince1970
+        ])
+    }
+    
+    /// 画面表示イベントを送信
+    /// - Parameters:
+    ///   - screenName: 画面名
+    ///   - screenClass: 画面クラス名
+    func logScreenView(screenName: String, screenClass: String) {
+        logEvent(.screenView, parameters: [
+            ParameterKey.screenName.rawValue: screenName,
+            ParameterKey.screenClass.rawValue: screenClass,
             ParameterKey.timestamp.rawValue: Date().timeIntervalSince1970
         ])
     }

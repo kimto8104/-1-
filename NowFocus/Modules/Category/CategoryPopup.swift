@@ -100,6 +100,10 @@ struct CategoryPopup: View {
     .alert("同じカテゴリーが既に存在します", isPresented: $viewModel.showDuplicateAlert) {
       Button("OK", role: .cancel) {}
     }
+    .onAppear {
+      // 画面表示時にAnalyticsイベントを送信
+      AnalyticsManager.shared.logScreenView(screenName: "Category Popup", screenClass: "CategoryPopup")
+    }
   }
 }
 

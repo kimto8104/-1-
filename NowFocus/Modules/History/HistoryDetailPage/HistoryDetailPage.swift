@@ -59,6 +59,9 @@ struct HistoryDetailPage: View {
     .navigationBarTitleDisplayMode(.inline)
     .onAppear {
       viewModel.updateHistory(with: allHistory)
+      
+      // 画面表示時にAnalyticsイベントを送信
+      AnalyticsManager.shared.logScreenView(screenName: "History Detail Page", screenClass: "HistoryDetailPage")
     }
   }
   

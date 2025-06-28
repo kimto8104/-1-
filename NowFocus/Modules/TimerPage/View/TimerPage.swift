@@ -83,6 +83,9 @@ struct TimerPage: View {
     .onAppear(perform: {
       model.startMonitoringDeviceMotion()
       model.startProgressAnimation()
+      
+      // 画面表示時にAnalyticsイベントを送信
+      AnalyticsManager.shared.logScreenView(screenName: "Timer Page", screenClass: "TimerPage")
     })
     
     .ignoresSafeArea()

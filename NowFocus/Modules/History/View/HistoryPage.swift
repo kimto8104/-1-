@@ -67,6 +67,9 @@ struct HistoryPage: View {
         print("HistoryPage: 履歴\(index + 1) - 日付: \(history.startDate), カテゴリー: \(history.category ?? "nil"), 時間: \(history.duration)")
       }
       viewModel.updateHistory(with: allHistory)
+      
+      // 画面表示時にAnalyticsイベントを送信
+      AnalyticsManager.shared.logScreenView(screenName: "History Page", screenClass: "HistoryPage")
     }
     .onChange(of: allHistory) { newValue in
       viewModel.updateHistory(with: newValue)

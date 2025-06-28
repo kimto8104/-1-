@@ -113,6 +113,7 @@ class TimerPageViewModel: ObservableObject {
   private func handleDeviceOrientationChange(isFaceDown: Bool) {
     if isFaceDown {
       timerService.startTimer()
+      AnalyticsManager.shared.logTimerStart(category: selectedCategory)
       if timerService.timerState == .focusing || timerService.timerState == .continueFocusing {
         UIApplication.shared.isIdleTimerDisabled = true
       }
@@ -124,6 +125,9 @@ class TimerPageViewModel: ObservableObject {
         print("Failed")
         self.showFailedView = true
         // 失敗画面を出す
+        // 集中失敗時にAnalyticsイベントを送信
+        let remainingTime = timerService.getTotalFocusTime()
+        AnalyticsManager.shared.logTimerCancel(duration: remainingTime, category: selectedCategory)
       case .continueFocusing:
         // 追加集中時間中に上向きになった場合&タイマー完了した時は結果を表示
         let totalTime = timerService.getTotalFocusTime()
@@ -132,6 +136,9 @@ class TimerPageViewModel: ObservableObject {
         // 連続記録を更新
         ConsecutiveDaysRecordManager.shared.recordFocusSession()
         updateShowCelebrationPopup(show: true)
+        
+        // 集中完了時にAnalyticsイベントを送信
+        AnalyticsManager.shared.logFocusSessionComplete(duration: totalTime, category: selectedCategory)
       default: break
       }
       // MotionMangerの判定を止める
@@ -195,6 +202,11 @@ extension TimerPageViewModel {
       showCelebrationPopup = show
       // 選択されているカテゴリーの連続集中日数を取得
       consecutiveDays = ConsecutiveDaysRecordManager.shared.getCurrentFocusStreakByCategory(selectedCategory)
+      
+      // 連続日数達成時にAnalyticsイベントを送信
+      if show && consecutiveDays > 0 {
+        AnalyticsManager.shared.logConsecutiveDaysAchieved(consecutiveDays: consecutiveDays)
+      }
     }
   }
   
