@@ -16,6 +16,8 @@
 		FE11013F2CE9729600C833C1 /* CustomAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE11013E2CE9729600C833C1 /* CustomAlert.swift */; };
 		FE1101442CEAABF100C833C1 /* FloatingBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1101432CEAABF100C833C1 /* FloatingBottomSheet.swift */; };
 		FE1101462CEAB4D600C833C1 /* FloatingBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1101452CEAB4D600C833C1 /* FloatingBottomSheetView.swift */; };
+		FE1A852B2E101AB600EECA0A /* GoogleService-Info-Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = FE1A852A2E101AB600EECA0A /* GoogleService-Info-Release.plist */; };
+		FE1A852D2E101ADE00EECA0A /* GoogleService-Info-Debug.plist in Resources */ = {isa = PBXBuildFile; fileRef = FE1A852C2E101ADE00EECA0A /* GoogleService-Info-Debug.plist */; };
 		FE4176C82C9DA72500D671ED /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4176C72C9DA72500D671ED /* Color+Extension.swift */; };
 		FE42FA592E0980AC00123F2F /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42FA582E0980AC00123F2F /* AnalyticsManager.swift */; };
 		FE4D27B12D1B832D00962E92 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4D27B02D1B832D00962E92 /* TabBar.swift */; };
@@ -53,13 +55,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		FE06351F2E07D77E0078D0A7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		FE06352A2E07DDF70078D0A7 /* GoogleService-Info-Debug.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Debug.plist"; sourceTree = "<group>"; };
 		FE11003D2CCE763C00C833C1 /* TimeSelectionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSelectionPresenter.swift; sourceTree = "<group>"; };
 		FE1100402CDBAF9200C833C1 /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
 		FE11013E2CE9729600C833C1 /* CustomAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlert.swift; sourceTree = "<group>"; };
 		FE1101432CEAABF100C833C1 /* FloatingBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingBottomSheet.swift; sourceTree = "<group>"; };
 		FE1101452CEAB4D600C833C1 /* FloatingBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingBottomSheetView.swift; sourceTree = "<group>"; };
+		FE1A852A2E101AB600EECA0A /* GoogleService-Info-Release.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Release.plist"; sourceTree = "<group>"; };
+		FE1A852C2E101ADE00EECA0A /* GoogleService-Info-Debug.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Debug.plist"; sourceTree = "<group>"; };
 		FE4176C72C9DA72500D671ED /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		FE42FA582E0980AC00123F2F /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
 		FE4D27B02D1B832D00962E92 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
@@ -85,7 +87,7 @@
 		FE8EAA362A00CC3C0040FB07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FE9ADB662D2D4F930036EA85 /* FocusHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusHistory.swift; sourceTree = "<group>"; };
 		FEB14FFB2C6B9F020011F32A /* MotionServiceWithInitialAttitude.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionServiceWithInitialAttitude.swift; sourceTree = "<group>"; };
-		FEB840522998B6F900B945BA /* FaceDown Focus Timer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FaceDown Focus Timer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEB840522998B6F900B945BA /* FaceDownFocusTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FaceDownFocusTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEB840552998B6F900B945BA /* NowFocusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowFocusApp.swift; sourceTree = "<group>"; };
 		FEB840592998B6FA00B945BA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FEB8405C2998B6FA00B945BA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -317,7 +319,7 @@
 		FEB840532998B6F900B945BA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FEB840522998B6F900B945BA /* FaceDown Focus Timer.app */,
+				FEB840522998B6F900B945BA /* FaceDownFocusTimer.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -331,10 +333,10 @@
 				FE54F1A92C2082AF0029DCDD /* Resources */,
 				FE8EAA362A00CC3C0040FB07 /* Info.plist */,
 				FE8EAA332A00C2DC0040FB07 /* NowFocus.entitlements */,
-				FE06352A2E07DDF70078D0A7 /* GoogleService-Info-Debug.plist */,
-				FE06351F2E07D77E0078D0A7 /* GoogleService-Info.plist */,
 				FE8EAA302A0000AD0040FB07 /* Extension */,
 				FEB840552998B6F900B945BA /* NowFocusApp.swift */,
+				FE1A852C2E101ADE00EECA0A /* GoogleService-Info-Debug.plist */,
+				FE1A852A2E101AB600EECA0A /* GoogleService-Info-Release.plist */,
 				FEB840592998B6FA00B945BA /* Assets.xcassets */,
 				FEB8405B2998B6FA00B945BA /* Preview Content */,
 				FE8EAA342A00C9910040FB07 /* AppDelegate.swift */,
@@ -407,22 +409,22 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		FEB840512998B6F900B945BA /* FaceDown Focus Timer */ = {
+		FEB840512998B6F900B945BA /* FaceDownFocusTimer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FEB840602998B6FA00B945BA /* Build configuration list for PBXNativeTarget "FaceDown Focus Timer" */;
+			buildConfigurationList = FEB840602998B6FA00B945BA /* Build configuration list for PBXNativeTarget "FaceDownFocusTimer" */;
 			buildPhases = (
 				FEB8404E2998B6F900B945BA /* Sources */,
 				FEB8404F2998B6F900B945BA /* Frameworks */,
-				FEB840502998B6F900B945BA /* Resources */,
 				FE06352D2E07E28A0078D0A7 /* ShellScript */,
+				FEB840502998B6F900B945BA /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "FaceDown Focus Timer";
+			name = FaceDownFocusTimer;
 			productName = NowFocus;
-			productReference = FEB840522998B6F900B945BA /* FaceDown Focus Timer.app */;
+			productReference = FEB840522998B6F900B945BA /* FaceDownFocusTimer.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -440,7 +442,7 @@
 					};
 				};
 			};
-			buildConfigurationList = FEB8404D2998B6F800B945BA /* Build configuration list for PBXProject "FaceDown Focus Timer" */;
+			buildConfigurationList = FEB8404D2998B6F800B945BA /* Build configuration list for PBXProject "FaceDownFocusTimer" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -460,7 +462,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FEB840512998B6F900B945BA /* FaceDown Focus Timer */,
+				FEB840512998B6F900B945BA /* FaceDownFocusTimer */,
 			);
 		};
 /* End PBXProject section */
@@ -472,8 +474,10 @@
 			files = (
 				FEB8405D2998B6FA00B945BA /* Preview Assets.xcassets in Resources */,
 				FEB8405A2998B6FA00B945BA /* Assets.xcassets in Resources */,
+				FE1A852B2E101AB600EECA0A /* GoogleService-Info-Release.plist in Resources */,
 				FEC0813A2DF710DA00DC0B0E /* Localizable.xcstrings in Resources */,
 				FE54F1AB2C2082D30029DCDD /* Warning-Siren04-02(Low-Long).mp3 in Resources */,
+				FE1A852D2E101ADE00EECA0A /* GoogleService-Info-Debug.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -495,7 +499,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\n\n# 開発と本番でGoogleService-Info.plistを切り替える\necho \"Configuration: ${CONFIGURATION}\"\necho \"PROJECT_DIR: ${PROJECT_DIR}\"\necho \"BUILT_PRODUCTS_DIR: ${BUILT_PRODUCTS_DIR}\"\necho \"PRODUCT_NAME: ${PRODUCT_NAME}\"\n\n# ソースファイルの存在確認\nif [ \"${CONFIGURATION}\" = \"Debug\" ]; then\n    SOURCE_FILE=\"${PROJECT_DIR}/NowFocus/GoogleService-Info-Debug.plist\"\nelif [ \"${CONFIGURATION}\" = \"Release\" ]; then\n    SOURCE_FILE=\"${PROJECT_DIR}/NowFocus/GoogleService-Info-Release.plist\"\nelse\n    echo \"Error: Unknown configuration '${CONFIGURATION}'\"\n    exit 1\nfi\n\necho \"Source file: ${SOURCE_FILE}\"\n\n# ソースファイルの存在確認\nif [ ! -f \"${SOURCE_FILE}\" ]; then\n    echo \"Error: Source file does not exist: ${SOURCE_FILE}\"\n    exit 1\nfi\n\necho \"Source file exists\"\n\n# 既存のGoogleService-Infoファイルを削除\nrm -f \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info-Debug.plist\"\nrm -f \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info-Release.plist\"\nrm -f \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\n\n# 新しいファイルをコピー\ncp \"${SOURCE_FILE}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\n\necho \"Copied ${SOURCE_FILE} to ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\necho \"GoogleService-Info.plist copy completed\"\n";
+			shellScript = "#!/bin/bash\n\necho \"Configuration: ${CONFIGURATION}\"\necho \"PROJECT_DIR: ${PROJECT_DIR}\"\necho \"PRODUCT_NAME: ${PRODUCT_NAME}\"\necho \"BUILT_PRODUCTS_DIR: ${BUILT_PRODUCTS_DIR}\"\necho \"SRCROOT: ${SRCROOT}\"\n\nif [ \"${CONFIGURATION}\" = \"Debug\" ]; then\n    SRC_PLIST=\"${SRCROOT}/NowFocus/GoogleService-Info-Debug.plist\"\nelif [ \"${CONFIGURATION}\" = \"Release\" ]; then\n    SRC_PLIST=\"${SRCROOT}/NowFocus/GoogleService-Info-Release.plist\"\nelse\n    echo \"❌ Error: Unsupported configuration '${CONFIGURATION}'\"\n    exit 1\nfi\n\nDST_PLIST=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\n\necho \"Source plist: ${SRC_PLIST}\"\necho \"Destination plist: ${DST_PLIST}\"\n\nif [ ! -f \"${SRC_PLIST}\" ]; then\n    echo \"❌ Error: Source plist does not exist at ${SRC_PLIST}\"\n    exit 1\nfi\n\necho \"➡️ Starting copy...\"\n\nif cp \"${SRC_PLIST}\" \"${DST_PLIST}\"; then\n    echo \"✅ Copy succeeded: '${SRC_PLIST}' → '${DST_PLIST}'\"\nelse\n    echo \"❌ Copy failed!\"\n    exit 1\nfi\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -677,6 +681,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"NowFocus/Preview Content\"";
 				DEVELOPMENT_TEAM = Y88N7C5HY9;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NowFocus/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Debug＋１分集中";
@@ -713,6 +718,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"NowFocus/Preview Content\"";
 				DEVELOPMENT_TEAM = Y88N7C5HY9;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NowFocus/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "＋１分集中";
@@ -740,7 +746,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		FEB8404D2998B6F800B945BA /* Build configuration list for PBXProject "FaceDown Focus Timer" */ = {
+		FEB8404D2998B6F800B945BA /* Build configuration list for PBXProject "FaceDownFocusTimer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FEB8405E2998B6FA00B945BA /* Debug */,
@@ -749,7 +755,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FEB840602998B6FA00B945BA /* Build configuration list for PBXNativeTarget "FaceDown Focus Timer" */ = {
+		FEB840602998B6FA00B945BA /* Build configuration list for PBXNativeTarget "FaceDownFocusTimer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FEB840612998B6FA00B945BA /* Debug */,
