@@ -218,14 +218,23 @@ class CategoryPopupViewModel: ObservableObject {
       return
     }
     categories.append(category)
-    saveCategories()
+    
+    // 非同期でカテゴリーを保存
+    Task {
+      await saveCategoriesAsync()
+    }
+    
     selectCategory(category)
   }
   
   @MainActor func removeCategory(_ category: String) {
     if let index = categories.firstIndex(of: category) {
       categories.remove(at: index)
-      saveCategories()
+      
+      // 非同期でカテゴリーを保存
+      Task {
+        await saveCategoriesAsync()
+      }
     }
   }
   
@@ -251,6 +260,13 @@ class CategoryPopupViewModel: ObservableObject {
   private func saveCategories() {
     print("CategoryPopupViewModel saveCategories - saving: \(categories)")
     UserDefaultManager.savedCategories = categories
+  }
+  
+  private func saveCategoriesAsync() async {
+    print("CategoryPopupViewModel saveCategoriesAsync - saving: \(categories)")
+    await MainActor.run {
+      UserDefaultManager.savedCategories = categories
+    }
   }
 }
 
