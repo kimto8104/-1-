@@ -49,7 +49,13 @@
 		FEC011692DDDF7FE0047AC58 /* TimerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC011682DDDF7FE0047AC58 /* TimerService.swift */; };
 		FEC0813A2DF710DA00DC0B0E /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = FEC081392DF710DA00DC0B0E /* Localizable.xcstrings */; };
 		FEC5498E2D58CD1E009F9D08 /* AddCategoryPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC5498D2D58CD1E009F9D08 /* AddCategoryPopup.swift */; };
+		FEC88C882E111B89000EF5B3 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = FEC88C872E111B89000EF5B3 /* FirebaseFirestore */; };
+		FEC88C8A2E111B89000EF5B3 /* FirebaseInAppMessaging-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = FEC88C892E111B89000EF5B3 /* FirebaseInAppMessaging-Beta */; };
+		FEC88C8C2E111B89000EF5B3 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = FEC88C8B2E111B89000EF5B3 /* FirebaseMessaging */; };
+		FEC88C8E2E111B89000EF5B3 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = FEC88C8D2E111B89000EF5B3 /* FirebaseRemoteConfig */; };
+		FEC88C902E111B89000EF5B3 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = FEC88C8F2E111B89000EF5B3 /* FirebaseStorage */; };
 		FED5E0112DF465CD006A350C /* FocusHistoryDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED5E0102DF465CD006A350C /* FocusHistoryDataManager.swift */; };
+		FEDBF25A2E12B5520030879A /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = FEDBF2592E12B5520030879A /* FirebaseMessaging */; };
 		FEF885322C74BE63005A9198 /* TimerProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF885312C74BE63005A9198 /* TimerProgressRing.swift */; };
 		FEFB29D329B7691E007D8FDA /* TimerPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEFB29D229B7691E007D8FDA /* TimerPage.swift */; };
 /* End PBXBuildFile section */
@@ -108,8 +114,14 @@
 			files = (
 				FE0635272E07D9770078D0A7 /* FirebaseMessaging in Frameworks */,
 				FE0635232E07D9770078D0A7 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				FEDBF25A2E12B5520030879A /* FirebaseMessaging in Frameworks */,
+				FEC88C902E111B89000EF5B3 /* FirebaseStorage in Frameworks */,
+				FEC88C8C2E111B89000EF5B3 /* FirebaseMessaging in Frameworks */,
 				FE0635252E07D9770078D0A7 /* FirebaseCrashlytics in Frameworks */,
+				FEC88C882E111B89000EF5B3 /* FirebaseFirestore in Frameworks */,
 				FE0635292E07D9770078D0A7 /* FirebaseRemoteConfig in Frameworks */,
+				FEC88C8A2E111B89000EF5B3 /* FirebaseInAppMessaging-Beta in Frameworks */,
+				FEC88C8E2E111B89000EF5B3 /* FirebaseRemoteConfig in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -684,7 +696,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NowFocus/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Debug＋１分集中";
+				INFOPLIST_KEY_CFBundleDisplayName = "＋１Minute";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -697,7 +709,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.5.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.tomoapp.face.down.timer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tomoapp.face.down.timer.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -797,6 +809,36 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FE0635212E07D9770078D0A7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseRemoteConfig;
+		};
+		FEC88C872E111B89000EF5B3 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE0635212E07D9770078D0A7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		FEC88C892E111B89000EF5B3 /* FirebaseInAppMessaging-Beta */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE0635212E07D9770078D0A7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseInAppMessaging-Beta";
+		};
+		FEC88C8B2E111B89000EF5B3 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE0635212E07D9770078D0A7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		FEC88C8D2E111B89000EF5B3 /* FirebaseRemoteConfig */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE0635212E07D9770078D0A7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseRemoteConfig;
+		};
+		FEC88C8F2E111B89000EF5B3 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE0635212E07D9770078D0A7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		FEDBF2592E12B5520030879A /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE0635212E07D9770078D0A7 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
