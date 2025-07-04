@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import FirebaseCore
 import FirebaseMessaging
+import Speech
 
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
@@ -28,7 +29,31 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
       completionHandler: { _, _ in }
     )
     application.registerForRemoteNotifications()
+    
+    // 音声認識の許可を要求
+    requestSpeechAuthorization()
+    
     return true
+  }
+  
+  // 音声認識の権限を要求
+  private func requestSpeechAuthorization() {
+    SFSpeechRecognizer.requestAuthorization { authStatus in
+      DispatchQueue.main.async {
+        switch authStatus {
+        case .authorized:
+          print("✅ Speech recognition authorized")
+        case .denied:
+          print("❌ Speech recognition denied")
+        case .restricted:
+          print("⚠️ Speech recognition restricted")
+        case .notDetermined:
+          print("❓ Speech recognition not determined")
+        @unknown default:
+          print("❓ Speech recognition unknown status")
+        }
+      }
+    }
   }
   
   // APNsからデバイストークンが取得できた場合に呼ばれる

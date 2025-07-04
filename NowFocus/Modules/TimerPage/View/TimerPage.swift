@@ -78,6 +78,24 @@ struct TimerPage: View {
             }
           )
         }
+        
+        // 習慣目標選択ポップアップ
+        if model.showHabitGoalSelection {
+          HabitGoalSelectionView(
+            isPresented: $model.showHabitGoalSelection,
+            onHabitSelected: { habit in
+              model.showHabitGoalReasonPopup(habit: habit)
+            }
+          )
+        }
+        
+        // 習慣目標理由入力ポップアップ
+        if model.showHabitGoalReason {
+          HabitGoalReasonView(
+            isPresented: $model.showHabitGoalReason,
+            selectedHabit: model.selectedHabitText
+          )
+        }
       }
     }
     .onAppear(perform: {
@@ -86,6 +104,11 @@ struct TimerPage: View {
       
       // 画面表示時にAnalyticsイベントを送信
       AnalyticsManager.shared.logScreenView(screenName: "Timer Page", screenClass: "TimerPage")
+      
+      // 習慣目標選択ポップアップを表示
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        model.showHabitGoalSelectionPopup()
+      }
     })
     
     .ignoresSafeArea()
