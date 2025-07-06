@@ -261,26 +261,6 @@ extension TimerPage {
             )
         }
       }
-      
-      if model.isPulsating {
-        ForEach(0..<6, id: \.self) { index in
-          Circle()
-            .fill(Color(hex: "#FFD43B")!.opacity(0.8))
-            .frame(width: 8 * multiplier, height: 8 * multiplier)
-            .offset(
-              x: cos(Double(index) * .pi / 3) * 120 * multiplier,
-              y: sin(Double(index) * .pi / 3) * 120 * multiplier
-            )
-            .scaleEffect(model.isPulsating ? 1.5 : 0.5)
-            .opacity(model.isPulsating ? 1.0 : 0.0)
-            .animation(
-              Animation.easeInOut(duration: 1.2)
-                .repeatForever(autoreverses: true)
-                .delay(Double(index) * 0.2),
-              value: model.isPulsating
-            )
-        }
-      }
     }
   }
   
