@@ -10,7 +10,6 @@ import Foundation
 class TimerManager: ObservableObject {
   @Published var remainingTime: Int? {
     didSet {
-      print("残り時間: \(String(describing: remainingTime))")
       updateFormattedTime()
     }
   }
@@ -56,7 +55,6 @@ class TimerManager: ObservableObject {
       }
       self.remainingTime! -= 1
       self.updateFormattedTime()
-      print("タイマー稼働中 ")
       if remainingTime <= 0 {
         // タイムアップ
         self.stopTimer()
