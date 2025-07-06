@@ -78,6 +78,24 @@ struct TimerPage: View {
             }
           )
         }
+        
+        // 習慣目標選択ポップアップ
+        if model.showHabitGoalSelection {
+          HabitGoalSelectionView(
+            isPresented: $model.showHabitGoalSelection,
+            onHabitSelected: { habit in
+              model.showHabitGoalReasonPopup(habit: habit)
+            }
+          )
+        }
+        
+        // 習慣目標理由入力ポップアップ
+        if model.showHabitGoalReason {
+          HabitGoalReasonView(
+            isPresented: $model.showHabitGoalReason,
+            selectedHabit: model.selectedHabitText
+          )
+        }
       }
     }
     .onAppear(perform: {
@@ -86,6 +104,11 @@ struct TimerPage: View {
       
       // 画面表示時にAnalyticsイベントを送信
       AnalyticsManager.shared.logScreenView(screenName: "Timer Page", screenClass: "TimerPage")
+      
+      // 習慣目標選択ポップアップを表示
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        model.showHabitGoalSelectionPopup()
+      }
     })
     
     .ignoresSafeArea()
@@ -142,24 +165,75 @@ extension TimerPage {
   
   func circleTimer(multiplier: CGFloat, time: String) -> some View {
     ZStack {
-      // タイマー背景円
       Circle()
-        .fill(Color.white)
+        .stroke(
+          LinearGradient(
+            gradient: Gradient(colors: [
+              Color(hex: "#339AF0")!.opacity(0.6),
+              Color(hex: "#228BE6")!.opacity(0.3)
+            ]),
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+          ),
+          lineWidth: 3 * multiplier
+        )
+        .frame(width: 240 * multiplier, height: 240 * multiplier)
+        .scaleEffect(1.1)
+        .opacity(0.7)
+        .animation(
+          Animation.easeInOut(duration: 1.5)
+            .repeatForever(autoreverses: true),
+          value: true
+        )
+      
+      // タイマー背景円（メイン）
+      Circle()
+        .fill(
+          LinearGradient(
+            gradient: Gradient(colors: [
+              Color.white,
+              Color(hex: "#F8F9FA")!
+            ]),
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+          )
+        )
         .frame(width: 220 * multiplier, height: 220 * multiplier)
         .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.2), radius: 10, x: 0, y: 5)
+        .scaleEffect(1.05)
+        .rotationEffect(.degrees(2))
+        .animation(
+          Animation.spring(response: 0.8, dampingFraction: 0.6)
+            .repeatForever(autoreverses: true),
+          value: true
+        )
+      
       
       VStack(spacing: 4 * multiplier) {
         // タイマーテキスト
         Text(model.displayTime)
           .foregroundColor(Color(hex: "#212529")!)
           .font(.system(size: 40 * multiplier, weight: .medium, design: .monospaced))
-          .monospacedDigit() // 数字が等幅になるように
+          .monospacedDigit()
+          .scaleEffect(1.1)
+          .animation(
+            Animation.easeInOut(duration: 1.0)
+              .repeatForever(autoreverses: true),
+            value: true
+          )
         
         // 追加集中時間モードの場合は「継続中」と表示
         if model.continueFocusingMode {
           Text("継続中")
             .foregroundColor(Color(hex: "#339AF0")!)
             .font(.system(size: 16 * multiplier, weight: .medium))
+            .scaleEffect(1.2)
+            .opacity(1.0)
+            .animation(
+              Animation.easeInOut(duration: 0.8)
+                .repeatForever(autoreverses: true),
+              value: true
+            )
         }
       }
     }

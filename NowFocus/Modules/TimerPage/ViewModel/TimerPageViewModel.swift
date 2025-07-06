@@ -39,6 +39,11 @@ class TimerPageViewModel: ObservableObject {
   @Published var showCelebrationPopup = false
   @Published var consecutiveDays = 0
   
+  // 習慣目標選択ポップアップ
+  @Published var showHabitGoalSelection = false
+  @Published var showHabitGoalReason = false
+  @Published var selectedHabitText = ""
+  
   init(motionManagerService: MotionManagerService, timerService: TimerService) {
     self.motionManagerService = motionManagerService
     self.timerService = timerService
@@ -165,8 +170,7 @@ class TimerPageViewModel: ObservableObject {
   
   func startProgressAnimation() {
     print("instruction pulse: \(self.isInstructionTextPulsing)")
-    // パルスアニメーションを開始
-    self.isPulsating = true
+    // パルスアニメーションは常に有効
   }
   
   func updateSelectedCategory(_ category: String) {
@@ -254,6 +258,23 @@ extension TimerPageViewModel {
       self.isCategoryPopupPresented = false
       print("isCategoryPopupPresented解除: \(self.isCategoryPopupPresented)")
     }
+  }
+  
+  func showHabitGoalSelectionPopup() {
+    self.showHabitGoalSelection = true
+  }
+  
+  func hideHabitGoalSelectionPopup() {
+    self.showHabitGoalSelection = false
+  }
+  
+  func showHabitGoalReasonPopup(habit: String) {
+    self.selectedHabitText = habit
+    self.showHabitGoalReason = true
+  }
+  
+  func hideHabitGoalReasonPopup() {
+    self.showHabitGoalReason = false
   }
 }
 

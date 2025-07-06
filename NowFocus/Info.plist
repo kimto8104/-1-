@@ -8,5 +8,9 @@
 	<array>
 		<string>remote-notification</string>
 	</array>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>このアプリは、習慣化したいことを音声で入力するために音声認識機能を使用します。</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>このアプリは、習慣化したいことを音声で入力するためにマイクを使用します。</string>
 </dict>
 </plist>
