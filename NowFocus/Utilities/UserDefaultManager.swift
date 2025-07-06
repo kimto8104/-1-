@@ -11,7 +11,6 @@ class UserDefaultManager: NSObject {
   
   class func setBool(_ boolValue: Bool, forKey: String) {
     UserDefaults.standard.set(boolValue, forKey: forKey)
-    UserDefaults.standard.synchronize() // 即座にディスクに保存
   }
   
   class func boolForKey(_ key: String) -> Bool {
@@ -20,7 +19,6 @@ class UserDefaultManager: NSObject {
   
   class func setInteger(_ intValue: Int, forKey: String) {
     UserDefaults.standard.set(intValue, forKey: forKey)
-    UserDefaults.standard.synchronize() // 即座にディスクに保存
   }
   
   class func integerForKey(_ key: String) -> Int {
