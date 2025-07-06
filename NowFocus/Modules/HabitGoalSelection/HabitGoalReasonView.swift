@@ -6,19 +6,16 @@
 //
 
 import SwiftUI
-import Speech
 
 struct HabitGoalReasonView: View {
     @Binding var isPresented: Bool
     let selectedHabit: String
     @State private var reasonText: String = ""
     @State private var keyboardHeight: CGFloat = 0
-    @State private var isRecording = false
-    @State private var pulseScale: CGFloat = 1.0
-    @State private var speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "ja-JP"))
-    @State private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
-    @State private var recognitionTask: SFSpeechRecognitionTask?
-    @State private var audioEngine = AVAudioEngine()
+    @FocusState private var isFocused: Bool
+    @State private var celebrationScale: CGFloat = 1.0
+    @State private var celebrationRotation: Double = 0.0
+    @State private var showCelebration = false
     
     var body: some View {
         ZStack {
@@ -56,33 +53,27 @@ struct HabitGoalReasonView: View {
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
                     
-                    // 音声入力フィールド
-                    HStack {
-                        Text(reasonText.isEmpty ? "音声で入力してください" : reasonText)
-                            .font(.body)
-                            .foregroundColor(reasonText.isEmpty ? .secondary : .primary)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 12)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                                    .background(Color.gray.opacity(0.05))
-                            )
-                    }
-                    .padding(.horizontal, 20)
+                    TextField("理由を入力してください", text: $reasonText)
+                        .font(.body)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.horizontal, 20)
+                        .submitLabel(.done)
+                        .focused($isFocused)
+                        .onSubmit {
+                            if !reasonText.isEmpty {
+                                triggerCelebrationAndClose()
+                            }
+                        }
                     
                     Spacer()
                     
-                    // マイクボタンまたは決定ボタン
                     HStack(spacing: 20) {
-                        // やり直しボタン（音声入力がある時のみ表示）
+                        // やり直しボタン（テキスト入力がある時のみ表示）
                         if !reasonText.isEmpty {
                             Button(action: {
                                 withAnimation(.easeInOut(duration: 0.3)) {
                                     reasonText = ""
-                                    // 音声認識の状態もリセット
-                                    resetSpeechRecognition()
+                                    isFocused = true
                                 }
                             }) {
                                 ZStack {
@@ -99,59 +90,25 @@ struct HabitGoalReasonView: View {
                             .transition(.scale.combined(with: .opacity))
                         }
                         
-                        // メインボタン（マイクまたは決定）
                         Button(action: {
-                            if reasonText.isEmpty {
-                                // 音声入力開始
-                                if isRecording {
-                                    stopRecording()
-                                } else {
-                                    startRecording()
-                                }
-                            } else {
-                                // 決定ボタンとして機能
-                                withAnimation(.easeInOut(duration: 0.3)) {
-                                    isPresented = false
-                                }
+                            if !reasonText.isEmpty {
+                                triggerCelebrationAndClose()
                             }
                         }) {
                             ZStack {
-                                // パルスエフェクト（録音中のみ表示）
-                                if isRecording {
-                                    Circle()
-                                        .stroke(reasonText.isEmpty ? Color.red : Color.blue, lineWidth: 2)
-                                        .frame(width: 80, height: 80)
-                                        .scaleEffect(pulseScale)
-                                        .opacity(2 - pulseScale)
-                                        .animation(
-                                            Animation.easeInOut(duration: 1.5)
-                                                .repeatForever(autoreverses: false),
-                                            value: pulseScale
-                                        )
-                                }
-                                
                                 Circle()
-                                    .fill(reasonText.isEmpty ? (isRecording ? Color.red : Color.blue) : Color.green)
+                                    .fill(reasonText.isEmpty ? Color.gray : Color.green)
                                     .frame(width: 80, height: 80)
-                                    .shadow(color: reasonText.isEmpty ? (isRecording ? Color.red.opacity(0.3) : Color.blue.opacity(0.3)) : Color.green.opacity(0.3), radius: 10, x: 0, y: 5)
+                                    .shadow(color: reasonText.isEmpty ? Color.gray.opacity(0.3) : Color.green.opacity(0.3), radius: 10, x: 0, y: 5)
                                 
-                                if reasonText.isEmpty {
-                                    // マイクアイコン
-                                    Image(systemName: isRecording ? "stop.fill" : "mic.fill")
-                                        .font(.system(size: 32, weight: .medium))
-                                        .foregroundColor(.white)
-                                        .scaleEffect(isRecording ? 0.8 : 1.0)
-                                        .animation(.easeInOut(duration: 0.2), value: isRecording)
-                                } else {
-                                    // チェックマークアイコン
-                                    Image(systemName: "checkmark")
-                                        .font(.system(size: 40, weight: .bold))
-                                        .foregroundColor(.white)
-                                }
+                                Image(systemName: "checkmark")
+                                    .font(.system(size: 40, weight: .bold))
+                                    .foregroundColor(.white)
                             }
-                            .scaleEffect(reasonText.isEmpty ? 1.0 : 1.1)
-                            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: reasonText.isEmpty)
+                            .scaleEffect(celebrationScale)
+                            .rotationEffect(.degrees(celebrationRotation))
                         }
+                        .disabled(reasonText.isEmpty)
                         
                         // 右側のスペーサー（やり直しボタンがある時は非表示）
                         if !reasonText.isEmpty {
@@ -161,7 +118,7 @@ struct HabitGoalReasonView: View {
                         }
                     }
                     
-                    Text(reasonText.isEmpty ? (isRecording ? "録音中..." : "タップして音声入力") : "タップして決定")
+                    Text(reasonText.isEmpty ? "理由を入力してください" : "タップして決定")
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .animation(.easeInOut(duration: 0.3), value: reasonText.isEmpty)
@@ -190,105 +147,24 @@ struct HabitGoalReasonView: View {
                 keyboardHeight = 0
             }
         }
-    }
-    
-    // 音声録音開始
-    private func startRecording() {
-        guard let speechRecognizer = speechRecognizer, speechRecognizer.isAvailable else {
-            print("Speech recognizer is not available")
-            return
-        }
-        
-        // 音声エンジンを停止してから再開
-        if audioEngine.isRunning {
-            audioEngine.stop()
-            recognitionRequest?.endAudio()
-        }
-        
-        do {
-            let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
-            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-            
-            recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-            
-            guard let recognitionRequest = recognitionRequest else {
-                print("Unable to create recognition request")
-                return
-            }
-            
-            recognitionRequest.shouldReportPartialResults = true
-            
-            let inputNode = audioEngine.inputNode
-            let recordingFormat = inputNode.outputFormat(forBus: 0)
-            inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
-                recognitionRequest.append(buffer)
-            }
-            
-            audioEngine.prepare()
-            try audioEngine.start()
-            
-            recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { result, error in
-                if let result = result {
-                    DispatchQueue.main.async {
-                        self.reasonText = result.bestTranscription.formattedString
-                    }
-                }
-                
-                if error != nil || result?.isFinal == true {
-                    self.audioEngine.stop()
-                    inputNode.removeTap(onBus: 0)
-                    self.recognitionRequest = nil
-                    self.recognitionTask = nil
-                    self.isRecording = false
-                }
-            }
-            
-            isRecording = true
-            
-            // パルスアニメーション開始
-            withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: false)) {
-                pulseScale = 2.0
-            }
-            
-        } catch {
-            print("Error starting speech recognition: \(error)")
+        .onAppear {
+            isFocused = true
         }
     }
     
-    // 音声録音停止
-    private func stopRecording() {
-        audioEngine.stop()
-        recognitionRequest?.endAudio()
-        isRecording = false
+    private func triggerCelebrationAndClose() {
+        isFocused = false
         
-        // パルスアニメーション停止
-        pulseScale = 1.0
-    }
-    
-    // 音声認識の状態をリセット
-    private func resetSpeechRecognition() {
-        // 録音中なら停止
-        if audioEngine.isRunning {
-            audioEngine.stop()
+        withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
+            celebrationScale = 1.3
+            celebrationRotation = 360
+            showCelebration = true
         }
         
-        // 認識リクエストを終了
-        recognitionRequest?.endAudio()
-        
-        // 認識タスクをキャンセル
-        recognitionTask?.cancel()
-        
-        // 状態をリセット
-        recognitionRequest = nil
-        recognitionTask = nil
-        isRecording = false
-        
-        // 音声セッションをリセット
-        do {
-            try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
-        } catch {
-            print("Error deactivating audio session: \(error)")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                isPresented = false
+            }
         }
     }
 }
