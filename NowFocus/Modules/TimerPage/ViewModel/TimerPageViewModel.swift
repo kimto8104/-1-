@@ -128,9 +128,6 @@ class TimerPageViewModel: ObservableObject {
       case .focusing:
         // 集中中に画面が上向きになった
         print("Failed")
-        withAnimation(.easeOut(duration: 0.5)) {
-          self.isPulsating = false
-        }
         self.showFailedView = true
         // 失敗画面を出す
         // 集中失敗時にAnalyticsイベントを送信
@@ -138,9 +135,6 @@ class TimerPageViewModel: ObservableObject {
         AnalyticsManager.shared.logTimerCancel(duration: remainingTime, category: selectedCategory)
       case .continueFocusing:
         // 追加集中時間中に上向きになった場合&タイマー完了した時は結果を表示
-        withAnimation(.easeOut(duration: 0.5)) {
-          self.isPulsating = false
-        }
         let totalTime = timerService.getTotalFocusTime()
         updateTotalFocusTime(totalFocusTimeString: totalTime.toFormattedString())
         saveFocusHistory() // 集中履歴を保存
@@ -166,27 +160,17 @@ class TimerPageViewModel: ObservableObject {
     switch timerState {
     case .focusing:
       print("start")
-      withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
-        self.isPulsating = true
-      }
     case .ready:
       print("ready")
-      withAnimation(.easeOut(duration: 0.5)) {
-        self.isPulsating = false
-      }
     case .continueFocusing:
       print("continuFocusing")
       self.continueFocusingMode = true
-      withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
-        self.isPulsating = true
-      }
     }
   }
   
   func startProgressAnimation() {
     print("instruction pulse: \(self.isInstructionTextPulsing)")
-    // パルスアニメーションを開始
-    self.isPulsating = true
+    // パルスアニメーションは常に有効
   }
   
   func updateSelectedCategory(_ category: String) {
@@ -250,9 +234,6 @@ extension TimerPageViewModel {
     self.showResultView = false
     self.showFailedView = false
     self.continueFocusingMode = false
-    withAnimation(.easeOut(duration: 0.5)) {
-      self.isPulsating = false
-    }
     motionManagerService.startMonitoringDeviceMotion()
   }
 }

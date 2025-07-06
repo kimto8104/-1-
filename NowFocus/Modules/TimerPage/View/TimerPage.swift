@@ -165,28 +165,26 @@ extension TimerPage {
   
   func circleTimer(multiplier: CGFloat, time: String) -> some View {
     ZStack {
-      if model.isPulsating {
-        Circle()
-          .stroke(
-            LinearGradient(
-              gradient: Gradient(colors: [
-                Color(hex: "#339AF0")!.opacity(0.6),
-                Color(hex: "#228BE6")!.opacity(0.3)
-              ]),
-              startPoint: .topLeading,
-              endPoint: .bottomTrailing
-            ),
-            lineWidth: 3 * multiplier
-          )
-          .frame(width: 240 * multiplier, height: 240 * multiplier)
-          .scaleEffect(model.isPulsating ? 1.1 : 1.0)
-          .opacity(model.isPulsating ? 0.7 : 0.3)
-          .animation(
-            Animation.easeInOut(duration: 1.5)
-              .repeatForever(autoreverses: true),
-            value: model.isPulsating
-          )
-      }
+      Circle()
+        .stroke(
+          LinearGradient(
+            gradient: Gradient(colors: [
+              Color(hex: "#339AF0")!.opacity(0.6),
+              Color(hex: "#228BE6")!.opacity(0.3)
+            ]),
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+          ),
+          lineWidth: 3 * multiplier
+        )
+        .frame(width: 240 * multiplier, height: 240 * multiplier)
+        .scaleEffect(1.1)
+        .opacity(0.7)
+        .animation(
+          Animation.easeInOut(duration: 1.5)
+            .repeatForever(autoreverses: true),
+          value: true
+        )
       
       // タイマー背景円（メイン）
       Circle()
@@ -202,37 +200,14 @@ extension TimerPage {
         )
         .frame(width: 220 * multiplier, height: 220 * multiplier)
         .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.2), radius: 10, x: 0, y: 5)
-        .scaleEffect(model.isPulsating ? 1.05 : 1.0)
-        .rotationEffect(.degrees(model.isPulsating ? 2 : 0))
+        .scaleEffect(1.05)
+        .rotationEffect(.degrees(2))
         .animation(
           Animation.spring(response: 0.8, dampingFraction: 0.6)
             .repeatForever(autoreverses: true),
-          value: model.isPulsating
+          value: true
         )
       
-      Circle()
-        .trim(from: 0, to: model.isPulsating ? 0.75 : 0.25)
-        .stroke(
-          AngularGradient(
-            gradient: Gradient(colors: [
-              Color(hex: "#51CF66")!,
-              Color(hex: "#339AF0")!,
-              Color(hex: "#845EF7")!,
-              Color(hex: "#FF6B6B")!
-            ]),
-            center: .center,
-            startAngle: .degrees(-90),
-            endAngle: .degrees(270)
-          ),
-          style: StrokeStyle(lineWidth: 4 * multiplier, lineCap: .round)
-        )
-        .frame(width: 200 * multiplier, height: 200 * multiplier)
-        .rotationEffect(.degrees(model.isPulsating ? 360 : 0))
-        .animation(
-          Animation.linear(duration: 3.0)
-            .repeatForever(autoreverses: false),
-          value: model.isPulsating
-        )
       
       VStack(spacing: 4 * multiplier) {
         // タイマーテキスト
@@ -240,11 +215,11 @@ extension TimerPage {
           .foregroundColor(Color(hex: "#212529")!)
           .font(.system(size: 40 * multiplier, weight: .medium, design: .monospaced))
           .monospacedDigit()
-          .scaleEffect(model.isPulsating ? 1.1 : 1.0)
+          .scaleEffect(1.1)
           .animation(
             Animation.easeInOut(duration: 1.0)
               .repeatForever(autoreverses: true),
-            value: model.isPulsating
+            value: true
           )
         
         // 追加集中時間モードの場合は「継続中」と表示
@@ -252,12 +227,12 @@ extension TimerPage {
           Text("継続中")
             .foregroundColor(Color(hex: "#339AF0")!)
             .font(.system(size: 16 * multiplier, weight: .medium))
-            .scaleEffect(model.isPulsating ? 1.2 : 1.0)
-            .opacity(model.isPulsating ? 1.0 : 0.8)
+            .scaleEffect(1.2)
+            .opacity(1.0)
             .animation(
               Animation.easeInOut(duration: 0.8)
                 .repeatForever(autoreverses: true),
-              value: model.isPulsating
+              value: true
             )
         }
       }
