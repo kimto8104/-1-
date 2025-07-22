@@ -36,8 +36,6 @@
 		FE73AA732DFC5C980092CD4C /* CelebrationPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE73AA722DFC5C980092CD4C /* CelebrationPopupView.swift */; };
 		FE73AA752DFC693F0092CD4C /* ConsecutiveDaysRecordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE73AA742DFC693F0092CD4C /* ConsecutiveDaysRecordManager.swift */; };
 		FE73AA782DFEF3650092CD4C /* HistoryDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE73AA772DFEF3650092CD4C /* HistoryDetailPage.swift */; };
-		FE76B32D2E1809A80035754F /* HabitGoalSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE76B32C2E1809A80035754F /* HabitGoalSelectionView.swift */; };
-		FE76B32F2E1814D10035754F /* HabitGoalReasonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE76B32E2E1814D10035754F /* HabitGoalReasonView.swift */; };
 		FE8A06BD2D0FA10100F9F206 /* GradientBackgroundUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8A06BC2D0FA10100F9F206 /* GradientBackgroundUtil.swift */; };
 		FE8EAA322A0000BC0040FB07 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8EAA312A0000BC0040FB07 /* Int+Extension.swift */; };
 		FE8EAA352A00C9910040FB07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8EAA342A00C9910040FB07 /* AppDelegate.swift */; };
@@ -88,8 +86,6 @@
 		FE73AA722DFC5C980092CD4C /* CelebrationPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelebrationPopupView.swift; sourceTree = "<group>"; };
 		FE73AA742DFC693F0092CD4C /* ConsecutiveDaysRecordManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsecutiveDaysRecordManager.swift; sourceTree = "<group>"; };
 		FE73AA772DFEF3650092CD4C /* HistoryDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDetailPage.swift; sourceTree = "<group>"; };
-		FE76B32C2E1809A80035754F /* HabitGoalSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGoalSelectionView.swift; sourceTree = "<group>"; };
-		FE76B32E2E1814D10035754F /* HabitGoalReasonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitGoalReasonView.swift; sourceTree = "<group>"; };
 		FE8A06BC2D0FA10100F9F206 /* GradientBackgroundUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackgroundUtil.swift; sourceTree = "<group>"; };
 		FE8EAA312A0000BC0040FB07 /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		FE8EAA332A00C2DC0040FB07 /* NowFocus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NowFocus.entitlements; sourceTree = "<group>"; };
@@ -212,7 +208,6 @@
 		FE5825D02C4D4843007AB552 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				FE76B32B2E18090E0035754F /* HabitGoalSelection */,
 				FE73AA712DFC5C580092CD4C /* ConsecutiveDaysCelebrationPopup */,
 				FE70E9ED2D4D8342002C0B7F /* Category */,
 				FE4D27B22D1C3D4C00962E92 /* History */,
@@ -297,15 +292,6 @@
 				FE73AA772DFEF3650092CD4C /* HistoryDetailPage.swift */,
 			);
 			path = HistoryDetailPage;
-			sourceTree = "<group>";
-		};
-		FE76B32B2E18090E0035754F /* HabitGoalSelection */ = {
-			isa = PBXGroup;
-			children = (
-				FE76B32C2E1809A80035754F /* HabitGoalSelectionView.swift */,
-				FE76B32E2E1814D10035754F /* HabitGoalReasonView.swift */,
-			);
-			path = HabitGoalSelection;
 			sourceTree = "<group>";
 		};
 		FE8EAA302A0000AD0040FB07 /* Extension */ = {
@@ -545,7 +531,6 @@
 				FE54F1AE2C32EBCA0029DCDD /* TimerManager.swift in Sources */,
 				FEC011692DDDF7FE0047AC58 /* TimerService.swift in Sources */,
 				FE11003E2CCE764800C833C1 /* TimeSelectionPresenter.swift in Sources */,
-				FE76B32F2E1814D10035754F /* HabitGoalReasonView.swift in Sources */,
 				FEFB29D329B7691E007D8FDA /* TimerPage.swift in Sources */,
 				FE73AA732DFC5C980092CD4C /* CelebrationPopupView.swift in Sources */,
 				FEB840682998C24500B945BA /* TimeSelectionView.swift in Sources */,
@@ -558,7 +543,6 @@
 				FEC5498E2D58CD1E009F9D08 /* AddCategoryPopup.swift in Sources */,
 				FE70E9F12D4F98F4002C0B7F /* CategoryPopupPresenter.swift in Sources */,
 				FE42FA592E0980AC00123F2F /* AnalyticsManager.swift in Sources */,
-				FE76B32D2E1809A80035754F /* HabitGoalSelectionView.swift in Sources */,
 				FEB840562998B6F900B945BA /* NowFocusApp.swift in Sources */,
 				FE8EAA322A0000BC0040FB07 /* Int+Extension.swift in Sources */,
 				FE70E9EC2D4443CE002C0B7F /* ModelContainerManager.swift in Sources */,

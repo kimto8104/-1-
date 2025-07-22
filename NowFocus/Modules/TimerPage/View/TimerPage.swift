@@ -78,24 +78,6 @@ struct TimerPage: View {
             }
           )
         }
-        
-        // 習慣目標選択ポップアップ
-        if model.showHabitGoalSelection {
-          HabitGoalSelectionView(
-            isPresented: $model.showHabitGoalSelection,
-            onHabitSelected: { habit in
-              model.showHabitGoalReasonPopup(habit: habit)
-            }
-          )
-        }
-        
-        // 習慣目標理由入力ポップアップ
-        if model.showHabitGoalReason {
-          HabitGoalReasonView(
-            isPresented: $model.showHabitGoalReason,
-            selectedHabit: model.selectedHabitText
-          )
-        }
       }
     }
     .onAppear(perform: {
@@ -104,11 +86,6 @@ struct TimerPage: View {
       
       // 画面表示時にAnalyticsイベントを送信
       AnalyticsManager.shared.logScreenView(screenName: "Timer Page", screenClass: "TimerPage")
-      
-      // 習慣目標選択ポップアップを表示
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-        model.showHabitGoalSelectionPopup()
-      }
     })
     
     .ignoresSafeArea()
@@ -154,8 +131,6 @@ extension TimerPage {
         
         circleTimer(multiplier: multiplier, time: model.displayTime)
           .opacity(model.showResultView ? 0 : 1)
-          
-        categorySelectionButton(multiplier: multiplier)
       }
       
       Spacer()
@@ -206,36 +181,7 @@ extension TimerPage {
     )
   }
   
-  func categorySelectionButton(multiplier: CGFloat) -> some View {
-    Button {
-      model.tapCategorySelectionButton()
-//      model.saveMockDataHistory()
-    } label: {
-      HStack(spacing: 10 * multiplier) {
-        Image(systemName: "tag.fill")
-          .font(.system(size: 16 * multiplier))
-          .foregroundColor(Color(hex: "#339AF0")!)
-        
-        Text(String(localized: String.LocalizationValue(model.selectedCategory)))
-          .font(.custom("IBM Plex Mono", size: 18 * multiplier))
-          .fontWeight(.medium)
-          .foregroundColor(Color(hex: "#495057")!)
-        
-        Spacer()
-        
-        Image(systemName: "chevron.down")
-          .font(.system(size: 14 * multiplier))
-          .foregroundColor(Color(hex: "#868E96")!)
-      }
-      .padding(.horizontal, 20 * multiplier)
-      .padding(.vertical, 16 * multiplier)
-      .background(
-        RoundedRectangle(cornerRadius: 12 * multiplier)
-          .fill(Color.white)
-          .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.1), radius: 4, x: 0, y: 2)
-      )
-    }
-  }
+
   
   func tabBarView(multiplier: CGFloat) -> some View {
     TabBarView(selectedTab: $model.selectedTab, multiplier: multiplier)
