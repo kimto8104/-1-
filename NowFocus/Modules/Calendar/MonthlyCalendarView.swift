@@ -129,13 +129,13 @@ struct MonthlyCalendarView: View {
   private var monthYearString: String {
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy年M月"
-    formatter.locale = Locale(identifier: "ja_JP")
+    formatter.locale = Locale.current
     return formatter.string(from: currentDate)
   }
   
   private var weekdaySymbols: [String] {
     let formatter = DateFormatter()
-    formatter.locale = Locale(identifier: "ja_JP")
+    formatter.locale = Locale.current
     return formatter.shortWeekdaySymbols
   }
   
@@ -174,7 +174,7 @@ struct CalendarDayView: View {
   
   private var focusTimeColor: Color {
     if day.focusTime == 0 {
-      return Color(hex: "#F1F3F5")!
+      return Color.clear
     } else {
       return Color(hex: "#FA5252")!
     }
@@ -198,7 +198,7 @@ struct CalendarDayView: View {
       
       Text(dayNumber)
         .font(.system(size: 16 * multiplier, weight: .medium))
-        .foregroundColor(day.isCurrentMonth ? Color(hex: "#495057")! : Color(hex: "#CED4DA")!)
+        .foregroundColor(day.isCurrentMonth ? (day.focusTime > 0 ? .white : Color(hex: "#495057")!) : Color(hex: "#CED4DA")!)
     }
     .frame(width: 40 * multiplier, height: 40 * multiplier)
   }

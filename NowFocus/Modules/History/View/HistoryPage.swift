@@ -75,7 +75,7 @@ struct HistoryPage: View {
   // 連続日数カード
   private func consecutiveDaysCard(gp: GeometryProxy, multiplier: CGFloat) -> some View {
     VStack(spacing: 16 * multiplier) {
-      Text("連続集中日数")
+      Text(String(localized: "連続集中日数"))
         .font(.system(size: 20 * multiplier, weight: .medium))
         .foregroundColor(Color(hex: "#495057")!)
       
@@ -85,12 +85,12 @@ struct HistoryPage: View {
           .foregroundColor(Color(hex: "#339AF0")!)
           .contentTransition(.numericText())
         
-        Text("日")
+        Text(String(localized: "日"))
           .font(.system(size: 20 * multiplier))
           .foregroundColor(Color(hex: "#339AF0")!)
       }
       
-      Text("現在の記録")
+      Text(String(localized: "現在の記録"))
         .font(.system(size: 14 * multiplier))
         .foregroundColor(Color(hex: "#868E96")!)
     }
@@ -113,12 +113,12 @@ struct HistoryPage: View {
             .font(.system(size: 64 * multiplier, weight: .bold))
             .foregroundColor(viewModel.consecutiveDays == 1 ? Color(hex: "#FA5252")! : Color(hex: "#495057")!)
           
-          Text("日")
+          Text(String(localized: "日"))
             .font(.system(size: 32 * multiplier, weight: .bold))
             .foregroundColor(Color(hex: "#495057")!)
         }
         
-        Text("連続達成！")
+        Text(String(localized: "連続達成！"))
           .font(.system(size: 18 * multiplier, weight: .medium))
           .foregroundColor(Color(hex: "#495057")!)
       }
@@ -150,7 +150,7 @@ struct HistoryPage: View {
           showingCategoryList = false
         } label: {
           HStack {
-            Text("全てのカテゴリー")
+            Text(String(localized: "全てのカテゴリー"))
               .font(.system(size: 16 * multiplier))
               .foregroundColor(Color(hex: "#495057")!)
             Spacer()
