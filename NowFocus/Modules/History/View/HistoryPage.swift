@@ -38,9 +38,6 @@ struct HistoryPage: View {
             Spacer().frame(height: 60 * multiplier)
             
             VStack(spacing: 30 * multiplier) {
-              // カテゴリー選択ボタン
-              categorySelectionButton(multiplier: multiplier)
-                .padding(.bottom, 10 * multiplier)
               
               // 連続日数カード
               consecutiveDaysCard(gp: gp, multiplier: multiplier)
@@ -52,9 +49,6 @@ struct HistoryPage: View {
             Spacer() // 下部スペース
           }
           .padding(.horizontal, 20 * multiplier)
-        }
-        .sheet(isPresented: $showingCategoryList) {
-          categoryListView(multiplier: multiplier)
         }
       }
       .navigationBarHidden(true)
@@ -79,36 +73,6 @@ struct HistoryPage: View {
         print("HistoryPage: Tab changed to Clock - アニメーション開始")
         viewModel.startNumberAnimation()
       }
-    }
-  }
-  
-  // カテゴリー選択ボタン
-  private func categorySelectionButton(multiplier: CGFloat) -> some View {
-    Button {
-      showingCategoryList = true
-    } label: {
-      HStack(spacing: 10 * multiplier) {
-        Image(systemName: "tag.fill")
-          .font(.system(size: 16 * multiplier))
-          .foregroundColor(Color(hex: "#339AF0")!)
-        
-        Text(viewModel.selectedCategory ?? String(localized: "全てのカテゴリー"))
-          .font(.system(size: 18 * multiplier, weight: .medium))
-          .foregroundColor(Color(hex: "#495057")!)
-        
-        Spacer()
-        
-        Image(systemName: "chevron.down")
-          .font(.system(size: 14 * multiplier))
-          .foregroundColor(Color(hex: "#868E96")!)
-      }
-      .padding(.horizontal, 20 * multiplier)
-      .padding(.vertical, 16 * multiplier)
-      .background(
-        RoundedRectangle(cornerRadius: 12 * multiplier)
-          .fill(Color.white)
-          .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.1), radius: 4, x: 0, y: 2)
-      )
     }
   }
   
