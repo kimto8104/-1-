@@ -20,6 +20,7 @@
 		FE1A852D2E101ADE00EECA0A /* GoogleService-Info-Debug.plist in Resources */ = {isa = PBXBuildFile; fileRef = FE1A852C2E101ADE00EECA0A /* GoogleService-Info-Debug.plist */; };
 		FE4176C82C9DA72500D671ED /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4176C72C9DA72500D671ED /* Color+Extension.swift */; };
 		FE42FA592E0980AC00123F2F /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42FA582E0980AC00123F2F /* AnalyticsManager.swift */; };
+		FE4C1BAE2E2FC647001180BA /* MonthlyCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4C1BAD2E2FC647001180BA /* MonthlyCalendarView.swift */; };
 		FE4D27B12D1B832D00962E92 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4D27B02D1B832D00962E92 /* TabBar.swift */; };
 		FE4D27B42D1C3D6000962E92 /* HistoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4D27B32D1C3D6000962E92 /* HistoryPage.swift */; };
 		FE54F1AB2C2082D30029DCDD /* Warning-Siren04-02(Low-Long).mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FE54F1AA2C2082D30029DCDD /* Warning-Siren04-02(Low-Long).mp3 */; };
@@ -70,6 +71,7 @@
 		FE1A852C2E101ADE00EECA0A /* GoogleService-Info-Debug.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Debug.plist"; sourceTree = "<group>"; };
 		FE4176C72C9DA72500D671ED /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		FE42FA582E0980AC00123F2F /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
+		FE4C1BAD2E2FC647001180BA /* MonthlyCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyCalendarView.swift; sourceTree = "<group>"; };
 		FE4D27B02D1B832D00962E92 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		FE4D27B32D1C3D6000962E92 /* HistoryPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPage.swift; sourceTree = "<group>"; };
 		FE54F1AA2C2082D30029DCDD /* Warning-Siren04-02(Low-Long).mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Warning-Siren04-02(Low-Long).mp3"; sourceTree = "<group>"; };
@@ -158,6 +160,14 @@
 			path = FloatingBottomSheet;
 			sourceTree = "<group>";
 		};
+		FE4C1BAC2E2FC63A001180BA /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				FE4C1BAD2E2FC647001180BA /* MonthlyCalendarView.swift */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
 		FE4D27AF2D1B832100962E92 /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +218,7 @@
 		FE5825D02C4D4843007AB552 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				FE4C1BAC2E2FC63A001180BA /* Calendar */,
 				FE73AA712DFC5C580092CD4C /* ConsecutiveDaysCelebrationPopup */,
 				FE70E9ED2D4D8342002C0B7F /* Category */,
 				FE4D27B22D1C3D4C00962E92 /* History */,
@@ -528,6 +539,7 @@
 				FE11013F2CE9729600C833C1 /* CustomAlert.swift in Sources */,
 				FE70E9EF2D4D8384002C0B7F /* CategoryPopup.swift in Sources */,
 				FEC011662DDDF39B0047AC58 /* TimerPageViewModel.swift in Sources */,
+				FE4C1BAE2E2FC647001180BA /* MonthlyCalendarView.swift in Sources */,
 				FE54F1AE2C32EBCA0029DCDD /* TimerManager.swift in Sources */,
 				FEC011692DDDF7FE0047AC58 /* TimerService.swift in Sources */,
 				FE11003E2CCE764800C833C1 /* TimeSelectionPresenter.swift in Sources */,

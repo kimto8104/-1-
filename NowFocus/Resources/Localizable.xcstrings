@@ -36,6 +36,7 @@
       }
     },
     "%@の集中時間" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -513,6 +514,7 @@
       }
     },
     "タップして詳細を見る" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -615,6 +617,7 @@
       }
     },
     "合計集中時間" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -953,6 +956,9 @@
           }
         }
       }
+    },
+    "連続達成！" : {
+
     },
     "連続集中日数" : {
       "localizations" : {

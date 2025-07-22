@@ -38,12 +38,8 @@ struct HistoryPage: View {
             Spacer().frame(height: 60 * multiplier)
             
             VStack(spacing: 30 * multiplier) {
-              
-              // 連続日数カード
-              consecutiveDaysCard(gp: gp, multiplier: multiplier)
-              
-              // 合計時間カード
-              totalTimeCard(gp: gp, multiplier: multiplier)
+              // 月間カレンダー
+              monthlyCalendarCard(gp: gp, multiplier: multiplier)
             }
             
             Spacer() // 下部スペース
@@ -108,45 +104,41 @@ struct HistoryPage: View {
     )
   }
 
-  // 合計時間カード
-  private func totalTimeCard(gp: GeometryProxy, multiplier: CGFloat) -> some View {
-    NavigationLink(destination: HistoryDetailPage(initialCategory: viewModel.selectedCategory)) {
-      VStack(spacing: 16 * multiplier) {
-        Text(viewModel.selectedCategory == nil ? "合計集中時間" : "\(viewModel.selectedCategory!)の集中時間")
-          .font(.system(size: 20 * multiplier, weight: .medium))
+  // 月間カレンダーカード
+  private func monthlyCalendarCard(gp: GeometryProxy, multiplier: CGFloat) -> some View {
+    VStack(spacing: 16 * multiplier) {
+      VStack(alignment: .center, spacing: 6 * multiplier) {
+        HStack(alignment: .bottom, spacing: 4 * multiplier) {
+          Text("\(viewModel.consecutiveDays)")
+            .font(.system(size: 64 * multiplier, weight: .bold))
+            .foregroundColor(viewModel.consecutiveDays == 1 ? Color(hex: "#FA5252")! : Color(hex: "#495057")!)
+          
+          Text("日")
+            .font(.system(size: 32 * multiplier, weight: .bold))
+            .foregroundColor(Color(hex: "#495057")!)
+        }
+        
+        Text("連続達成！")
+          .font(.system(size: 18 * multiplier, weight: .medium))
           .foregroundColor(Color(hex: "#495057")!)
-        
-        Text(viewModel.formatDuration(viewModel.filteredDuration))
-          .font(.system(size: 36 * multiplier, weight: .semibold, design: .monospaced))
-          .foregroundColor(Color(hex: "#339AF0")!)
-          .tracking(-0.5)
-          .lineLimit(1)
-          .minimumScaleFactor(0.7)
-          .padding(.vertical, 10 * multiplier)
-        
-        Text("タップして詳細を見る")
-          .font(.system(size: 14 * multiplier))
-          .foregroundColor(Color(hex: "#868E96")!)
-          .opacity(viewModel.isPulsing ? 0.4 : 1.0)  // ViewModelの状態を使用
-          .onAppear {
-            // アニメーションを開始
-            withAnimation(Animation.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
-              viewModel.startPulsingAnimation()  // ViewModelのメソッドを呼び出し
-            }
-          }
       }
       .frame(maxWidth: .infinity)
+      .padding(.horizontal, 20 * multiplier)
       .padding(.vertical, 20 * multiplier)
-      .padding(.horizontal, 25 * multiplier)
-      .frame(width: gp.size.width * 0.85)
-      .background(
-        RoundedRectangle(cornerRadius: 16 * multiplier)
-          .fill(Color.white)
-          .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.15), radius: 8, x: 0, y: 4)
+      
+      MonthlyCalendarView(
+        currentDate: viewModel.currentCalendarDate,
+        focusHistory: allHistory,
+        multiplier: multiplier,
+        onPreviousMonth: {
+          viewModel.previousMonth()
+        },
+        onNextMonth: {
+          viewModel.nextMonth()
+        }
       )
-      .contentShape(Rectangle())
     }
-    .buttonStyle(PlainButtonStyle())
+    .frame(width: gp.size.width * 0.85)
   }
   
   // カテゴリー選択リスト
@@ -214,6 +206,9 @@ class HistoryViewModel: ObservableObject {
   @Published var selectedCategory: String? = nil
   @Published var consecutiveDays: Int = 0
   @Published var isPulsing: Bool = false
+  
+  // カレンダー関連の状態
+  @Published var currentCalendarDate: Date = Date()
   
   // 数字アニメーション用の状態
   @Published var displayedConsecutiveDays: Int = 0
@@ -350,6 +345,19 @@ class HistoryViewModel: ObservableObject {
           self.displayedConsecutiveDays = i
         }
       }
+    }
+  }
+  
+  // カレンダー操作メソッド
+  func previousMonth() {
+    withAnimation(.easeInOut(duration: 0.3)) {
+      currentCalendarDate = Calendar.current.date(byAdding: .month, value: -1, to: currentCalendarDate) ?? currentCalendarDate
+    }
+  }
+  
+  func nextMonth() {
+    withAnimation(.easeInOut(duration: 0.3)) {
+      currentCalendarDate = Calendar.current.date(byAdding: .month, value: 1, to: currentCalendarDate) ?? currentCalendarDate
     }
   }
 }
