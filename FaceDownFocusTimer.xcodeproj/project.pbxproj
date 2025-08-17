@@ -41,6 +41,7 @@
 		FE8EAA322A0000BC0040FB07 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8EAA312A0000BC0040FB07 /* Int+Extension.swift */; };
 		FE8EAA352A00C9910040FB07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8EAA342A00C9910040FB07 /* AppDelegate.swift */; };
 		FE9ADB672D2D4F930036EA85 /* FocusHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9ADB662D2D4F930036EA85 /* FocusHistory.swift */; };
+		FE9E9AC22E52095B007DBA1C /* HabitSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9E9AC12E52095B007DBA1C /* HabitSettingView.swift */; };
 		FEB14FFC2C6B9F020011F32A /* MotionServiceWithInitialAttitude.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB14FFB2C6B9F020011F32A /* MotionServiceWithInitialAttitude.swift */; };
 		FEB840562998B6F900B945BA /* NowFocusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB840552998B6F900B945BA /* NowFocusApp.swift */; };
 		FEB8405A2998B6FA00B945BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FEB840592998B6FA00B945BA /* Assets.xcassets */; };
@@ -94,6 +95,7 @@
 		FE8EAA342A00C9910040FB07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FE8EAA362A00CC3C0040FB07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FE9ADB662D2D4F930036EA85 /* FocusHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusHistory.swift; sourceTree = "<group>"; };
+		FE9E9AC12E52095B007DBA1C /* HabitSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitSettingView.swift; sourceTree = "<group>"; };
 		FEB14FFB2C6B9F020011F32A /* MotionServiceWithInitialAttitude.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionServiceWithInitialAttitude.swift; sourceTree = "<group>"; };
 		FEB840522998B6F900B945BA /* FaceDownFocusTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FaceDownFocusTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEB840552998B6F900B945BA /* NowFocusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowFocusApp.swift; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 		FE5825D02C4D4843007AB552 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				FE9E9AC02E520938007DBA1C /* HabitSetting */,
 				FE4C1BAC2E2FC63A001180BA /* Calendar */,
 				FE73AA712DFC5C580092CD4C /* ConsecutiveDaysCelebrationPopup */,
 				FE70E9ED2D4D8342002C0B7F /* Category */,
@@ -329,6 +332,14 @@
 				FE4D27B32D1C3D6000962E92 /* HistoryPage.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		FE9E9AC02E520938007DBA1C /* HabitSetting */ = {
+			isa = PBXGroup;
+			children = (
+				FE9E9AC12E52095B007DBA1C /* HabitSettingView.swift */,
+			);
+			path = HabitSetting;
 			sourceTree = "<group>";
 		};
 		FEB840492998B6F800B945BA = {
@@ -538,6 +549,7 @@
 				FE8EAA352A00C9910040FB07 /* AppDelegate.swift in Sources */,
 				FE11013F2CE9729600C833C1 /* CustomAlert.swift in Sources */,
 				FE70E9EF2D4D8384002C0B7F /* CategoryPopup.swift in Sources */,
+				FE9E9AC22E52095B007DBA1C /* HabitSettingView.swift in Sources */,
 				FEC011662DDDF39B0047AC58 /* TimerPageViewModel.swift in Sources */,
 				FE4C1BAE2E2FC647001180BA /* MonthlyCalendarView.swift in Sources */,
 				FE54F1AE2C32EBCA0029DCDD /* TimerManager.swift in Sources */,
