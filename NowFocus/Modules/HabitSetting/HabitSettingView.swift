@@ -45,7 +45,6 @@ struct HabitSettingView: View {
             .frame(height: 20 * multiplier)
           
           TextField("", text: $viewModel.inputText, prompt: Text("1分ならできる習慣を入力").foregroundStyle(.gray))
-          .foregroundColor(.white)
             .padding(.vertical, 14)
             .padding(.horizontal, 20)
             .submitLabel(.done)
