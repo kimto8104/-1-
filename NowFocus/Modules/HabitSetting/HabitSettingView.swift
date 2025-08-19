@@ -11,18 +11,19 @@ import Observation
 
 @Observable
 class HabitSettingViewModel {
-    var inputText: String = "" {
-        didSet {
-            isButtonEnabled = !inputText.isEmpty
-        }
+  var inputText: String = "" {
+    didSet {
+      isButtonEnabled = !inputText.isEmpty
     }
-    var isButtonEnabled: Bool = false
+  }
+  var isButtonEnabled: Bool = false
 }
 
 struct HabitSettingView: View {
-    @State private var viewModel = HabitSettingViewModel()
-
-    var body: some View {
+  @State private var viewModel = HabitSettingViewModel()
+  @FocusState private var textFieldFocused: Bool
+  
+  var body: some View {
     
     GeometryReader { gp in
       let hm = gp.size.width / 375
@@ -43,13 +44,21 @@ struct HabitSettingView: View {
           Spacer()
             .frame(height: 20 * multiplier)
           
-          TextField("1分ならできる習慣を入力", text: $viewModel.inputText)
-            .padding(.horizontal)
-            .font(.system(size: 18 * multiplier))
-            .background(Color(hex: "#F7F5F5"))
-            .frame(width: 310 * multiplier, height: 60 * multiplier)
-            .clipShape(Capsule())
+          TextField("", text: $viewModel.inputText, prompt: Text("1分ならできる習慣を入力").foregroundStyle(.gray))
+          .foregroundColor(.white)
+            .padding(.vertical, 14)
+            .padding(.horizontal, 20)
             .submitLabel(.done)
+            .background(
+              RoundedRectangle(cornerRadius: 25)
+                .fill(Color.white)
+                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 3)
+                .shadow(color: Color.white.opacity(0.7), radius: 5, x: 0, y: -2)
+            )
+            .padding()
+            .scaleEffect(textFieldFocused ? 1.06 : 1.0)
+            .animation(.easeInOut(duration: 0.18), value: textFieldFocused)
+            .focused($textFieldFocused)
           
           Spacer()
             .frame(height: 40 * multiplier)
