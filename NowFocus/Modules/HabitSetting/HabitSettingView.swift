@@ -22,7 +22,7 @@ class HabitSettingViewModel {
 struct HabitSettingView: View {
   @State private var viewModel = HabitSettingViewModel()
   @FocusState private var textFieldFocused: Bool
-  
+  let onComplete: () -> Void // Created Habit
   var body: some View {
     
     GeometryReader { gp in
@@ -32,7 +32,7 @@ struct HabitSettingView: View {
       
       ZStack {
         VStack {
-          Text("1分")
+          Text("60秒")
             .font(.system(size: 48 * multiplier))
             .fontWeight(.bold)
             .frame(width: 154 * multiplier, height: 100 * multiplier)
@@ -44,7 +44,7 @@ struct HabitSettingView: View {
           Spacer()
             .frame(height: 20 * multiplier)
           
-          TextField("", text: $viewModel.inputText, prompt: Text("1分ならできる習慣を入力").foregroundStyle(.gray))
+          TextField("", text: $viewModel.inputText, prompt: Text("60秒ならできる習慣を入力").foregroundStyle(.gray))
             .padding(.vertical, 14)
             .padding(.horizontal, 20)
             .submitLabel(.done)
@@ -64,6 +64,7 @@ struct HabitSettingView: View {
           
           Button {
             // 挑戦するAction here
+            onComplete()
           } label: {
             Text("挑戦する")
               .foregroundStyle(.white)
@@ -82,5 +83,7 @@ struct HabitSettingView: View {
 }
 
 #Preview {
-  HabitSettingView()
+  HabitSettingView {
+    print("")
+  }
 }
