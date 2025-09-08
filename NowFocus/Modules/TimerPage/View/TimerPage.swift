@@ -132,6 +132,7 @@ extension TimerPage {
                 circleTimer(multiplier: multiplier, time: model.displayTime)
                     .opacity(model.showResultView ? 0 : 1)
                 
+                controllButtonView(multiplier: multiplier)
                 #if DEBUG
                 turnOffFaceDownButton(multiplier: multiplier)
                 #endif
@@ -163,20 +164,6 @@ extension TimerPage {
                         .foregroundColor(Color(hex: "#339AF0")!)
                         .font(.system(size: 16 * multiplier, weight: .medium))
                 }
-                
-                if model.isFaceDownDisabled {
-                    Button(action: {
-                        // ここにタイマー開始処理を入れる
-                        model.startTimerWitouFaceDownFunction()
-                    }) {
-                        Image(systemName: "play.fill")
-                            .font(.system(size: 24 * multiplier))
-                            .foregroundColor(.white)
-                            .padding(20 * multiplier)
-                            .background(Circle().fill(Color(hex: "#339AF0")!))
-                            .shadow(radius: 4)
-                    }
-                }
             }
         }
     }
@@ -202,6 +189,47 @@ extension TimerPage {
     func tabBarView(multiplier: CGFloat) -> some View {
         TabBarView(selectedTab: $model.selectedTab, multiplier: multiplier)
             .transition(.opacity)
+    }
+    
+    
+    @ViewBuilder func controllButtonView(multiplier: CGFloat) -> some View {
+        if model.isFaceDownDisabled {
+            if model.timerService.timerState == .ready {
+                startTimerButton(multiplier: multiplier)
+            } else {
+                stopTimerButton(multiplier: multiplier)
+            }
+        } else {
+            EmptyView()
+        }
+    }
+    
+    func startTimerButton(multiplier: CGFloat) -> some View {
+        Button(action: {
+            // ここにタイマー開始処理を入れる
+            model.startTimerWitouFaceDownFunction()
+        }) {
+            Image(systemName: "play.fill")
+                .font(.system(size: 24 * multiplier))
+                .foregroundColor(.white)
+                .padding(20 * multiplier)
+                .background(Circle().fill(Color(hex: "#339AF0")!))
+                .shadow(radius: 4)
+        }
+    }
+    
+    func stopTimerButton(multiplier: CGFloat) -> some View {
+        Button(action: {
+            // ここにタイマー開始処理を入れる
+            model.startTimerWitouFaceDownFunction()
+        }) {
+            Image(systemName: "stop.fill")
+                .font(.system(size: 24 * multiplier))
+                .foregroundColor(.white)
+                .padding(20 * multiplier)
+                .background(Circle().fill(Color(hex: "#339AF0")!))
+                .shadow(radius: 4)
+        }
     }
     
     func turnOffFaceDownButton(multiplier: CGFloat) -> some View {

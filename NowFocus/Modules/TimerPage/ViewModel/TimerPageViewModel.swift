@@ -14,7 +14,7 @@ class TimerPageViewModel: ObservableObject {
     
     // Services
     private var motionManagerService: MotionManagerService?
-    private let timerService: TimerService
+    private(set) var timerService: TimerService
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -200,6 +200,10 @@ extension TimerPageViewModel {
     // start timer without FaceDown Function
     func startTimerWitouFaceDownFunction() {
         timerService.startTimer()
+    }
+    
+    func stopTimerWithoutFaceDownFunction() {
+        timerService.pauseTimer()
     }
 }
 // ViewModel Method
