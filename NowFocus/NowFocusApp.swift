@@ -22,17 +22,12 @@ struct NowFocusApp: App {
 struct RootView: View {
   @AppStorage("HabitIsCreated") var isHabitCreated: Bool = false
   var body: some View {
-    if isHabitCreated {
       TimerPage()
         .modelContainer(for: [FocusHistory.self]) // SwiftDataのモデルコンテナをビュー階層に統合
         .onAppear {
           // アプリ起動時にリセットを確認
           UserDefaultManager.resetDailyDataIfDateChanged()
         }
-    } else {
-      HabitSettingView {
-        isHabitCreated = true
-      }
-    }
+    
   }
 }

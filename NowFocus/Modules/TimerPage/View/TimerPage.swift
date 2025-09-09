@@ -78,6 +78,29 @@ struct TimerPage: View {
             }
           )
         }
+        
+        // HabitSettingView - 中央表示
+        if model.isHabitSettingPresented {
+          ZStack {
+            // 背景を暗くする
+            Color.black.opacity(0.5)
+              .ignoresSafeArea()
+              .onTapGesture {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                  model.isHabitSettingPresented = false
+                }
+              }
+            
+            // HabitSettingViewを中央に表示
+            HabitSettingView {
+              withAnimation(.easeInOut(duration: 0.3)) {
+                model.isHabitSettingPresented = false
+              }
+            }
+            .transition(.scale.combined(with: .opacity))
+          }
+        }
+        
       }
     }
     .onAppear(perform: {
@@ -86,6 +109,13 @@ struct TimerPage: View {
       
       // 画面表示時にAnalyticsイベントを送信
       AnalyticsManager.shared.logScreenView(screenName: "Timer Page", screenClass: "TimerPage")
+      
+      // TimerPageが表示された時にHabitSettingViewを表示
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        withAnimation(.easeInOut(duration: 0.3)) {
+          model.isHabitSettingPresented = true
+        }
+      }
     })
     
     .ignoresSafeArea()

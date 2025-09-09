@@ -35,6 +35,9 @@ class TimerPageViewModel: ObservableObject {
   var categoryPopup: CategoryPopup?  // モジュールをここで保持
   @Published var selectedCategory: String = UserDefaultManager.savedCategories.first ?? "reading"
   
+  // HabitSetting
+  @Published var isHabitSettingPresented = false
+  
   // お祝いポップアップ関連のプロパティ
   @Published var showCelebrationPopup = false
   @Published var consecutiveDays = 0
