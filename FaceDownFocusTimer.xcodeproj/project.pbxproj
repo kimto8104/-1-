@@ -30,6 +30,7 @@
 		FE6362D92C5B01EC009AB470 /* MotionManagerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6362D82C5B01EC009AB470 /* MotionManagerService.swift */; };
 		FE69124B2DE9E2DE00985C87 /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE69124A2DE9E2DE00985C87 /* TimeInterval+Extension.swift */; };
 		FE6A03032E8022D900B6B83D /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6A03022E8022D900B6B83D /* KeyboardResponder.swift */; };
+		FE6A03072E8183A000B6B83D /* KeyboardAdaptiveModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6A03062E8183A000B6B83D /* KeyboardAdaptiveModifier.swift */; };
 		FE70E9EC2D4443CE002C0B7F /* ModelContainerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE70E9EB2D4443CE002C0B7F /* ModelContainerManager.swift */; };
 		FE70E9EF2D4D8384002C0B7F /* CategoryPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE70E9EE2D4D8384002C0B7F /* CategoryPopup.swift */; };
 		FE70E9F12D4F98F4002C0B7F /* CategoryPopupPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE70E9F02D4F98F4002C0B7F /* CategoryPopupPresenter.swift */; };
@@ -83,6 +84,7 @@
 		FE6362D82C5B01EC009AB470 /* MotionManagerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionManagerService.swift; sourceTree = "<group>"; };
 		FE69124A2DE9E2DE00985C87 /* TimeInterval+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extension.swift"; sourceTree = "<group>"; };
 		FE6A03022E8022D900B6B83D /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
+		FE6A03062E8183A000B6B83D /* KeyboardAdaptiveModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAdaptiveModifier.swift; sourceTree = "<group>"; };
 		FE70E9EB2D4443CE002C0B7F /* ModelContainerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelContainerManager.swift; sourceTree = "<group>"; };
 		FE70E9EE2D4D8384002C0B7F /* CategoryPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPopup.swift; sourceTree = "<group>"; };
 		FE70E9F02D4F98F4002C0B7F /* CategoryPopupPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPopupPresenter.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				FE73AA742DFC693F0092CD4C /* ConsecutiveDaysRecordManager.swift */,
 				FE42FA582E0980AC00123F2F /* AnalyticsManager.swift */,
 				FE6A03022E8022D900B6B83D /* KeyboardResponder.swift */,
+				FE6A03062E8183A000B6B83D /* KeyboardAdaptiveModifier.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -572,6 +575,7 @@
 				FE70E9F12D4F98F4002C0B7F /* CategoryPopupPresenter.swift in Sources */,
 				FE42FA592E0980AC00123F2F /* AnalyticsManager.swift in Sources */,
 				FEB840562998B6F900B945BA /* NowFocusApp.swift in Sources */,
+				FE6A03072E8183A000B6B83D /* KeyboardAdaptiveModifier.swift in Sources */,
 				FE8EAA322A0000BC0040FB07 /* Int+Extension.swift in Sources */,
 				FE70E9EC2D4443CE002C0B7F /* ModelContainerManager.swift in Sources */,
 				FEF885322C74BE63005A9198 /* TimerProgressRing.swift in Sources */,

@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
+// keyboardの高さをリアクティブに取得し保持する
 final class KeyboardResponder: ObservableObject {
     @Published var currentheight: CGFloat = 0
     // キーボードが表示される直前に送られる通知をCombine の Publisher として受け取れるようにしている
@@ -23,7 +24,8 @@ final class KeyboardResponder: ObservableObject {
     
     init() {
         keyboardWillShowNotification.map { notification in
-            CGFloat((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? 0 )
+            print("⌨️現れたキーボードの高さは：\(CGFloat((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? 0 ))")
+            return CGFloat((notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? 0 )
         }
         // currentHeight へUIResponder.keyboardFrameEndUserInfoKeyを流している
         .assign(to: \.currentheight, on: self)

@@ -97,10 +97,10 @@ struct TimerPage: View {
                 model.isHabitSettingPresented = false
               }
             }
+            .keyboardAdaptiveOffset(factor: 0.4)
             .transition(.scale.combined(with: .opacity))
           }
         }
-        
       }
     }
     .onAppear(perform: {
@@ -351,51 +351,6 @@ extension TimerPage {
           .shadow(color: .black.opacity(0.2), radius: 20, x: 0, y: 10)
       )
       .padding(.horizontal, 20 * multiplier)
-    }
-  }
-}
-
-// MARK: - CategoryPopup Handling
-extension TimerPageViewModel {
-  var categoryPopupDelegate: CategoryPopupDelegate {
-    CategoryPopupDelegateImpl(parent: self)
-  }
-  
-  class CategoryPopupDelegateImpl: @preconcurrency CategoryPopupDelegate {
-    private weak var parent: TimerPageViewModel?
-    
-    init(parent: TimerPageViewModel) {
-      self.parent = parent
-    }
-    
-    func updateCategoryList(categories: [String]) {
-      // カテゴリーリストの更新は CategoryPopupViewModel に任せる
-    }
-    
-    @MainActor func closePopup() {
-      parent?.isCategoryPopupPresented = false
-    }
-    
-    func showAddCategoryPopup() {
-      // 新規カテゴリー追加ポップアップの表示は CategoryPopupViewModel に任せる
-    }
-    
-    func hideAddCategoryPopup() {
-      // 新規カテゴリー追加ポップアップの非表示は CategoryPopupViewModel に任せる
-    }
-    
-    @MainActor func addCategory(name: String) {
-      parent?.selectedCategory = name
-      parent?.isCategoryPopupPresented = false
-    }
-    
-    @MainActor func didSelectCategory(name: String) {
-      parent?.selectedCategory = name
-      parent?.isCategoryPopupPresented = false
-    }
-    
-    @MainActor func removeCategoryFromHistory(category: String) {
-      // カテゴリーの削除は CategoryPopupViewModel に任せる
     }
   }
 }
