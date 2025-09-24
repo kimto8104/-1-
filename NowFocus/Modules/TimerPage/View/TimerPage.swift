@@ -85,12 +85,7 @@ struct TimerPage: View {
             // 背景を暗くする
             Color.black.opacity(0.5)
               .ignoresSafeArea()
-              .onTapGesture {
-                withAnimation(.easeInOut(duration: 0.3)) {
-                  model.isHabitSettingPresented = false
-                }
-              }
-            
+        
             // HabitSettingViewを中央に表示
             HabitSettingView {
               withAnimation(.easeInOut(duration: 0.3)) {
