@@ -18,33 +18,41 @@ import Foundation
 @MainActor
 class ModelContainerManager {
     static let shared = ModelContainerManager()
-    let container: ModelContainer?
+    let container: ModelContainer
+
     private init() {
         do {
-            container = try ModelContainer(for: FocusHistory.self)
+            // 保存対象の @Model をすべてスキーマに含める
+            container = try ModelContainer(for: FocusHistory.self, Habit.self)
         } catch {
-            print("Failed to save SwiftData at \(#line) Fix It")
-            container = nil
+            // コンテナ生成に失敗するのは設定不備など致命的な場合が多いため fail fast
+            fatalError("Failed to create SwiftData ModelContainer: \(error)")
         }
     }
     
     @MainActor func saveFocusHistory(history: FocusHistory) {
-        self.container?.mainContext.insert(history)
+        let context = container.mainContext
+        context.insert(history)
         do {
-            try self.container?.mainContext.save()
+            if context.hasChanges {
+                try context.save()
+            }
         } catch {
             print("ModelContainerManager: 保存失敗 - \(error)")
         }
     }
     
-    // カテゴリーを保存
+    // Habitを保存
     @MainActor func saveHabit(habit: Habit) {
         print("Habit保存開始：\(habit)")
-        self.container?.mainContext.insert(habit)
+        let context = container.mainContext
+        context.insert(habit)
         do {
-            try self.container?.mainContext.save()
+            if context.hasChanges {
+                try context.save()
+            }
         } catch {
-            print("Failed to save Habit")
+            print("ModelContainerManager: Habitの保存に失敗 - \(error)")
         }
     }
     
@@ -65,16 +73,19 @@ class ModelContainerManager {
             }
         )
         
+        let context = container.mainContext
         do {
-            let histories = try container?.mainContext.fetch(descriptor) ?? []
+            let histories = try context.fetch(descriptor)
             print("ModelContainerManager: 対象履歴数 - \(histories.count)")
             
             // 該当する履歴を完全に削除
             for history in histories {
-                container?.mainContext.delete(history)
+                context.delete(history)
             }
             // SwiftData保存
-            try container?.mainContext.save()
+            if context.hasChanges {
+                try context.save()
+            }
             print("ModelContainerManager: カテゴリー削除完了")
         } catch {
             print("ModelContainerManager: カテゴリー削除失敗 - \(error)")
