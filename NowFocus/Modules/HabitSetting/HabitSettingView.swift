@@ -48,7 +48,7 @@ class HabitSettingViewModel {
         let allHabits = ModelContainerManager.shared.fetchAllHabits()
         print("ALL Habits Count: \(allHabits.count)")
         for habit in allHabits {
-            print("Habit Name: \(habit.habitName)")
+            print("Habit Name: \(habit.name)")
         }
     }
     
