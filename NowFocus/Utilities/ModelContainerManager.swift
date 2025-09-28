@@ -52,7 +52,7 @@ class ModelContainerManager {
     
     // Habitを保存（失敗時はHabitSaveErrorへマッピングしてthrow）
     @MainActor func saveHabit(habit: Habit) throws {
-        print("Habit保存開始：\(habit.habitName)")
+        print("Habit保存開始：\(habit.name)")
         let context = container.mainContext
         context.insert(habit)
         do {
@@ -61,7 +61,7 @@ class ModelContainerManager {
             }
         } catch {
             // 保存に失敗した場合
-            let mapped = mapToHabitSaveError(from: error, habitName: habit.habitName)
+            let mapped = mapToHabitSaveError(from: error, habitName: habit.name)
             print("ModelContainerManager: Habitの保存に失敗 - \(error) -> mapped: \(mapped)")
             throw mapped
         }
@@ -79,42 +79,6 @@ class ModelContainerManager {
         }
     }
     
-    @MainActor func removeCategoryFromHistory(category: String) {
-        print("ModelContainerManager: カテゴリー削除開始 - \(category)")
-        
-        // UserDefaultsからカテゴリーを削除
-        var savedCategories = UserDefaultManager.savedCategories
-        // カテゴリーが一致すればUserDefaultから削除
-        savedCategories.removeAll { $0 == category }
-        // UserDefaultのカテゴリーを更新
-        UserDefaultManager.savedCategories = savedCategories
-        
-        // SwiftDataの該当カテゴリーの履歴を検索
-        let descriptor = FetchDescriptor<FocusHistory>(
-            predicate: #Predicate<FocusHistory> { history in
-                history.category == category
-            }
-        )
-        
-        let context = container.mainContext
-        do {
-            let histories = try context.fetch(descriptor)
-            print("ModelContainerManager: 対象履歴数 - \(histories.count)")
-            
-            // 該当する履歴を完全に削除
-            for history in histories {
-                context.delete(history)
-            }
-            // SwiftData保存
-            if context.hasChanges {
-                try context.save()
-            }
-            print("ModelContainerManager: カテゴリー削除完了")
-        } catch {
-            print("ModelContainerManager: カテゴリー削除失敗 - \(error)")
-        }
-    }
-    
     // MARK: - データ取得（全件）
     
     /// すべてのHabitを取得（名前順）
@@ -122,7 +86,7 @@ class ModelContainerManager {
     func fetchAllHabits() -> [Habit] {
         let context = container.mainContext
         let descriptor = FetchDescriptor<Habit>(
-            sortBy: [SortDescriptor(\.habitName, order: .forward)]
+            sortBy: [SortDescriptor(\.name, order: .forward)]
         )
         do {
             let result = try context.fetch(descriptor)
@@ -169,14 +133,13 @@ class ModelContainerManager {
         let habits = fetchAllHabits()
         print("Habit: \(habits.count)件")
         for (idx, h) in habits.enumerated() {
-            print("[Habit \(idx)] name=\(h.habitName), reason=\(h.reason ?? "nil")")
+            print("[Habit \(idx)] name=\(h.name), reason=\(h.reason ?? "nil")")
         }
         
         let histories = fetchAllFocusHistories()
         print("FocusHistory: \(histories.count)件")
         for (idx, fh) in histories.enumerated() {
-            let cat = fh.category ?? "nil"
-            print("[History \(idx)] start=\(fh.startDate), duration=\(fh.duration), category=\(cat)")
+            print("[History \(idx)] start=\(fh.startDate), duration=\(fh.duration)")
         }
         
         print("===== SwiftData Dump End =====")
