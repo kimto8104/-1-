@@ -11,7 +11,7 @@ import Observation
 
 @Observable
 class HabitSettingViewModel {
-    var categoryName: String = "" {
+    var habitName: String = "" {
         didSet {
             updateButtonState()
         }
@@ -23,16 +23,62 @@ class HabitSettingViewModel {
     }
     var isButtonEnabled: Bool = false
     
-    private func updateButtonState() {
-        isButtonEnabled = !categoryName.isEmpty
+    // エラー表示用
+    var saveError: HabitSaveError? = nil
+    var isShowingErrorAlert: Bool = false
+    
+    // UI向けのエラーメッセージ
+    var errorMessage: String {
+        guard let saveError else { return "" }
+        switch saveError {
+        case .duplicateHabitName(let name):
+            return "「\(name)」はすでに登録されています。別の名前を入力してください。"
+        case .unknown(let underlying):
+            // 必要に応じて underlying.localizedDescription を出さない（一般ユーザー向け）運用も可
+            return "保存中に不明なエラーが発生しました。時間をおいて再度お試しください。\n(\(underlying.localizedDescription))"
+        }
     }
     
+    private func updateButtonState() {
+        isButtonEnabled = !habitName.isEmpty
+    }
     
+    @MainActor
+    fileprivate func getAllHabits() {
+        let allHabits = ModelContainerManager.shared.fetchAllHabits()
+        print("ALL Habits Count: \(allHabits.count)")
+        for habit in allHabits {
+            print("Habit Name: \(habit.habitName)")
+        }
+    }
+    
+    @MainActor
+    @discardableResult
+    fileprivate func addHabit(name: String, reason: String?) -> Bool {
+        ModelContainerManager.shared.debugPrintAllData()
+        do {
+            try ModelContainerManager.shared.saveHabit(habit: Habit(habitName: name, reason: reason))
+            // 成功時はエラーをクリア
+            saveError = nil
+            isShowingErrorAlert = false
+            return true
+        } catch let e as HabitSaveError {
+            // 期待通りのドメインエラー
+            saveError = e
+            isShowingErrorAlert = true
+            return false
+        } catch {
+            // 念のためのフォールバック（通常は到達しない想定）
+            saveError = .unknown(underlying: error)
+            isShowingErrorAlert = true
+            return false
+        }
+    }
 }
 
 struct HabitSettingView: View {
     @State private var viewModel = HabitSettingViewModel()
-    @FocusState private var categoryNameFocused: Bool
+    @FocusState private var habitNameFocused: Bool
     @FocusState private var reasonFocused: Bool
     let onComplete: () -> Void // Created Habit
     
@@ -74,10 +120,10 @@ struct HabitSettingView: View {
                                 .fill(Color.blue)
                                 .frame(width: 8, height: 8)
                             
-                            TextField("ここに入力してください", text: $viewModel.categoryName)
+                            TextField("ここに入力してください", text: $viewModel.habitName)
                                 .font(.system(size: 16))
                                 .submitLabel(.done)
-                                .focused($categoryNameFocused)
+                                .focused($habitNameFocused)
                             
                             Image(systemName: "pencil")
                                 .foregroundColor(.gray)
@@ -90,7 +136,7 @@ struct HabitSettingView: View {
                                 .fill(Color.white)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .stroke(categoryNameFocused ? Color.blue : Color.gray.opacity(0.3), lineWidth: 2)
+                                        .stroke(habitNameFocused ? Color.blue : Color.gray.opacity(0.3), lineWidth: 2)
                                 )
                         )
                     }
@@ -124,7 +170,18 @@ struct HabitSettingView: View {
             
             // Register Button
             Button {
-                onComplete()
+                // Save Habit
+                let success = viewModel.addHabit(
+                    name: viewModel.habitName.trimmingCharacters(in: .whitespacesAndNewlines),
+                    reason: viewModel.reason.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                        ? nil
+                        : viewModel.reason.trimmingCharacters(in: .whitespacesAndNewlines)
+                )
+                
+                if success {
+                    viewModel.getAllHabits()
+                    onComplete()
+                }
             } label: {
                 HStack {
                     Image(systemName: "plus")
@@ -150,6 +207,12 @@ struct HabitSettingView: View {
         }
         .shadow(color: .black.opacity(0.2), radius: 20, x: 0, y: 10)
         .padding(.horizontal, 20)
+        // エラーアラート
+        .alert("登録できません", isPresented: $viewModel.isShowingErrorAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(viewModel.errorMessage)
+        }
     }
 }
 

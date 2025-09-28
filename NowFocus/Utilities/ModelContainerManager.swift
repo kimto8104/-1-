@@ -52,7 +52,7 @@ class ModelContainerManager {
     
     // Habitを保存（失敗時はHabitSaveErrorへマッピングしてthrow）
     @MainActor func saveHabit(habit: Habit) throws {
-        print("Habit保存開始：\(habit)")
+        print("Habit保存開始：\(habit.habitName)")
         let context = container.mainContext
         context.insert(habit)
         do {
@@ -60,6 +60,7 @@ class ModelContainerManager {
                 try context.save()
             }
         } catch {
+            // 保存に失敗した場合
             let mapped = mapToHabitSaveError(from: error, habitName: habit.habitName)
             print("ModelContainerManager: Habitの保存に失敗 - \(error) -> mapped: \(mapped)")
             throw mapped
@@ -112,6 +113,73 @@ class ModelContainerManager {
         } catch {
             print("ModelContainerManager: カテゴリー削除失敗 - \(error)")
         }
+    }
+    
+    // MARK: - データ取得（全件）
+    
+    /// すべてのHabitを取得（名前順）
+    @MainActor
+    func fetchAllHabits() -> [Habit] {
+        let context = container.mainContext
+        let descriptor = FetchDescriptor<Habit>(
+            sortBy: [SortDescriptor(\.habitName, order: .forward)]
+        )
+        do {
+            let result = try context.fetch(descriptor)
+            print("ModelContainerManager: Habit全件取得 - \(result.count)件")
+            return result
+        } catch {
+            print("ModelContainerManager: Habit全件取得に失敗 - \(error)")
+            return []
+        }
+    }
+    
+    /// すべてのFocusHistoryを取得（日付降順）
+    @MainActor
+    func fetchAllFocusHistories() -> [FocusHistory] {
+        let context = container.mainContext
+        let descriptor = FetchDescriptor<FocusHistory>(
+            sortBy: [SortDescriptor(\.startDate, order: .reverse)]
+        )
+        do {
+            let result = try context.fetch(descriptor)
+            print("ModelContainerManager: FocusHistory全件取得 - \(result.count)件")
+            return result
+        } catch {
+            print("ModelContainerManager: FocusHistory全件取得に失敗 - \(error)")
+            return []
+        }
+    }
+    
+    /// 任意の @Model タイプの全件取得（必要なら利用）
+    @MainActor
+    func fetchAll<T: PersistentModel>(_ type: T.Type) throws -> [T] {
+        let context = container.mainContext
+        let descriptor = FetchDescriptor<T>()
+        return try context.fetch(descriptor)
+    }
+    
+    // MARK: - デバッグ用ダンプ
+    
+    /// すべてのデータをログにダンプ出力（確認用）
+    @MainActor
+    func debugPrintAllData() {
+        print("===== SwiftData Dump Start =====")
+        
+        let habits = fetchAllHabits()
+        print("Habit: \(habits.count)件")
+        for (idx, h) in habits.enumerated() {
+            print("[Habit \(idx)] name=\(h.habitName), reason=\(h.reason ?? "nil")")
+        }
+        
+        let histories = fetchAllFocusHistories()
+        print("FocusHistory: \(histories.count)件")
+        for (idx, fh) in histories.enumerated() {
+            let cat = fh.category ?? "nil"
+            print("[History \(idx)] start=\(fh.startDate), duration=\(fh.duration), category=\(cat)")
+        }
+        
+        print("===== SwiftData Dump End =====")
     }
 }
 

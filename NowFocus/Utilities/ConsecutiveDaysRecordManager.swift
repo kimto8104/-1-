@@ -62,7 +62,7 @@ class ConsecutiveDaysRecordManager {
     )
     
     do {
-      let histories = try ModelContainerManager.shared.container?.mainContext.fetch(descriptor) ?? []
+        let histories = try ModelContainerManager.shared.container.mainContext.fetch(descriptor)
       
       print("ConsecutiveDaysRecordManager: 取得した履歴数: \(histories.count)")
       for (index, history) in histories.enumerated() {
@@ -160,7 +160,7 @@ class ConsecutiveDaysRecordManager {
     )
     
     do {
-      let histories = try ModelContainerManager.shared.container?.mainContext.fetch(descriptor) ?? []
+      let histories = try ModelContainerManager.shared.container.mainContext.fetch(descriptor)
       
       print("ConsecutiveDaysRecordManager: 全カテゴリー履歴取得数: \(histories.count)")
       for (index, history) in histories.enumerated() {
