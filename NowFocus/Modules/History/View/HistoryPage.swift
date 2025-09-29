@@ -51,10 +51,9 @@ struct HistoryPage: View {
     }
     .onAppear {
       print("HistoryPage: onAppear - 履歴数: \(allHistory.count)")
-      print("HistoryPage: カテゴリー一覧: \(allHistory.compactMap { $0.category })")
       print("HistoryPage: 履歴の詳細:")
       for (index, history) in allHistory.enumerated() {
-        print("HistoryPage: 履歴\(index + 1) - 日付: \(history.startDate), カテゴリー: \(history.category ?? "nil"), 時間: \(history.duration)")
+        print("HistoryPage: 履歴\(index + 1) - 日付: \(history.startDate), 時間: \(history.duration)")
       }
       viewModel.updateHistory(with: allHistory)
       
@@ -160,25 +159,6 @@ struct HistoryPage: View {
             }
           }
         }
-        
-        ForEach(Array(viewModel.categoryDurations.keys.sorted()), id: \.self) { category in
-          Button {
-            viewModel.selectCategory(category)
-            showingCategoryList = false
-          } label: {
-            HStack {
-              Text(category)
-                .font(.system(size: 16 * multiplier))
-                .foregroundColor(Color(hex: "#495057")!)
-              Spacer()
-              if viewModel.selectedCategory == category {
-                Image(systemName: "checkmark")
-                  .foregroundColor(Color(hex: "#339AF0")!)
-              }
-            }
-          }
-        }
-        .onDelete(perform: viewModel.deleteCategory)
       }
       
       .listStyle(InsetGroupedListStyle())
@@ -234,7 +214,6 @@ class HistoryViewModel: ObservableObject {
     print("HistoryViewModel: 現在の選択カテゴリー: \(selectedCategory ?? "nil")")
     
     self.allHistory = history
-    updateCategoryDurations()
     updateConsecutiveDays()
     
     // 選択中のカテゴリーが削除されていた場合、選択を解除
@@ -245,37 +224,10 @@ class HistoryViewModel: ObservableObject {
     }
   }
   
-  private func updateCategoryDurations() {
-    print("HistoryViewModel: updateCategoryDurations開始")
-    var durations: [String: TimeInterval] = [:]
-    
-    for history in allHistory {
-      if let category = history.category {  // nilの場合は集計しない
-        durations[category, default: 0] += history.duration
-        print("HistoryViewModel: カテゴリー '\(category)' に \(history.duration)秒 を追加")
-      } else {
-        print("HistoryViewModel: カテゴリーがnilの履歴をスキップ - 日付: \(history.startDate)")
-      }
-    }
-    
-    print("HistoryViewModel: カテゴリー集計結果: \(durations)")
-    categoryDurations = durations
-  }
-  
   private func updateConsecutiveDays() {
     Task { @MainActor in
       print("HistoryViewModel: updateConsecutiveDays開始")
       print("HistoryViewModel: 選択中のカテゴリー: \(selectedCategory ?? "nil")")
-      
-      if let selectedCategory = selectedCategory {
-        print("HistoryViewModel: カテゴリー別連続日数を取得中...")
-        consecutiveDays = ConsecutiveDaysRecordManager.shared.getCurrentFocusStreakByCategory(selectedCategory)
-        print("HistoryViewModel: カテゴリー別連続日数: \(consecutiveDays)")
-      } else {
-        print("HistoryViewModel: 全カテゴリー連続日数を取得中...")
-        consecutiveDays = ConsecutiveDaysRecordManager.shared.getTotalConsecutiveFocusDays()
-        print("HistoryViewModel: 全カテゴリー連続日数: \(consecutiveDays)")
-      }
       // 連続日数が更新されたらアニメーションを開始
       startNumberAnimation()
     }
@@ -302,30 +254,6 @@ class HistoryViewModel: ObservableObject {
     
     selectedCategory = category
     updateConsecutiveDays()  // カテゴリー変更時に連続日数を更新
-  }
-  
-  @MainActor func deleteCategory(at offsets: IndexSet) {
-    // 1. まずcategoryDurationsから即座に削除
-    let categories = Array(categoryDurations.keys.sorted())
-    for index in offsets {
-      let category = categories[index]
-      categoryDurations.removeValue(forKey: category)
-      if selectedCategory == category {
-        selectedCategory = nil
-      }
-    }
-    updateConsecutiveDays()
-    // 2. 履歴データの更新は非同期で遅らせる
-    DispatchQueue.main.async {
-      for index in offsets {
-        let category = categories[index]
-        ModelContainerManager.shared.removeCategoryFromHistory(category: category)
-      }
-      // 少し遅らせてViewModelを再計算
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-        self.updateHistory(with: self.allHistory)
-      }
-    }
   }
   
   // アニメーションを開始するメソッド

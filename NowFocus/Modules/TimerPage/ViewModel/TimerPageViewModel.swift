@@ -203,8 +203,6 @@ extension TimerPageViewModel {
   func updateShowCelebrationPopup(show: Bool) {
     withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
       showCelebrationPopup = show
-      // 選択されているカテゴリーの連続集中日数を取得
-      consecutiveDays = ConsecutiveDaysRecordManager.shared.getCurrentFocusStreakByCategory(selectedCategory)
       
       // 連続日数達成時にAnalyticsイベントを送信
       if show && consecutiveDays > 0 {
@@ -269,42 +267,7 @@ extension TimerPageViewModel {
     FocusHistoryDataManager.shared.saveFocusHistoryData(
       startDate: startDate,
       duration: duration,
-      category: selectedCategory
+      habit: Habit(habitName: "Test")
     )
-  }
-  
-  // モックデータを生成して保存するメソッド
-  func saveMockDataHistory() {
-    // 過去30日分のランダムなデータを生成
-    let numberOfRecords = Int.random(in: 5...15) // 5〜15件のレコードを生成
-    let categories = ["勉強", "読書", "プログラミング", "運動", "瞑想", "作業", "趣味"]
-    
-    for _ in 0..<numberOfRecords {
-      // 過去30日以内のランダムな日時を生成
-      let randomDaysAgo = Int.random(in: 0...30)
-      let randomHoursAgo = Int.random(in: 0...23)
-      let randomMinutesAgo = Int.random(in: 0...59)
-      
-      let startDate = Calendar.current.date(
-        byAdding: .day,
-        value: -randomDaysAgo,
-        to: Date()
-      )?.addingTimeInterval(
-        TimeInterval(-(randomHoursAgo * 3600 + randomMinutesAgo * 60))
-      ) ?? Date()
-      
-      // 1分〜60分のランダムな集中時間を生成
-      let duration = TimeInterval(Int.random(in: 60...3600))
-      
-      // ランダムなカテゴリーを選択（30%の確率でnil）
-      let category = Double.random(in: 0...1) < 0.3 ? nil : categories.randomElement()
-      
-      // データを保存
-      FocusHistoryDataManager.shared.saveFocusHistoryData(
-        startDate: startDate,
-        duration: duration,
-        category: category
-      )
-    }
   }
 }
