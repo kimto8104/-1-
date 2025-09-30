@@ -30,31 +30,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     )
     application.registerForRemoteNotifications()
     
-    // 音声認識の許可を要求
-    requestSpeechAuthorization()
     
     return true
   }
   
-  // 音声認識の権限を要求
-  private func requestSpeechAuthorization() {
-    SFSpeechRecognizer.requestAuthorization { authStatus in
-      DispatchQueue.main.async {
-        switch authStatus {
-        case .authorized:
-          print("✅ Speech recognition authorized")
-        case .denied:
-          print("❌ Speech recognition denied")
-        case .restricted:
-          print("⚠️ Speech recognition restricted")
-        case .notDetermined:
-          print("❓ Speech recognition not determined")
-        @unknown default:
-          print("❓ Speech recognition unknown status")
-        }
-      }
-    }
-  }
   
   // APNsからデバイストークンが取得できた場合に呼ばれる
   func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
