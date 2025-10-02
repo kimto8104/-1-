@@ -108,21 +108,5 @@ extension UserDefaultManager {
 //  }
 }
 
-// MARK: Category
-extension UserDefaultManager {
-  // カテゴリーリストの取得・保存
-  static var savedCategories: [String] {
-    get {
-      if let data = UserDefaults.standard.array(forKey: #function) as? [String] {
-        return data
-      }
-      // データがない場合はローカライズキーを返す
-      return ["reading"]
-    }
-    set {
-      UserDefaults.standard.set(newValue, forKey: #function)
-    }
-  }
-}
 
 

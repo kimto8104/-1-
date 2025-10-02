@@ -54,20 +54,6 @@ struct TimerPage: View {
           }
         }
         
-        // カテゴリーポップアップ
-        if model.isCategoryPopupPresented {
-          CategoryPopup(
-            onCategorySelect: { category in
-              model.selectedCategory = category
-              model.isCategoryPopupPresented = false
-            },
-            onDismiss: {
-              model.isCategoryPopupPresented = false
-            }
-          )
-          .opacity(model.isCategoryPopupPresented ? 1 : 0)
-        }
-        
         // 連続日数お祝いポップアップ
         if model.showCelebrationPopup {
           CelebrationPopupView(
@@ -91,6 +77,7 @@ struct TimerPage: View {
               withAnimation(.easeInOut(duration: 0.3)) {
                 model.isHabitSettingPresented = false
               }
+              model.onHabitSettingCompleted()
             }
             .keyboardAdaptiveOffset(factor: 0.4)
             .transition(.scale.combined(with: .opacity))
@@ -178,9 +165,9 @@ extension TimerPage {
           .font(.system(size: 40 * multiplier, weight: .medium, design: .monospaced))
           .monospacedDigit() // 数字が等幅になるように
         
-        // 追加集中時間モードの場合は「継続中」と表示
+        // 追加集中時間モードの場合はHabit名を表示
         if model.continueFocusingMode {
-          Text("継続中")
+          Text(model.currentHabitName.isEmpty ? "継続中" : model.currentHabitName)
             .foregroundColor(Color(hex: "#339AF0")!)
             .font(.system(size: 16 * multiplier, weight: .medium))
         }

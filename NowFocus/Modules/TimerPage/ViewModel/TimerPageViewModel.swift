@@ -32,11 +32,10 @@ class TimerPageViewModel: ObservableObject {
   @Published var isInstructionTextPulsing: Bool = false // instructionText用の点滅アニメーション
   // Category
   @Published var isCategoryPopupPresented = false
-  var categoryPopup: CategoryPopup?  // モジュールをここで保持
-  @Published var selectedCategory: String = UserDefaultManager.savedCategories.first ?? "reading"
   
   // HabitSetting
   @Published var isHabitSettingPresented = false
+  @Published var currentHabitName: String = ""
   
   // お祝いポップアップ関連のプロパティ
   @Published var showCelebrationPopup = false
@@ -45,8 +44,7 @@ class TimerPageViewModel: ObservableObject {
   init(motionManagerService: MotionManagerService, timerService: TimerService) {
     self.motionManagerService = motionManagerService
     self.timerService = timerService
-    print("TimerPageViewModel init - savedCategories: \(UserDefaultManager.savedCategories)")
-    print("TimerPageViewModel init - selectedCategory: \(selectedCategory)")
+    loadCurrentHabit()
     startObserving()
   }
   
@@ -55,6 +53,15 @@ class TimerPageViewModel: ObservableObject {
     observeDisplayTime()
     observeFaceDownState()
     observeSelectedTab()
+  }
+  
+  private func loadCurrentHabit() {
+    let habits = ModelContainerManager.shared.fetchAllHabits()
+    if let firstHabit = habits.first {
+      currentHabitName = firstHabit.name
+    } else {
+      currentHabitName = ""
+    }
   }
   
   private func observeFaceDownState() {
@@ -116,7 +123,6 @@ class TimerPageViewModel: ObservableObject {
   private func handleDeviceOrientationChange(isFaceDown: Bool) {
     if isFaceDown {
       timerService.startTimer()
-      AnalyticsManager.shared.logTimerStart(category: selectedCategory)
       if timerService.timerState == .focusing || timerService.timerState == .continueFocusing {
         UIApplication.shared.isIdleTimerDisabled = true
       }
@@ -130,7 +136,6 @@ class TimerPageViewModel: ObservableObject {
         // 失敗画面を出す
         // 集中失敗時にAnalyticsイベントを送信
         let remainingTime = timerService.getTotalFocusTime()
-        AnalyticsManager.shared.logTimerCancel(duration: remainingTime, category: selectedCategory)
       case .continueFocusing:
         // 追加集中時間中に上向きになった場合&タイマー完了した時は結果を表示
         let totalTime = timerService.getTotalFocusTime()
@@ -140,8 +145,6 @@ class TimerPageViewModel: ObservableObject {
         ConsecutiveDaysRecordManager.shared.recordFocusSession()
         updateShowCelebrationPopup(show: true)
         
-        // 集中完了時にAnalyticsイベントを送信
-        AnalyticsManager.shared.logFocusSessionComplete(duration: totalTime, category: selectedCategory)
       default: break
       }
       // MotionMangerの判定を止める
@@ -170,11 +173,6 @@ class TimerPageViewModel: ObservableObject {
     print("instruction pulse: \(self.isInstructionTextPulsing)")
     // パルスアニメーションを開始
     self.isPulsating = true
-  }
-  
-  func updateSelectedCategory(_ category: String) {
-    self.selectedCategory = category
-    hideCategoryPopup()
   }
 }
 
@@ -233,28 +231,9 @@ extension TimerPageViewModel {
     self.continueFocusingMode = false
     motionManagerService.startMonitoringDeviceMotion()
   }
-}
-
-// MARK: Category
-extension TimerPageViewModel {
-  func tapCategorySelectionButton() {
-    print("tapCategorySelectionButton - current categories: \(UserDefaultManager.savedCategories)")
-    print("tapCategorySelectionButton - selectedCategory: \(selectedCategory)")
-    showCategoryPopup()
-  }
   
-  func showCategoryPopup() {
-    withAnimation(.easeInOut(duration: 0.2)) {
-      self.isCategoryPopupPresented = true
-    }
-  }
-  
-  func hideCategoryPopup() {
-    print("hideCategoryPopup呼び出し")
-    withAnimation(.easeInOut(duration: 0.2)) {
-      self.isCategoryPopupPresented = false
-      print("isCategoryPopupPresented解除: \(self.isCategoryPopupPresented)")
-    }
+  func onHabitSettingCompleted() {
+    loadCurrentHabit()
   }
 }
 

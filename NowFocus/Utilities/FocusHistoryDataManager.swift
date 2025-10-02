@@ -18,7 +18,6 @@ class FocusHistoryDataManager {
   /// - Parameters:
   ///   - startDate: 開始日付
   ///   - duration: 集中時間
-  ///   - category: カテゴリー（任意）
   ///   - habit: 紐づける親 Habit（必須）
   func saveFocusHistoryData(startDate: Date, duration: TimeInterval, habit: Habit) {
     let focusHistory = FocusHistory(
