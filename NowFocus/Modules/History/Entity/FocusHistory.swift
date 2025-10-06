@@ -17,7 +17,6 @@ class FocusHistory {
     // 集中時間
     var duration: TimeInterval
     // 紐づくHabit（逆参照は Habit 側で指定済み）
-    @Relationship
     var habit: Habit
     
     init(startDate: Date, duration: TimeInterval, habit: Habit) {

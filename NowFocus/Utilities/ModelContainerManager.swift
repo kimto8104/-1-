@@ -11,6 +11,7 @@
 /// - Habitの保存（saveHabit / saveHabitReturningErrorType）
 /// - カテゴリーの削除とそれに関連する履歴の更新（removeCategoryFromHistory）
 /// - SwiftDataのコンテナとコンテキストの管理
+/// - デバッグ用の全データ削除（debugDeleteAllData）
 /// シングルトンパターンを採用しており、アプリケーション全体で一つのインスタンスを共有します。
 
 import SwiftData
@@ -144,6 +145,41 @@ class ModelContainerManager {
         
         print("===== SwiftData Dump End =====")
     }
+    
+    // MARK: - デバッグ用 全データ削除
+    
+    /// デバッグ用途: SwiftDataに保存されている全データ（FocusHistory, Habit）を削除します。
+    /// 注意: 本番利用は想定していません。呼び出し側でユーザー確認を行ってください。
+    #if DEBUG
+    @MainActor
+    func debugDeleteAllData() {
+        let context = container.mainContext
+        do {
+            // 1) 先に履歴を削除（リレーションがある場合の整合性を考慮）
+            let allHistories = try context.fetch(FetchDescriptor<FocusHistory>())
+            for h in allHistories {
+                context.delete(h)
+            }
+            
+            // 2) 次にHabitを削除
+            let allHabits = try context.fetch(FetchDescriptor<Habit>())
+            for h in allHabits {
+                context.delete(h)
+            }
+            
+            if context.hasChanges {
+                try context.save()
+            }
+            print("ModelContainerManager: デバッグ全データ削除 完了 (Histories: \(allHistories.count), Habits: \(allHabits.count))")
+        } catch {
+            print("ModelContainerManager: デバッグ全データ削除 失敗 - \(error)")
+        }
+    }
+    #else
+    @available(*, unavailable, message: "debugDeleteAllData is only available in Debug builds.")
+    @MainActor
+    func debugDeleteAllData() { }
+    #endif
 }
 
 // NSErrorを解析してHabitSaveErrorへマッピング（UI文言はここで作らない）

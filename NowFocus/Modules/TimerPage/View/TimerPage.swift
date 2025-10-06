@@ -66,7 +66,7 @@ struct TimerPage: View {
         }
         
         // HabitSettingView - 中央表示
-        if model.isHabitSettingPresented {
+        if !model.isHabitAlreadyExist {
           ZStack {
             // 背景を暗くする
             Color.black.opacity(0.5)
@@ -75,7 +75,7 @@ struct TimerPage: View {
             // HabitSettingViewを中央に表示
             HabitSettingView {
               withAnimation(.easeInOut(duration: 0.3)) {
-                model.isHabitSettingPresented = false
+                model.isHabitAlreadyExist = true
               }
               model.onHabitSettingCompleted()
             }
@@ -83,6 +83,29 @@ struct TimerPage: View {
             .transition(.scale.combined(with: .opacity))
           }
         }
+        
+        // DEBUG専用: 全データ削除ボタン
+        #if DEBUG
+        VStack {
+          HStack {
+            Spacer()
+            Button {
+              model.deleteAllDataForDebug()
+            } label: {
+              Text("Delete All Data")
+                .font(.system(size: 12, weight: .semibold))
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(Color.red.opacity(0.9))
+                .foregroundColor(.white)
+                .cornerRadius(8)
+            }
+            .padding(.top, 50 * multiplier)
+            .padding(.trailing, 20)
+          }
+          Spacer()
+        }
+        #endif
       }
     }
     .onAppear(perform: {
@@ -95,7 +118,7 @@ struct TimerPage: View {
       // TimerPageが表示された時にHabitSettingViewを表示
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
         withAnimation(.easeInOut(duration: 0.3)) {
-          model.isHabitSettingPresented = true
+          model.isHabitAlreadyExist = true
         }
       }
     })
@@ -166,11 +189,10 @@ extension TimerPage {
           .monospacedDigit() // 数字が等幅になるように
         
         // 追加集中時間モードの場合はHabit名を表示
-        if model.continueFocusingMode {
-          Text(model.currentHabitName.isEmpty ? "継続中" : model.currentHabitName)
-            .foregroundColor(Color(hex: "#339AF0")!)
-            .font(.system(size: 16 * multiplier, weight: .medium))
-        }
+        
+          Text(model.currentHabitName)
+              .foregroundStyle(.red)
+              .font(.system(size: 20 * multiplier, weight: .medium))
       }
     }
   }
