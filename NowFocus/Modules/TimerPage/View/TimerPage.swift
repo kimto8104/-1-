@@ -80,7 +80,7 @@ struct TimerPage: View {
               model.onHabitSettingCompleted()
             }
             .keyboardAdaptiveOffset(factor: 0.4)
-            .transition(.scale.combined(with: .opacity))
+            .transition(AnyTransition.scale.combined(with: AnyTransition.opacity))
           }
         }
         
@@ -131,6 +131,11 @@ struct TimerPage: View {
     } message: {
       Text("１分始めることが大事")
     }
+    .sheet(isPresented: $model.isShowingHabitSettings, onDismiss: {
+      model.onHabitSettingCompleted()
+    }) {
+      HabitEditView()
+    }
   } // body ここまで
 }
 
@@ -143,7 +148,7 @@ extension TimerPage {
           .environmentObject(model)
       } else if model.showFailedView {
         failedPage(gp: gp, multiplier: multiplier)
-          .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))
+          .transition(.asymmetric(insertion: .scale(scale: 0.95).combined(with: .opacity), removal: .opacity))
       } else if model.showResultView {
         // resultViewの代わりに空のViewを表示
         Color.clear
@@ -198,21 +203,46 @@ extension TimerPage {
   }
   
   func instructionText(gp: GeometryProxy, multiplier: CGFloat) -> some View {
-    HStack {
-      Image(systemName: "arrow.turn.down.right")
-        .font(.system(size: 16 * multiplier))
-        .foregroundColor(Color(hex: "#228BE6")!)
+    VStack(spacing: 16 * multiplier) {
+      // 設定ボタン
+      Button {
+        model.isShowingHabitSettings = true
+      } label: {
+        HStack {
+          Image(systemName: "gearshape.fill")
+            .font(.system(size: 14 * multiplier))
+            .foregroundColor(Color(hex: "#228BE6")!)
+          
+          Text("習慣を管理")
+            .font(.system(size: 14 * multiplier, weight: .medium))
+            .foregroundColor(Color(hex: "#228BE6")!)
+        }
+        .padding(.horizontal, 16 * multiplier)
+        .padding(.vertical, 10 * multiplier)
+        .background(
+          RoundedRectangle(cornerRadius: 10 * multiplier)
+            .fill(Color.white)
+            .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.15), radius: 4, x: 0, y: 2)
+        )
+      }
       
-      Text("画面を下向きにしてタイマーを開始")
-        .font(.custom("IBM Plex Mono", size: 16 * multiplier))
-        .foregroundColor(Color(hex: "#495057")!)
+      // タイマー開始インストラクション
+      HStack {
+        Image(systemName: "arrow.turn.down.right")
+          .font(.system(size: 16 * multiplier))
+          .foregroundColor(Color(hex: "#228BE6")!)
+        
+        Text("画面を下向きにしてタイマーを開始")
+          .font(.custom("IBM Plex Mono", size: 16 * multiplier))
+          .foregroundColor(Color(hex: "#495057")!)
+      }
+      .padding(.horizontal, 20 * multiplier)
+      .padding(.vertical, 12 * multiplier)
+      .background(
+        RoundedRectangle(cornerRadius: 12 * multiplier)
+          .fill(Color(hex: "#F1F3F5")!)
+      )
     }
-    .padding(.horizontal, 20 * multiplier)
-    .padding(.vertical, 12 * multiplier)
-    .background(
-      RoundedRectangle(cornerRadius: 12 * multiplier)
-        .fill(Color(hex: "#F1F3F5")!)
-    )
   }
   
 
@@ -383,3 +413,4 @@ extension TimerPage {
   TimerPage()
     .environment(\.locale, .init(identifier: "vi"))
 }
+

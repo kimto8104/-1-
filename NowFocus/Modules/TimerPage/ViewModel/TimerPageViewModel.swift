@@ -36,6 +36,7 @@ class TimerPageViewModel: ObservableObject {
     // HabitSetting
     @Published var isHabitAlreadyExist = false
     @Published var currentHabitName: String = ""
+    @Published var isShowingHabitSettings = false
     
     // お祝いポップアップ関連のプロパティ
     @Published var showCelebrationPopup = false
