@@ -21,6 +21,7 @@ import SwiftData
 // MARK: - View
 struct TimerPage: View {
   @StateObject var model = TimerPageViewModel(motionManagerService: MotionManagerService(), timerService: TimerService(initialTime: 1))
+  @State private var isShowingSettings = false
   
   var body: some View {
     GeometryReader { gp in
@@ -136,24 +137,42 @@ struct TimerPage: View {
     }) {
       HabitEditView()
     }
+    .sheet(isPresented: $isShowingSettings) {
+      SettingsView()
+    }
   } // body ここまで
 }
 
 // MARK: Private CurrentView
 extension TimerPage {
   private func currentView(gp: GeometryProxy, multiplier: CGFloat) -> some View {
-    Group {
-      if model.selectedTab == .Clock {
-        HistoryPage()
-          .environmentObject(model)
-      } else if model.showFailedView {
-        failedPage(gp: gp, multiplier: multiplier)
-          .transition(.asymmetric(insertion: .scale(scale: 0.95).combined(with: .opacity), removal: .opacity))
-      } else if model.showResultView {
-        // resultViewの代わりに空のViewを表示
-        Color.clear
-      } else {
-        timerView(gp: gp, multiplier: multiplier)
+    ZStack(alignment: .topTrailing) {
+      Group {
+        if model.selectedTab == .Clock {
+          HistoryPage()
+            .environmentObject(model)
+        } else if model.showFailedView {
+          failedPage(gp: gp, multiplier: multiplier)
+            .transition(.asymmetric(insertion: .scale(scale: 0.95).combined(with: .opacity), removal: .opacity))
+        } else if model.showResultView {
+          // resultViewの代わりに空のViewを表示
+          Color.clear
+        } else {
+          timerView(gp: gp, multiplier: multiplier)
+        }
+      }
+      
+      // 設定ボタン (TimerView表示時のみ)
+      if model.selectedTab == .Home && !model.showFailedView && !model.showResultView {
+        Button {
+          isShowingSettings = true
+        } label: {
+          Image(systemName: "gearshape.fill")
+            .font(.system(size: 24 * multiplier))
+            .foregroundColor(Color(hex: "#ADB5BD")!)
+            .padding(20 * multiplier)
+        }
+        .padding(.top, 40 * multiplier) // ステータスバー分
       }
     }
   }

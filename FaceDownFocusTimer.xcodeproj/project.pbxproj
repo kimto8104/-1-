@@ -39,6 +39,8 @@
 		FE8A06BD2D0FA10100F9F206 /* GradientBackgroundUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8A06BC2D0FA10100F9F206 /* GradientBackgroundUtil.swift */; };
 		FE8EAA322A0000BC0040FB07 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8EAA312A0000BC0040FB07 /* Int+Extension.swift */; };
 		FE8EAA352A00C9910040FB07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8EAA342A00C9910040FB07 /* AppDelegate.swift */; };
+		FE9220262ECF5212003C64ED /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9220252ECF5212003C64ED /* NotificationManager.swift */; };
+		FE92202F2ECF5600003C64ED /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE92202E2ECF5600003C64ED /* SettingsView.swift */; };
 		FE9ADB672D2D4F930036EA85 /* FocusHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9ADB662D2D4F930036EA85 /* FocusHistory.swift */; };
 		FE9E9AC22E52095B007DBA1C /* HabitSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9E9AC12E52095B007DBA1C /* HabitSettingView.swift */; };
 		FEB14FFC2C6B9F020011F32A /* MotionServiceWithInitialAttitude.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB14FFB2C6B9F020011F32A /* MotionServiceWithInitialAttitude.swift */; };
@@ -91,6 +93,8 @@
 		FE8EAA332A00C2DC0040FB07 /* NowFocus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NowFocus.entitlements; sourceTree = "<group>"; };
 		FE8EAA342A00C9910040FB07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FE8EAA362A00CC3C0040FB07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		FE9220252ECF5212003C64ED /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		FE92202E2ECF5600003C64ED /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		FE9ADB662D2D4F930036EA85 /* FocusHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusHistory.swift; sourceTree = "<group>"; };
 		FE9E9AC12E52095B007DBA1C /* HabitSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitSettingView.swift; sourceTree = "<group>"; };
 		FEB14FFB2C6B9F020011F32A /* MotionServiceWithInitialAttitude.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionServiceWithInitialAttitude.swift; sourceTree = "<group>"; };
@@ -139,6 +143,7 @@
 				FE42FA582E0980AC00123F2F /* AnalyticsManager.swift */,
 				FE6A03022E8022D900B6B83D /* KeyboardResponder.swift */,
 				FE6A03062E8183A000B6B83D /* KeyboardAdaptiveModifier.swift */,
+				FE9220252ECF5212003C64ED /* NotificationManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -217,6 +222,7 @@
 		FE5825D02C4D4843007AB552 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				FE92202D2ECF55F1003C64ED /* Settings */,
 				FE9E9AC02E520938007DBA1C /* HabitSetting */,
 				FE4C1BAC2E2FC63A001180BA /* Calendar */,
 				FE73AA712DFC5C580092CD4C /* ConsecutiveDaysCelebrationPopup */,
@@ -235,8 +241,6 @@
 			children = (
 				FEC011672DDDF7F10047AC58 /* TimerService */,
 				FEC011642DDDF3760047AC58 /* ViewModel */,
-				FEC011632DDDF3700047AC58 /* Model */,
-				FE5825D62C4D48A6007AB552 /* Entity */,
 				FE5825D42C4D4895007AB552 /* Presenter */,
 				FE5825D32C4D488F007AB552 /* Interactor */,
 				FE5825D22C4D4886007AB552 /* View */,
@@ -269,13 +273,6 @@
 			path = Presenter;
 			sourceTree = "<group>";
 		};
-		FE5825D62C4D48A6007AB552 /* Entity */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Entity;
-			sourceTree = "<group>";
-		};
 		FE6A03082E841B0200B6B83D /* Entitiy */ = {
 			isa = PBXGroup;
 			children = (
@@ -300,6 +297,14 @@
 				FE69124A2DE9E2DE00985C87 /* TimeInterval+Extension.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		FE92202D2ECF55F1003C64ED /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				FE92202E2ECF5600003C64ED /* SettingsView.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		FE9ADB642D2D4CF40036EA85 /* Entity */ = {
@@ -372,13 +377,6 @@
 				FEB8405C2998B6FA00B945BA /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		FEC011632DDDF3700047AC58 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		FEC011642DDDF3760047AC58 /* ViewModel */ = {
@@ -534,6 +532,7 @@
 				FE847DEA2E96987400490A64 /* HabitEditView.swift in Sources */,
 				FE69124B2DE9E2DE00985C87 /* TimeInterval+Extension.swift in Sources */,
 				FE8EAA352A00C9910040FB07 /* AppDelegate.swift in Sources */,
+				FE92202F2ECF5600003C64ED /* SettingsView.swift in Sources */,
 				FE11013F2CE9729600C833C1 /* CustomAlert.swift in Sources */,
 				FE9E9AC22E52095B007DBA1C /* HabitSettingView.swift in Sources */,
 				FEC011662DDDF39B0047AC58 /* TimerPageViewModel.swift in Sources */,
@@ -558,6 +557,7 @@
 				FEF885322C74BE63005A9198 /* TimerProgressRing.swift in Sources */,
 				FE6A030A2E841B2700B6B83D /* Habit.swift in Sources */,
 				FE1100412CDBAFA200C833C1 /* UserDefaultManager.swift in Sources */,
+				FE9220262ECF5212003C64ED /* NotificationManager.swift in Sources */,
 				FE1101442CEAABF100C833C1 /* FloatingBottomSheet.swift in Sources */,
 				FE4D27B12D1B832D00962E92 /* TabBar.swift in Sources */,
 				FE8A06BD2D0FA10100F9F206 /* GradientBackgroundUtil.swift in Sources */,
