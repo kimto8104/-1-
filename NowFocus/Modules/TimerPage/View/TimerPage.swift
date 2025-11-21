@@ -22,7 +22,6 @@ import SwiftData
 struct TimerPage: View {
   @StateObject var model = TimerPageViewModel(motionManagerService: MotionManagerService(), timerService: TimerService(initialTime: 1))
   @State private var isShowingSettings = false
-  
   @State private var isShowingNotificationSettings = false
   
   var body: some View {
@@ -175,7 +174,7 @@ extension TimerPage {
         Button {
           isShowingSettings = true
         } label: {
-          Image(systemName: "bell.fill")
+          Image(systemName: "gearshape.fill")
             .font(.system(size: 24 * multiplier))
             .foregroundColor(Color(hex: "#ADB5BD")!)
             .padding(20 * multiplier)
