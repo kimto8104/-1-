@@ -20,7 +20,7 @@ struct NotificationHalfModalSettingView: View {
     
     var body: some View {
         ZStack {
-            Color(UIColor.systemGroupedBackground)
+            (Color(hex: "#EAF2F8") ?? .white)
                 .ignoresSafeArea()
             
             VStack(alignment: .leading, spacing: 24) {
@@ -61,7 +61,7 @@ struct NotificationHalfModalSettingView: View {
                     DatePicker("", selection: $notificationTime, displayedComponents: .hourAndMinute)
                         .labelsHidden()
                         .frame(width: 120, height: 50)
-                        .background(Color.white)
+                        .background(Color(hex: "#EAF2F8") ?? .white)
                         .cornerRadius(12)
                         .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
                         .overlay(
@@ -88,18 +88,17 @@ struct NotificationHalfModalSettingView: View {
                 Button(action: saveSettings) {
                     Text("保存")
                         .font(.headline)
-                        .foregroundColor(.white)
+                        .fontWeight(.bold)
+                        .foregroundColor(.primary)
                         .frame(maxWidth: .infinity)
                         .frame(height: 56)
-                        .background(Color(hex: "#607D8B") ?? .blue)
-                        .cornerRadius(16)
-                        .shadow(color: (Color(hex: "#607D8B") ?? .blue).opacity(0.3), radius: 10, x: 0, y: 5)
                 }
+                .buttonStyle(NeumorphicButtonStyle())
                 .padding(.bottom, 20)
                 
             }
             .padding(24)
-            .background(Color.white)
+            .background(Color(hex: "#EAF2F8") ?? .white)
             .cornerRadius(24)
             .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 10)
             .padding()
@@ -159,34 +158,65 @@ private struct ModalDayButton: View {
             Text(title)
                 .font(.subheadline)
                 .fontWeight(.bold)
-                .foregroundColor(isSelected ? .primary : .gray)
+                .foregroundColor(isSelected ? .primary : .gray.opacity(0.5))
                 .frame(width: 40, height: 40)
                 .background(
                     Group {
                         if isSelected {
                             ZStack {
                                 Circle()
-                                    .fill(Color.white)
+                                    .fill(Color(hex: "#EAF2F8") ?? .white)
                                 Circle()
-                                    .stroke(Color.gray.opacity(0.2), lineWidth: 4)
+                                    .stroke(Color.gray.opacity(0.6), lineWidth: 4)
                                     .blur(radius: 4)
-                                    .offset(x: 2, y: 2)
+                                    .offset(x: 3, y: 3)
                                     .mask(Circle().fill(LinearGradient(gradient: Gradient(colors: [.black, .clear]), startPoint: .topLeading, endPoint: .bottomTrailing)))
                                 Circle()
                                     .stroke(Color.white, lineWidth: 4)
                                     .blur(radius: 4)
-                                    .offset(x: -2, y: -2)
+                                    .offset(x: -3, y: -3)
                                     .mask(Circle().fill(LinearGradient(gradient: Gradient(colors: [.clear, .black]), startPoint: .topLeading, endPoint: .bottomTrailing)))
                             }
                         } else {
                             Circle()
-                                .fill(Color.white)
+                                .fill(Color(hex: "#EAF2F8") ?? .white)
                                 .shadow(color: Color.black.opacity(0.1), radius: 4, x: 2, y: 2)
                                 .shadow(color: Color.white, radius: 4, x: -2, y: -2)
                         }
                     }
                 )
         }
+    }
+}
+
+struct NeumorphicButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .background(
+                Group {
+                    if configuration.isPressed {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color(hex: "#EAF2F8") ?? .white)
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(Color.gray.opacity(0.6), lineWidth: 4)
+                                .blur(radius: 4)
+                                .offset(x: 3, y: 3)
+                                .mask(RoundedRectangle(cornerRadius: 16).fill(LinearGradient(gradient: Gradient(colors: [.black, .clear]), startPoint: .topLeading, endPoint: .bottomTrailing)))
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(Color.white, lineWidth: 4)
+                                .blur(radius: 4)
+                                .offset(x: -3, y: -3)
+                                .mask(RoundedRectangle(cornerRadius: 16).fill(LinearGradient(gradient: Gradient(colors: [.clear, .black]), startPoint: .topLeading, endPoint: .bottomTrailing)))
+                        }
+                    } else {
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color(hex: "#EAF2F8") ?? .white)
+                            .shadow(color: Color.black.opacity(0.1), radius: 4, x: 2, y: 2)
+                            .shadow(color: Color.white, radius: 4, x: -2, y: -2)
+                    }
+                }
+            )
     }
 }
 
