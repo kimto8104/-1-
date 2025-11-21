@@ -23,6 +23,8 @@ struct TimerPage: View {
   @StateObject var model = TimerPageViewModel(motionManagerService: MotionManagerService(), timerService: TimerService(initialTime: 1))
   @State private var isShowingSettings = false
   
+  @State private var isShowingNotificationSettings = false
+  
   var body: some View {
     GeometryReader { gp in
       let hm = gp.size.width / 375
@@ -121,6 +123,8 @@ struct TimerPage: View {
         withAnimation(.easeInOut(duration: 0.3)) {
           model.isHabitAlreadyExist = true
         }
+        // Show Notification Settings on launch
+        isShowingNotificationSettings = true
       }
     })
     
@@ -139,6 +143,10 @@ struct TimerPage: View {
     }
     .sheet(isPresented: $isShowingSettings) {
       SettingsView()
+    }
+    .sheet(isPresented: $isShowingNotificationSettings) {
+        NotificationHalfModalSettingView()
+            .presentationDetents([.medium])
     }
   } // body ここまで
 }
@@ -167,7 +175,7 @@ extension TimerPage {
         Button {
           isShowingSettings = true
         } label: {
-          Image(systemName: "gearshape.fill")
+          Image(systemName: "bell.fill")
             .font(.system(size: 24 * multiplier))
             .foregroundColor(Color(hex: "#ADB5BD")!)
             .padding(20 * multiplier)

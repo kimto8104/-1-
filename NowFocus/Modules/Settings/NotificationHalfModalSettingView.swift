@@ -1,13 +1,13 @@
 //
-//  SettingsView.swift
-//  NowFocus
+//  NotificationHalfModalSettingView.swift
+//  FaceDownFocusTimer
 //
-//  Created by Tomofumi Kimura on 2025/11/20.
+//  Created by iosDevelopers on 2025/11/21.
 //
 
 import SwiftUI
 
-struct SettingsView: View {
+struct NotificationHalfModalSettingView: View {
     @StateObject private var notificationManager = NotificationManager.shared
     @Environment(\.dismiss) var dismiss
     
@@ -25,8 +25,13 @@ struct SettingsView: View {
             
             VStack(alignment: .leading, spacing: 24) {
                 
-                // Header (if needed, or just rely on navigation bar if presented in nav view)
-                // The image shows "習慣設定編集画面" at the top, likely a navigation title.
+                // Title
+                Text("通知設定")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.top, 24)
+                    .padding(.bottom, 8)
                 
                 VStack(alignment: .leading, spacing: 16) {
                     // Day Selector
@@ -36,7 +41,7 @@ struct SettingsView: View {
                     
                     HStack(spacing: 12) {
                         ForEach(0..<7) { index in
-                            DayButton(
+                            ModalDayButton(
                                 title: days[index],
                                 isSelected: selectedDays.contains(index + 1),
                                 action: {
@@ -86,9 +91,9 @@ struct SettingsView: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height: 56)
-                        .background(Color.blue)
+                        .background(Color(hex: "#607D8B") ?? .blue)
                         .cornerRadius(16)
-                        .shadow(color: Color.blue.opacity(0.3), radius: 10, x: 0, y: 5)
+                        .shadow(color: (Color(hex: "#607D8B") ?? .blue).opacity(0.3), radius: 10, x: 0, y: 5)
                 }
                 .padding(.bottom, 20)
                 
@@ -116,8 +121,6 @@ struct SettingsView: View {
     
     private func loadSettings() {
         // Load saved settings here
-        // For now, we just use the defaults or what's in NotificationManager if applicable
-        // In a real app, we'd load 'selectedDays' from UserDefaults
         if let savedTime = UserDefaults.standard.object(forKey: "notificationTime") as? Double {
             notificationTime = Date(timeIntervalSince1970: savedTime)
         }
@@ -137,9 +140,6 @@ struct SettingsView: View {
         
         // Update NotificationManager
         if isNotificationEnabled {
-            // Logic to schedule notifications for selected days
-            // Since NotificationManager currently only supports daily, we might need to update it later.
-            // For now, we'll just schedule a daily one as a fallback or update the manager.
             notificationManager.scheduleDailyNotification(at: notificationTime)
         } else {
             notificationManager.cancelNotifications()
@@ -149,7 +149,7 @@ struct SettingsView: View {
     }
 }
 
-struct DayButton: View {
+private struct ModalDayButton: View {
     let title: String
     let isSelected: Bool
     let action: () -> Void
@@ -159,14 +159,25 @@ struct DayButton: View {
             Text(title)
                 .font(.subheadline)
                 .fontWeight(.bold)
-                .foregroundColor(isSelected ? .white : .gray)
+                .foregroundColor(isSelected ? .primary : .gray)
                 .frame(width: 40, height: 40)
                 .background(
                     Group {
                         if isSelected {
-                            Circle()
-                                .fill(Color.blue)
-                                .shadow(color: Color.blue.opacity(0.3), radius: 5, x: 0, y: 3)
+                            ZStack {
+                                Circle()
+                                    .fill(Color.white)
+                                Circle()
+                                    .stroke(Color.gray.opacity(0.2), lineWidth: 4)
+                                    .blur(radius: 4)
+                                    .offset(x: 2, y: 2)
+                                    .mask(Circle().fill(LinearGradient(gradient: Gradient(colors: [.black, .clear]), startPoint: .topLeading, endPoint: .bottomTrailing)))
+                                Circle()
+                                    .stroke(Color.white, lineWidth: 4)
+                                    .blur(radius: 4)
+                                    .offset(x: -2, y: -2)
+                                    .mask(Circle().fill(LinearGradient(gradient: Gradient(colors: [.clear, .black]), startPoint: .topLeading, endPoint: .bottomTrailing)))
+                            }
                         } else {
                             Circle()
                                 .fill(Color.white)
@@ -180,5 +191,5 @@ struct DayButton: View {
 }
 
 #Preview {
-    SettingsView()
+    NotificationHalfModalSettingView()
 }
