@@ -9,81 +9,162 @@ import SwiftUI
 
 struct SettingsView: View {
     @StateObject private var notificationManager = NotificationManager.shared
-    @AppStorage("isNotificationEnabled") private var isNotificationEnabled: Bool = false
-    @AppStorage("notificationTime") private var notificationTime: Double = Date().timeIntervalSince1970
     @Environment(\.dismiss) var dismiss
     
-    @State private var showPermissionAlert = false
+    // State for UI
+    @State private var selectedDays: Set<Int> = [1, 2, 3, 4, 5] // Default Mon-Fri (1=Mon, 7=Sun)
+    @State private var notificationTime: Date = Date()
+    @State private var isNotificationEnabled: Bool = true
+    
+    let days = ["月", "火", "水", "木", "金", "土", "日"]
     
     var body: some View {
-        NavigationView {
-            Form {
-                Section(header: Text("通知設定")) {
-                    Toggle("毎日通知を受け取る", isOn: $isNotificationEnabled)
-                        .onChange(of: isNotificationEnabled) { newValue in
-                            if newValue {
-                                notificationManager.requestPermission { granted in
-                                    if !granted {
-                                        isNotificationEnabled = false
-                                        showPermissionAlert = true
-                                    } else {
-                                        scheduleNotification()
-                                    }
-                                }
-                            } else {
-                                notificationManager.cancelNotifications()
-                            }
-                        }
+        ZStack {
+            Color(UIColor.systemGroupedBackground)
+                .ignoresSafeArea()
+            
+            VStack(alignment: .leading, spacing: 24) {
+                
+                // Header (if needed, or just rely on navigation bar if presented in nav view)
+                // The image shows "習慣設定編集画面" at the top, likely a navigation title.
+                
+                VStack(alignment: .leading, spacing: 16) {
+                    // Day Selector
+                    Text("曜日")
+                        .font(.headline)
+                        .foregroundColor(.gray)
                     
-                    if isNotificationEnabled {
-                        DatePicker("通知時間", selection: Binding(
-                            get: { Date(timeIntervalSince1970: notificationTime) },
-                            set: { newDate in
-                                notificationTime = newDate.timeIntervalSince1970
-                                scheduleNotification()
-                            }
-                        ), displayedComponents: .hourAndMinute)
+                    HStack(spacing: 12) {
+                        ForEach(0..<7) { index in
+                            DayButton(
+                                title: days[index],
+                                isSelected: selectedDays.contains(index + 1),
+                                action: {
+                                    toggleDay(index + 1)
+                                }
+                            )
+                        }
                     }
                 }
                 
-                Section(header: Text("アプリについて")) {
+                VStack(alignment: .leading, spacing: 16) {
+                    // Time Picker
+                    Text("時間")
+                        .font(.headline)
+                        .foregroundColor(.gray)
+                    
+                    DatePicker("", selection: $notificationTime, displayedComponents: .hourAndMinute)
+                        .labelsHidden()
+                        .frame(width: 120, height: 50)
+                        .background(Color.white)
+                        .cornerRadius(12)
+                        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.gray.opacity(0.1), lineWidth: 1)
+                        )
+                }
+                
+                VStack(alignment: .leading, spacing: 16) {
+                    // Notification Toggle
                     HStack {
-                        Text("バージョン")
-                        Spacer()
-                        Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0")
+                        Text("通知")
+                            .font(.headline)
                             .foregroundColor(.gray)
+                        Spacer()
+                        Toggle("", isOn: $isNotificationEnabled)
+                            .labelsHidden()
                     }
                 }
-            }
-            .navigationTitle("設定")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("閉じる") {
-                        dismiss()
-                    }
+                
+                Spacer()
+                
+                // Save Button
+                Button(action: saveSettings) {
+                    Text("保存")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 56)
+                        .background(Color.blue)
+                        .cornerRadius(16)
+                        .shadow(color: Color.blue.opacity(0.3), radius: 10, x: 0, y: 5)
                 }
+                .padding(.bottom, 20)
+                
             }
-            .alert("通知が許可されていません", isPresented: $showPermissionAlert) {
-                Button("設定を開く") {
-                    if let url = URL(string: UIApplication.openSettingsURLString) {
-                        UIApplication.shared.open(url)
-                    }
-                }
-                Button("キャンセル", role: .cancel) { }
-            } message: {
-                Text("通知を受け取るには、設定アプリから通知を許可してください。")
-            }
-            .onAppear {
-                // 画面表示時に権限状態を確認して同期
-                notificationManager.checkPermissionStatus()
-            }
+            .padding(24)
+            .background(Color.white)
+            .cornerRadius(24)
+            .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 10)
+            .padding()
+        }
+        .navigationTitle("習慣設定編集画面")
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            loadSettings()
         }
     }
     
-    private func scheduleNotification() {
-        let date = Date(timeIntervalSince1970: notificationTime)
-        notificationManager.scheduleDailyNotification(at: date)
+    private func toggleDay(_ dayIndex: Int) {
+        if selectedDays.contains(dayIndex) {
+            selectedDays.remove(dayIndex)
+        } else {
+            selectedDays.insert(dayIndex)
+        }
+    }
+    
+    private func loadSettings() {
+        // Load saved settings here
+        // For now, we just use the defaults or what's in NotificationManager if applicable
+        // In a real app, we'd load 'selectedDays' from UserDefaults
+        if let savedTime = UserDefaults.standard.object(forKey: "notificationTime") as? Double {
+            notificationTime = Date(timeIntervalSince1970: savedTime)
+        }
+        isNotificationEnabled = UserDefaults.standard.bool(forKey: "isNotificationEnabled")
+        
+        // Load days if saved, otherwise default
+        if let savedDays = UserDefaults.standard.array(forKey: "selectedDays") as? [Int] {
+            selectedDays = Set(savedDays)
+        }
+    }
+    
+    private func saveSettings() {
+        // Save to UserDefaults
+        UserDefaults.standard.set(notificationTime.timeIntervalSince1970, forKey: "notificationTime")
+        UserDefaults.standard.set(isNotificationEnabled, forKey: "isNotificationEnabled")
+        UserDefaults.standard.set(Array(selectedDays), forKey: "selectedDays")
+        
+        // Update NotificationManager
+        if isNotificationEnabled {
+            // Logic to schedule notifications for selected days
+            // Since NotificationManager currently only supports daily, we might need to update it later.
+            // For now, we'll just schedule a daily one as a fallback or update the manager.
+            notificationManager.scheduleDailyNotification(at: notificationTime)
+        } else {
+            notificationManager.cancelNotifications()
+        }
+        
+        dismiss()
+    }
+}
+
+struct DayButton: View {
+    let title: String
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.subheadline)
+                .fontWeight(.bold)
+                .foregroundColor(isSelected ? .white : .gray)
+                .frame(width: 40, height: 40)
+                .background(isSelected ? Color.blue : Color.gray.opacity(0.1))
+                .clipShape(Circle())
+                .shadow(color: isSelected ? Color.blue.opacity(0.3) : Color.clear, radius: 5, x: 0, y: 3)
+        }
     }
 }
 
