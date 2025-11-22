@@ -6,24 +6,26 @@
 //
 
 import Foundation
+
 // 集中した記録を管理するクラス
-// 保存
-// 削除
-// 編集など
+// 保存 / 削除 / 編集など
 @MainActor
 class FocusHistoryDataManager {
   static let shared = FocusHistoryDataManager()
   let modelContainerManger = ModelContainerManager.shared
   
-  // データからFocusHistoryを作成し、SwiftDataに保存をしてくれる
-  // 開始日付
-//  var startDate: Date
-//  // 集中時間
-//  var duration: TimeInterval
-//  // カテゴリー
-//  var category: String?
-  func saveFocusHistoryData(startDate: Date, duration: TimeInterval, category: String?) {
-    let focusHistory = FocusHistory(startDate: startDate, duration: duration, category: category)
+  /// データから FocusHistory を作成し、SwiftData に保存します。
+  /// - Parameters:
+  ///   - startDate: 開始日付
+  ///   - duration: 集中時間
+  ///   - habit: 紐づける親 Habit（必須）
+  func saveFocusHistoryData(startDate: Date, duration: TimeInterval, habit: Habit) {
+    let focusHistory = FocusHistory(
+      startDate: startDate,
+      duration: duration,
+      habit: habit
+    )
     modelContainerManger.saveFocusHistory(history: focusHistory)
   }
 }
+

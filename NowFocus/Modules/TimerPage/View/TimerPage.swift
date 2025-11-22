@@ -21,6 +21,8 @@ import SwiftData
 // MARK: - View
 struct TimerPage: View {
   @StateObject var model = TimerPageViewModel(motionManagerService: MotionManagerService(), timerService: TimerService(initialTime: 1))
+  @State private var isShowingSettings = false
+  @State private var isShowingNotificationSettings = false
   
   var body: some View {
     GeometryReader { gp in
@@ -54,20 +56,6 @@ struct TimerPage: View {
           }
         }
         
-        // カテゴリーポップアップ
-        if model.isCategoryPopupPresented {
-          CategoryPopup(
-            onCategorySelect: { category in
-              model.selectedCategory = category
-              model.isCategoryPopupPresented = false
-            },
-            onDismiss: {
-              model.isCategoryPopupPresented = false
-            }
-          )
-          .opacity(model.isCategoryPopupPresented ? 1 : 0)
-        }
-        
         // 連続日数お祝いポップアップ
         if model.showCelebrationPopup {
           CelebrationPopupView(
@@ -78,6 +66,48 @@ struct TimerPage: View {
             }
           )
         }
+        
+        // HabitSettingView - 中央表示
+        if !model.isHabitAlreadyExist {
+          ZStack {
+            // 背景を暗くする
+            Color.black.opacity(0.5)
+              .ignoresSafeArea()
+        
+            // HabitSettingViewを中央に表示
+            HabitSettingView {
+              withAnimation(.easeInOut(duration: 0.3)) {
+                model.isHabitAlreadyExist = true
+              }
+              model.onHabitSettingCompleted()
+            }
+            .keyboardAdaptiveOffset(factor: 0.4)
+            .transition(AnyTransition.scale.combined(with: AnyTransition.opacity))
+          }
+        }
+        
+        // DEBUG専用: 全データ削除ボタン
+        #if DEBUG
+        VStack {
+          HStack {
+            Spacer()
+            Button {
+              model.deleteAllDataForDebug()
+            } label: {
+              Text("Delete All Data")
+                .font(.system(size: 12, weight: .semibold))
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(Color.red.opacity(0.9))
+                .foregroundColor(.white)
+                .cornerRadius(8)
+            }
+            .padding(.top, 50 * multiplier)
+            .padding(.trailing, 20)
+          }
+          Spacer()
+        }
+        #endif
       }
     }
     .onAppear(perform: {
@@ -86,6 +116,15 @@ struct TimerPage: View {
       
       // 画面表示時にAnalyticsイベントを送信
       AnalyticsManager.shared.logScreenView(screenName: "Timer Page", screenClass: "TimerPage")
+      
+      // TimerPageが表示された時にHabitSettingViewを表示
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        withAnimation(.easeInOut(duration: 0.3)) {
+          model.isHabitAlreadyExist = true
+        }
+        // Show Notification Settings on launch
+        isShowingNotificationSettings = true
+      }
     })
     
     .ignoresSafeArea()
@@ -96,24 +135,51 @@ struct TimerPage: View {
     } message: {
       Text("１分始めることが大事")
     }
+    .sheet(isPresented: $model.isShowingHabitSettings, onDismiss: {
+      model.onHabitSettingCompleted()
+    }) {
+      HabitEditView()
+    }
+    .sheet(isPresented: $isShowingSettings) {
+      SettingsView()
+    }
+    .sheet(isPresented: $isShowingNotificationSettings) {
+        NotificationHalfModalSettingView()
+            .presentationDetents([.medium])
+    }
   } // body ここまで
 }
 
 // MARK: Private CurrentView
 extension TimerPage {
   private func currentView(gp: GeometryProxy, multiplier: CGFloat) -> some View {
-    Group {
-      if model.selectedTab == .Clock {
-        HistoryPage()
-          .environmentObject(model)
-      } else if model.showFailedView {
-        failedPage(gp: gp, multiplier: multiplier)
-          .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))
-      } else if model.showResultView {
-        // resultViewの代わりに空のViewを表示
-        Color.clear
-      } else {
-        timerView(gp: gp, multiplier: multiplier)
+    ZStack(alignment: .topTrailing) {
+      Group {
+        if model.selectedTab == .Clock {
+          HistoryPage()
+            .environmentObject(model)
+        } else if model.showFailedView {
+          failedPage(gp: gp, multiplier: multiplier)
+            .transition(.asymmetric(insertion: .scale(scale: 0.95).combined(with: .opacity), removal: .opacity))
+        } else if model.showResultView {
+          // resultViewの代わりに空のViewを表示
+          Color.clear
+        } else {
+          timerView(gp: gp, multiplier: multiplier)
+        }
+      }
+      
+      // 設定ボタン (TimerView表示時のみ)
+      if model.selectedTab == .Home && !model.showFailedView && !model.showResultView {
+        Button {
+          isShowingSettings = true
+        } label: {
+          Image(systemName: "gearshape.fill")
+            .font(.system(size: 24 * multiplier))
+            .foregroundColor(Color(hex: "#ADB5BD")!)
+            .padding(20 * multiplier)
+        }
+        .padding(.top, 40 * multiplier) // ステータスバー分
       }
     }
   }
@@ -153,32 +219,56 @@ extension TimerPage {
           .font(.system(size: 40 * multiplier, weight: .medium, design: .monospaced))
           .monospacedDigit() // 数字が等幅になるように
         
-        // 追加集中時間モードの場合は「継続中」と表示
-        if model.continueFocusingMode {
-          Text("継続中")
-            .foregroundColor(Color(hex: "#339AF0")!)
-            .font(.system(size: 16 * multiplier, weight: .medium))
-        }
+        // 追加集中時間モードの場合はHabit名を表示
+        
+          Text(model.currentHabitName)
+              .foregroundStyle(.red)
+              .font(.system(size: 20 * multiplier, weight: .medium))
       }
     }
   }
   
   func instructionText(gp: GeometryProxy, multiplier: CGFloat) -> some View {
-    HStack {
-      Image(systemName: "arrow.turn.down.right")
-        .font(.system(size: 16 * multiplier))
-        .foregroundColor(Color(hex: "#228BE6")!)
+    VStack(spacing: 16 * multiplier) {
+      // 設定ボタン
+      Button {
+        model.isShowingHabitSettings = true
+      } label: {
+        HStack {
+          Image(systemName: "gearshape.fill")
+            .font(.system(size: 14 * multiplier))
+            .foregroundColor(Color(hex: "#228BE6")!)
+          
+          Text("習慣を管理")
+            .font(.system(size: 14 * multiplier, weight: .medium))
+            .foregroundColor(Color(hex: "#228BE6")!)
+        }
+        .padding(.horizontal, 16 * multiplier)
+        .padding(.vertical, 10 * multiplier)
+        .background(
+          RoundedRectangle(cornerRadius: 10 * multiplier)
+            .fill(Color.white)
+            .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.15), radius: 4, x: 0, y: 2)
+        )
+      }
       
-      Text("画面を下向きにしてタイマーを開始")
-        .font(.custom("IBM Plex Mono", size: 16 * multiplier))
-        .foregroundColor(Color(hex: "#495057")!)
+      // タイマー開始インストラクション
+      HStack {
+        Image(systemName: "arrow.turn.down.right")
+          .font(.system(size: 16 * multiplier))
+          .foregroundColor(Color(hex: "#228BE6")!)
+        
+        Text("画面を下向きにしてタイマーを開始")
+          .font(.custom("IBM Plex Mono", size: 16 * multiplier))
+          .foregroundColor(Color(hex: "#495057")!)
+      }
+      .padding(.horizontal, 20 * multiplier)
+      .padding(.vertical, 12 * multiplier)
+      .background(
+        RoundedRectangle(cornerRadius: 12 * multiplier)
+          .fill(Color(hex: "#F1F3F5")!)
+      )
     }
-    .padding(.horizontal, 20 * multiplier)
-    .padding(.vertical, 12 * multiplier)
-    .background(
-      RoundedRectangle(cornerRadius: 12 * multiplier)
-        .fill(Color(hex: "#F1F3F5")!)
-    )
   }
   
 
@@ -325,51 +415,6 @@ extension TimerPage {
   }
 }
 
-// MARK: - CategoryPopup Handling
-extension TimerPageViewModel {
-  var categoryPopupDelegate: CategoryPopupDelegate {
-    CategoryPopupDelegateImpl(parent: self)
-  }
-  
-  class CategoryPopupDelegateImpl: @preconcurrency CategoryPopupDelegate {
-    private weak var parent: TimerPageViewModel?
-    
-    init(parent: TimerPageViewModel) {
-      self.parent = parent
-    }
-    
-    func updateCategoryList(categories: [String]) {
-      // カテゴリーリストの更新は CategoryPopupViewModel に任せる
-    }
-    
-    @MainActor func closePopup() {
-      parent?.isCategoryPopupPresented = false
-    }
-    
-    func showAddCategoryPopup() {
-      // 新規カテゴリー追加ポップアップの表示は CategoryPopupViewModel に任せる
-    }
-    
-    func hideAddCategoryPopup() {
-      // 新規カテゴリー追加ポップアップの非表示は CategoryPopupViewModel に任せる
-    }
-    
-    @MainActor func addCategory(name: String) {
-      parent?.selectedCategory = name
-      parent?.isCategoryPopupPresented = false
-    }
-    
-    @MainActor func didSelectCategory(name: String) {
-      parent?.selectedCategory = name
-      parent?.isCategoryPopupPresented = false
-    }
-    
-    @MainActor func removeCategoryFromHistory(category: String) {
-      // カテゴリーの削除は CategoryPopupViewModel に任せる
-    }
-  }
-}
-
 #Preview("English") {
   TimerPage()
     .environment(\.locale, .init(identifier: "en"))
@@ -394,3 +439,4 @@ extension TimerPageViewModel {
   TimerPage()
     .environment(\.locale, .init(identifier: "vi"))
 }
+
