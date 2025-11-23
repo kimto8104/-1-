@@ -73,16 +73,6 @@ struct TimerPage: View {
             // 背景を暗くする
             Color.black.opacity(0.5)
               .ignoresSafeArea()
-        
-            // HabitSettingViewを中央に表示
-            HabitSettingView {
-              withAnimation(.easeInOut(duration: 0.3)) {
-                model.isHabitAlreadyExist = true
-              }
-              model.onHabitSettingCompleted()
-            }
-            .keyboardAdaptiveOffset(factor: 0.4)
-            .transition(AnyTransition.scale.combined(with: AnyTransition.opacity))
           }
         }
         
@@ -134,11 +124,6 @@ struct TimerPage: View {
       }
     } message: {
       Text("１分始めることが大事")
-    }
-    .sheet(isPresented: $model.isShowingHabitSettings, onDismiss: {
-      model.onHabitSettingCompleted()
-    }) {
-      HabitEditView()
     }
     .sheet(isPresented: $isShowingSettings) {
       SettingsView()

@@ -35,7 +35,6 @@
 		FE70E9EC2D4443CE002C0B7F /* ModelContainerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE70E9EB2D4443CE002C0B7F /* ModelContainerManager.swift */; };
 		FE73AA732DFC5C980092CD4C /* CelebrationPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE73AA722DFC5C980092CD4C /* CelebrationPopupView.swift */; };
 		FE73AA752DFC693F0092CD4C /* ConsecutiveDaysRecordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE73AA742DFC693F0092CD4C /* ConsecutiveDaysRecordManager.swift */; };
-		FE847DEA2E96987400490A64 /* HabitEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE847DE92E96987400490A64 /* HabitEditView.swift */; };
 		FE8A06BD2D0FA10100F9F206 /* GradientBackgroundUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8A06BC2D0FA10100F9F206 /* GradientBackgroundUtil.swift */; };
 		FE8EAA322A0000BC0040FB07 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8EAA312A0000BC0040FB07 /* Int+Extension.swift */; };
 		FE8EAA352A00C9910040FB07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8EAA342A00C9910040FB07 /* AppDelegate.swift */; };
@@ -43,7 +42,6 @@
 		FE92202F2ECF5600003C64ED /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE92202E2ECF5600003C64ED /* SettingsView.swift */; };
 		FE9220312ED09CED003C64ED /* NotificationHalfModalSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9220302ED09CED003C64ED /* NotificationHalfModalSettingView.swift */; };
 		FE9ADB672D2D4F930036EA85 /* FocusHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9ADB662D2D4F930036EA85 /* FocusHistory.swift */; };
-		FE9E9AC22E52095B007DBA1C /* HabitSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9E9AC12E52095B007DBA1C /* HabitSettingView.swift */; };
 		FEB14FFC2C6B9F020011F32A /* MotionServiceWithInitialAttitude.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB14FFB2C6B9F020011F32A /* MotionServiceWithInitialAttitude.swift */; };
 		FEB840562998B6F900B945BA /* NowFocusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB840552998B6F900B945BA /* NowFocusApp.swift */; };
 		FEB8405A2998B6FA00B945BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FEB840592998B6FA00B945BA /* Assets.xcassets */; };
@@ -88,7 +86,6 @@
 		FE70E9EB2D4443CE002C0B7F /* ModelContainerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelContainerManager.swift; sourceTree = "<group>"; };
 		FE73AA722DFC5C980092CD4C /* CelebrationPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelebrationPopupView.swift; sourceTree = "<group>"; };
 		FE73AA742DFC693F0092CD4C /* ConsecutiveDaysRecordManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsecutiveDaysRecordManager.swift; sourceTree = "<group>"; };
-		FE847DE92E96987400490A64 /* HabitEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitEditView.swift; sourceTree = "<group>"; };
 		FE8A06BC2D0FA10100F9F206 /* GradientBackgroundUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackgroundUtil.swift; sourceTree = "<group>"; };
 		FE8EAA312A0000BC0040FB07 /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		FE8EAA332A00C2DC0040FB07 /* NowFocus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NowFocus.entitlements; sourceTree = "<group>"; };
@@ -98,7 +95,6 @@
 		FE92202E2ECF5600003C64ED /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		FE9220302ED09CED003C64ED /* NotificationHalfModalSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHalfModalSettingView.swift; sourceTree = "<group>"; };
 		FE9ADB662D2D4F930036EA85 /* FocusHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusHistory.swift; sourceTree = "<group>"; };
-		FE9E9AC12E52095B007DBA1C /* HabitSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitSettingView.swift; sourceTree = "<group>"; };
 		FEB14FFB2C6B9F020011F32A /* MotionServiceWithInitialAttitude.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionServiceWithInitialAttitude.swift; sourceTree = "<group>"; };
 		FEB840522998B6F900B945BA /* FaceDownFocusTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FaceDownFocusTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEB840552998B6F900B945BA /* NowFocusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowFocusApp.swift; sourceTree = "<group>"; };
@@ -330,8 +326,6 @@
 			isa = PBXGroup;
 			children = (
 				FE6A03082E841B0200B6B83D /* Entitiy */,
-				FE9E9AC12E52095B007DBA1C /* HabitSettingView.swift */,
-				FE847DE92E96987400490A64 /* HabitEditView.swift */,
 			);
 			path = HabitSetting;
 			sourceTree = "<group>";
@@ -532,12 +526,10 @@
 				FEB14FFC2C6B9F020011F32A /* MotionServiceWithInitialAttitude.swift in Sources */,
 				FE6A03032E8022D900B6B83D /* KeyboardResponder.swift in Sources */,
 				FE4176C82C9DA72500D671ED /* Color+Extension.swift in Sources */,
-				FE847DEA2E96987400490A64 /* HabitEditView.swift in Sources */,
 				FE69124B2DE9E2DE00985C87 /* TimeInterval+Extension.swift in Sources */,
 				FE8EAA352A00C9910040FB07 /* AppDelegate.swift in Sources */,
 				FE92202F2ECF5600003C64ED /* SettingsView.swift in Sources */,
 				FE11013F2CE9729600C833C1 /* CustomAlert.swift in Sources */,
-				FE9E9AC22E52095B007DBA1C /* HabitSettingView.swift in Sources */,
 				FE9220312ED09CED003C64ED /* NotificationHalfModalSettingView.swift in Sources */,
 				FEC011662DDDF39B0047AC58 /* TimerPageViewModel.swift in Sources */,
 				FE4C1BAE2E2FC647001180BA /* MonthlyCalendarView.swift in Sources */,
