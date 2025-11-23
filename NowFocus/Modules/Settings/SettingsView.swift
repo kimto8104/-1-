@@ -137,10 +137,13 @@ struct SettingsView: View {
         
         // Update NotificationManager
         if isNotificationEnabled {
-            // Logic to schedule notifications for selected days
-            // Since NotificationManager currently only supports daily, we might need to update it later.
-            // For now, we'll just schedule a daily one as a fallback or update the manager.
-            notificationManager.scheduleDailyNotification(at: notificationTime)
+            notificationManager.requestPermission { granted in
+                if granted {
+                    notificationManager.scheduleNotifications(at: notificationTime, on: Array(selectedDays))
+                } else {
+                    print("Notification permission denied")
+                }
+            }
         } else {
             notificationManager.cancelNotifications()
         }

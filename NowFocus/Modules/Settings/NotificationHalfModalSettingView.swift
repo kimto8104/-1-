@@ -139,7 +139,15 @@ struct NotificationHalfModalSettingView: View {
         
         // Update NotificationManager
         if isNotificationEnabled {
-            notificationManager.scheduleDailyNotification(at: notificationTime)
+            notificationManager.requestPermission { granted in
+                if granted {
+                    notificationManager.scheduleNotifications(at: notificationTime, on: Array(selectedDays))
+                } else {
+                    // Handle permission denied if needed (e.g., show alert)
+                    // For now, we just don't schedule
+                    print("Notification permission denied")
+                }
+            }
         } else {
             notificationManager.cancelNotifications()
         }

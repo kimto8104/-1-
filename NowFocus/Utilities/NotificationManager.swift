@@ -35,26 +35,43 @@ class NotificationManager: NSObject, ObservableObject {
         }
     }
     
-    func scheduleDailyNotification(at date: Date, title: String = "集中する時間です", body: String = "1分だけ集中してみませんか？") {
-        let content = UNMutableNotificationContent()
-        content.title = title
-        content.body = body
-        content.sound = .default
+    func scheduleNotifications(at date: Date, on days: [Int], title: String = "集中する時間です", body: String = "1分だけ集中してみませんか？") {
+        // Cancel existing notifications first
+        cancelNotifications()
         
         let calendar = Calendar.current
-        let components = calendar.dateComponents([.hour, .minute], from: date)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+        let hour = calendar.component(.hour, from: date)
+        let minute = calendar.component(.minute, from: date)
         
-        let request = UNNotificationRequest(identifier: "daily_reminder", content: content, trigger: trigger)
-        
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("Error scheduling notification: \(error)")
+        for day in days {
+            // Convert View ID (1=Mon, ..., 7=Sun) to Calendar Weekday (1=Sun, 2=Mon, ..., 7=Sat)
+            // View: 1(Mon) -> Cal: 2
+            // View: 7(Sun) -> Cal: 1
+            var weekday = day + 1
+            if weekday > 7 { weekday = 1 }
+            
+            let content = UNMutableNotificationContent()
+            content.title = title
+            content.body = body
+            content.sound = .default
+            
+            var components = DateComponents()
+            components.hour = hour
+            components.minute = minute
+            components.weekday = weekday
+            
+            let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+            let request = UNNotificationRequest(identifier: "reminder_weekday_\(weekday)", content: content, trigger: trigger)
+            
+            UNUserNotificationCenter.current().add(request) { error in
+                if let error = error {
+                    print("Error scheduling notification for weekday \(weekday): \(error)")
+                }
             }
         }
     }
     
     func cancelNotifications() {
-        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["daily_reminder"])
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
     }
 }
