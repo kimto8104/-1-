@@ -215,28 +215,6 @@ extension TimerPage {
   
   func instructionText(gp: GeometryProxy, multiplier: CGFloat) -> some View {
     VStack(spacing: 16 * multiplier) {
-      // 設定ボタン
-      Button {
-        model.isShowingHabitSettings = true
-      } label: {
-        HStack {
-          Image(systemName: "gearshape.fill")
-            .font(.system(size: 14 * multiplier))
-            .foregroundColor(Color(hex: "#228BE6")!)
-          
-          Text("習慣を管理")
-            .font(.system(size: 14 * multiplier, weight: .medium))
-            .foregroundColor(Color(hex: "#228BE6")!)
-        }
-        .padding(.horizontal, 16 * multiplier)
-        .padding(.vertical, 10 * multiplier)
-        .background(
-          RoundedRectangle(cornerRadius: 10 * multiplier)
-            .fill(Color.white)
-            .shadow(color: Color(hex: "#ADB5BD")!.opacity(0.15), radius: 4, x: 0, y: 2)
-        )
-      }
-      
       // タイマー開始インストラクション
       HStack {
         Image(systemName: "arrow.turn.down.right")
